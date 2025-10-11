@@ -1,0 +1,209 @@
+2025-10-09 06:38:06 [INFO] AnycubicPhotonWorkshop start!
+2025-10-09 06:38:06 [INFO] argc:  2
+2025-10-09 06:38:06 [WARN] "C:/Program Files/AnycubicPhotonWorkshop"
+2025-10-09 06:38:06 [WARN] Successfully init crashpad
+2025-10-09 06:38:06 [WARN] Unable to enumerate family ' "Alibaba PuHuiTi 3.0 55 Regular L3" '
+2025-10-09 06:38:07 [WARN] Unable to enumerate family ' "Alibaba PuHuiTi 3.0 95 ExtraBold" '
+2025-10-09 06:38:07 [INFO] ctk manager plugins:  "C:/Program Files/AnycubicPhotonWorkshop/plugins/"
+2025-10-09 06:38:07 [INFO] Load plugin org.commontk.eventadmin success.
+2025-10-09 06:38:07 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/splashwindow.dll"
+2025-10-09 06:38:07 [INFO] Install Plugin Success!
+2025-10-09 06:38:07 [WARN] Unable to enumerate family ' "Alibaba PuHuiTi 3.0 55 Regular L3" '
+2025-10-09 06:38:07 [WARN] Unable to enumerate family ' "Alibaba PuHuiTi 3.0 95 ExtraBold" '
+2025-10-09 06:38:07 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/printer.dll"
+2025-10-09 06:38:07 [INFO] Install Plugin Success!
+2025-10-09 06:38:08 [WARN] loadMachineResin currentPrinter(Anycubic Photon Mono X2) init success.
+2025-10-09 06:38:08 [INFO] loadMachineParamRange is success.
+2025-10-09 06:38:08 [INFO] loadMachineResinType is success.
+2025-10-09 06:38:08 [INFO] loadMachineResinName is success.
+2025-10-09 06:38:08 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/mainwindow.dll"
+2025-10-09 06:38:08 [INFO] Install Plugin Success!
+2025-10-09 06:38:08 [INFO] "current server is testserver. 0"
+2025-10-09 06:38:08 [INFO] "environment_url is https://workbentch.s3.us-east-2.amazonaws.com/workshop/environment.ini"
+2025-10-09 06:38:08 [INFO] QmlFactory 0.102 s
+2025-10-09 06:38:08 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/autoupdater.dll"
+2025-10-09 06:38:08 [INFO] Install Plugin Success!
+2025-10-09 06:38:08 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/gareport.dll"
+2025-10-09 06:38:08 [INFO] Install Plugin Success!
+2025-10-09 06:38:08 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/accloud.dll"
+2025-10-09 06:38:08 [INFO] Install Plugin Success!
+2025-10-09 06:38:08 [WARN] ACCloudDataModel::ACCloudDataModel, importTempPath = C:/Users/Sukasa/AppData/Local/Temp/ac_cloud/, dowloadPath = C:/Users/Sukasa/Downloads/ac_cloud/
+2025-10-09 06:38:08 [WARN] CountriesDataModel::setCurrCountryIdn, newCurrCountryIdn = CN
+2025-10-09 06:38:08 [WARN] void __cdecl ACCloudNetRequest::getCountries(void)
+2025-10-09 06:38:08 [WARN] void __cdecl ACCloudNetRequest::getPrintCtrlCodeReasons(void)
+2025-10-09 06:38:09 [WARN] ACCloudManager::ACCloudManager, cloud model, build_time = 2024-02-28 17:54:44, git_brance = release/pws3.3, git_hash = d70c34a, git_commit = 2024-02-28
+2025-10-09 06:38:09 [INFO] [Install Plugin] "C:/Program Files/AnycubicPhotonWorkshop/plugins/facegen.dll"
+2025-10-09 06:38:09 [INFO] Install Plugin Success!
+2025-10-09 06:38:09 [WARN] Translation::changedSystemLanguage, language = 0
+2025-10-09 06:38:09 [WARN] register  GizmoController
+2025-10-09 06:38:09 [WARN] void __cdecl EventMiniHandlerCallback::event(const struct ReasonResponse *,unsigned int)
+2025-10-09 06:38:10 [WARN] enableMenuShortcut menushort cut: 0
+2025-10-09 06:38:10 [INFO] uiState:  false
+2025-10-09 06:38:10 [WARN] enableMenuShortcut menushort cut: 0
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:10 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:10 [WARN] xChanged 1
+2025-10-09 06:38:11 [INFO] event:  "splash_window_visible" data:  QVariant(bool, false) extentionData:  QVariant(Invalid)
+2025-10-09 06:38:11 [INFO] event:  "main_load" data:  QVariant(Invalid) extentionData:  QVariant(Invalid)
+2025-10-09 06:38:11 [INFO] event:  "main_language_changed" data:  QVariant(int, 0) extentionData:  QVariant(Invalid)
+2025-10-09 06:38:11 [WARN] void __cdecl PrintersDataModel::onReasonResponse(const struct ReasonResponse *,int)
+count = 125
+2025-10-09 06:38:11 [INFO] uiState:  true
+2025-10-09 06:38:11 [WARN] creating renderer
+2025-10-09 06:38:11 [WARN] printer valid --:  98.35 61.4
+2025-10-09 06:38:11 [WARN] printer build --:  98.304 61.44
+2025-10-09 06:38:11 [WARN] deltaX -- :  0.0459976
+2025-10-09 06:38:11 [WARN] deltaY -- :  0.0399971
+2025-10-09 06:38:11 [WARN] machine boarder width 1--------------------  -0.0459976 0.0399971
+2025-10-09 06:38:11 [WARN] create planar shadow node
+2025-10-09 06:38:11 [WARN] loadGizmoRotationHead OK 576
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "" ,name =  "\"CollectedCoordinateSystemNodesVisitor\""
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "" ,name =  "ComputeBoundsVisitor"
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home/ComputeBound
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home/ComputeBound
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home/BoundingSphere
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO]  camera_manipulator::home/udpate_view
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "" ,name =  "GLObjectsVisitor"
+2025-10-09 06:38:11 [WARN] GL Verison:  0x1b891ef00a8
+2025-10-09 06:38:11 [WARN] GL Renderer:  0x1b891f47bac
+2025-10-09 06:38:11 [WARN] compile shader program ok
+2025-10-09 06:38:11 [WARN] compile shader program ok
+2025-10-09 06:38:11 [WARN] compile shader program ok
+2025-10-09 06:38:11 [WARN] AnyGizmos::Im3d_Init      LoadCompileShader Ok
+2025-10-09 06:38:11 [WARN] AnyGizmos::Im3d_Init   VAO release Ok
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:11 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:11 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:11 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:11 [INFO] event:  "updater_init_compeleted" data:  QVariant(Invalid) extentionData:  QVariant(Invalid)
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:11 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:11 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:11 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [WARN] void __cdecl ACCloudNetRequest::getCountries(void)
+2025-10-09 06:38:11 [WARN] void __cdecl ACCloudNetRequest::getPrintCtrlCodeReasons(void)
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [INFO] send post data success!
+2025-10-09 06:38:11 [INFO] event:  "accloud_start_init" data:  QVariant(int, 0) extentionData:  QVariant(int, 0)
+2025-10-09 06:38:11 [INFO] parseImportFiles other files: C:\Users\Sukasa\OneDrive\Projects\Stationeers\Electrical Rework Mod\ReVolt\Assets\About\stationeersmods
+2025-10-09 06:38:11 [INFO] parseImportFiles other files: C:\Users\Sukasa\OneDrive\Projects\Stationeers\Electrical Rework Mod\ReVolt\Assets\About\stationeersmods
+2025-10-09 06:38:11 [INFO] sendData:  "{\n    \"appName\": \"AnycubicPhotonWorkshop_V3.3.0\",\n    \"appVersion\": \"v3.3.0\",\n    \"business\": \"\",\n    \"city\": \"0\",\n    \"country\": \"\xE5\x8A\xA0\xE6\x8B\xBF\xE5\xA4\xA7\",\n    \"elementContent\": \"\",\n    \"elementType\": \"\",\n    \"eventName\": \"AppStart\",\n    \"function\": \"\",\n    \"isOverseasVersion\": true,\n    \"module\": \"\",\n    \"pcId\": \"572f1db68d1a096c6891cd582dd68ea4\",\n    \"printerType\": \"\",\n    \"province\": \"\xE4\xB8\x8D\xE5\x88\x97\xE9\xA2\xA0\xE5\x93\xA5\xE4\xBC\xA6\xE6\xAF\x94\xE4\xBA\x9A\",\n    \"timestamp\": 1760017091,\n    \"title\": \"\",\n    \"userId\": 0\n}\n"
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:11 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:11 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:11 [INFO] uiState:  false
+2025-10-09 06:38:11 [WARN] enableMenuShortcut menushort cut: 32
+2025-10-09 06:38:11 [INFO] "doReportImportModelResult!"
+2025-10-09 06:38:11 [INFO] event:  "ga_report" data:  QVariant(QByteArray, "{\n    \"business\": \"model_prepare\",\n    \"elementContent\": \"Import Files\",\n    \"elementType\": \"BUTTON\",\n    \"event\": \"ImportModelResult\",\n    \"function\": \"import_model\",\n    \"module\": \"menu_bar\",\n    \"printerType\": \"LCD\",\n    \"title\": \"\"\n}\n") extentionData:  QVariant(QByteArray, "{\n    \"importType\": \"4\",\n    \"modelInformation\": [\n        {\n            \"fileName\": \"stationeersmods\",\n            \"fileSize\": 0,\n            \"fileType\": \"\",\n            \"isSuccess\": 1\n        }\n    ],\n    \"numberOfModel\": 1\n}\n")
+2025-10-09 06:38:11 [INFO] "start check autoUpdater!"
+2025-10-09 06:38:11 [INFO] event:  "updater_check" data:  QVariant(Invalid) extentionData:  QVariant(Invalid)
+2025-10-09 06:38:11 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [INFO] osg_scene_root::traverse nv_class =  "CollectMatchGeodeVisitor" ,name =  "NodeVisitor"
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] void __cdecl EventMiniHandlerCallback::event(const struct ReasonResponse *,unsigned int)
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [WARN] QFSFileEngine::open: No file name specified
+2025-10-09 06:38:12 [WARN] Cannot open file '', because: No file name specified
+2025-10-09 06:38:12 [INFO] sendData:  "{\n    \"appName\": \"AnycubicPhotonWorkshop_V3.3.0\",\n    \"appVersion\": \"v3.3.0\",\n    \"business\": \"\",\n    \"city\": \"0\",\n    \"country\": \"\xE5\x8A\xA0\xE6\x8B\xBF\xE5\xA4\xA7\",\n    \"elementContent\": \"\",\n    \"elementType\": \"\",\n    \"eventName\": \"ImportModelResult\",\n    \"function\": \"\",\n    \"isOverseasVersion\": true,\n    \"module\": \"\",\n    \"pcId\": \"572f1db68d1a096c6891cd582dd68ea4\",\n    \"printerType\": \"\",\n    \"province\": \"\xE4\xB8\x8D\xE5\x88\x97\xE9\xA2\xA0\xE5\x93\xA5\xE4\xBC\xA6\xE6\xAF\x94\xE4\xBA\x9A\",\n    \"timestamp\": 1760017092,\n    \"title\": \"\",\n    \"userId\": 0\n}\n"
+2025-10-09 06:38:12 [WARN] void __cdecl PrintersDataModel::onReasonResponse(const struct ReasonResponse *,int)
+count = 125
+2025-10-09 06:38:12 [INFO] send post data success!
+2025-10-09 06:38:13 [INFO] uiState:  false
+2025-10-09 06:38:13 [INFO] send post data success!
+2025-10-09 06:38:14 [INFO] uiState:  false
+2025-10-09 06:38:16 [INFO] uiState:  true
+2025-10-09 06:38:16 [WARN] enableMenuShortcut menushort cut: 0
+2025-10-09 06:38:17 [INFO] scene modifyed:  false
+2025-10-09 06:38:17 [INFO] save support file is success!
+2025-10-09 06:38:18 [INFO] AnycubicPhotonWorkshop end!
+2025-10-09 06:38:18 [WARN] QThreadStorage: Thread 0x1b8fba67080 exited after QThreadStorage 7 destroyed

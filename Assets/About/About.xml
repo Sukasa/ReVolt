@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>Re-Volt [StationeersMods]</Name>
+  <Author>Sukasa</Author>
+  <Version>0.1.1</Version>
+  <!-- Steam description using steam styling tags for Steam workshop page -->
+  <Description>[h1]ReVolt[/h1]
+    [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
+    See: https://github.com/StationeersLaunchPad/StationeersLaunchPad
+    Re-Volt is an electrical overhaul mod for Stationeers
+  </Description>
+  <!-- Ingame Description using TMP tags for Workshop menu -->
+  <InGameDescription>
+    <![CDATA[<size="30"><color=#ffa500> ReVolt </color></size>
+<b>WARNING:</b> <color=#ff0000>This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.</color>
+See: https://github.com/StationeersLaunchPad/StationeersLaunchPad
+Description for ReVolt
+]]>
+  </InGameDescription>
+  <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
+  <ChangeLog>
+    [h3]Version 0.0.1:[/h3]
+    [list]
+    [*]Not even the initial release, this is just getting it to build and load!
+    [/list]
+  </ChangeLog>
+  <!-- StationeersLaunchPad and BepInEx tags for Steam workshop page will be automatically added by the framework when publishing -->
+  <Tags>
+    <Tag>StationeersLaunchPad</Tag>
+  </Tags>
+  <!-- Automatic downloads of dependencies -->
+  <Dependencies />
+  <!-- Automatic reordering of the mods list -->
+  <LoadBefore />
+  <LoadAfter />
+</ModMetadata>

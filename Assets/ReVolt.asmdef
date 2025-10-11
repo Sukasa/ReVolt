@@ -1,0 +1,33 @@
+{
+    "autoReferenced":  true,
+    "includePlatforms":  [
+                             "Editor",
+                             "WindowsStandalone32",
+                             "WindowsStandalone64"
+                         ],
+    "references":  [
+                       "GUID:343deaaf83e0cee4ca978e7df0b80d21"
+                   ],
+    "excludePlatforms":  [
+
+                         ],
+    "overrideReferences":  true,
+    "allowUnsafeCode":  false,
+    "precompiledReferences":  [
+                                  "Assembly-CSharp.dll",
+                                  "Assembly-CSharp-firstpass.dll",
+                                  "StationeersMods.Interface.dll",
+                                  "0Harmony.dll",
+                                  "BepInEx.dll",
+                                  "UniTask.dll"
+                              ],
+    "name":  "ReVolt",
+    "rootNamespace":  "ReVolt",
+    "versionDefines":  [
+
+                       ],
+    "defineConstraints":  [
+
+                          ],
+    "noEngineReferences":  false
+}
