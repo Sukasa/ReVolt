@@ -25,7 +25,6 @@ namespace ReVolt
             PrefabPatch.prefabs = contentHandler.prefabs;
             harmony.PatchAll();
 
-
             UnityEngine.Debug.Log("Re-Volt Loaded with " + contentHandler.prefabs.Count + " prefab(s)");
         }
     }
