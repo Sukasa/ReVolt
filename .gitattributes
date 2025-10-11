@@ -1,0 +1,43 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted to native line endings on checkout.
+*.cs     text
+*.js     text
+*.json   text
+*.xml    text
+*.sh     text eol=lf
+*.bat    text eol=crlf
+*.md     text
+
+# Binary files
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.dll    binary
+*.exe    binary
+*.unity  binary
+
+# Unity specific files
+*.meta   text
+*.asset  binary
+*.prefab binary
+*.fbx    binary
+*.mat    binary
+*.anim   binary
+*.controller binary
+*.ttf    binary
+*.otf    binary
+
+# Custom diff settings for specific file types
+*.cs     diff=csharp
+*.js     diff=javascript
+*.json   diff=json
+*.xml    diff=xml
+
+# Merge settings for specific file types
+*.cs     merge=union
+*.js     merge=union
+*.json   merge=union
+*.xml    merge=union
