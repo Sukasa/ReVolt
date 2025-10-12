@@ -9,20 +9,22 @@ namespace ReVolt.Assets.Scripts.patches
     [HarmonyPatch]
     public class PrefabPatch
     {
-        public static ReadOnlyCollection<GameObject> prefabs { get; set; }
+        public static ReadOnlyCollection<GameObject> PrefabContent { get; set; }
         [HarmonyPatch(typeof(Prefab), "LoadAll")]
         public static void Prefix()
         {
+            if (!ReVolt.configEnablePrefabs.Value) // If the user has turned off adding prefabs, don't add prefabs.
+                return;
+
             try
             {
-                Debug.Log("ReVolt Prefab Patch started");
-                foreach (var gameObject in prefabs)
+                foreach (var gameObject in PrefabContent)
                 {
                     Thing thing = gameObject.GetComponent<Thing>();
                     // Additional patching goes here, like setting references to materials(colors) or tools from the game
+
                     if (thing != null)
                     {
-                        Debug.Log(gameObject.name + " added to WorldManager");
                         WorldManager.Instance.SourcePrefabs.Add(thing);
                     }
                 }
