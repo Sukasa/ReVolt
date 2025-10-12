@@ -1,10 +1,10 @@
 using HarmonyLib;
 using ReVolt.Assets.Scripts.patches;
 using StationeersMods.Interface;
-using System.Diagnostics;
+
 namespace ReVolt
 {
-    [StationeersMod("ReVolt", "Re-Volt [StationeersMods]", "0.0.1")]
+    [StationeersMod("ReVolt", "Re-Volt [StationeersMods]", "1.0.0")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
@@ -14,7 +14,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> configEnablePrefabs;
         public override void OnLoaded(ContentHandler contentHandler)
         {
-            UnityEngine.Debug.Log("Re-Volt is loading");
+            UnityEngine.Debug.Log("Re-Volt is charging up!");
             // Balancing config
             configMaxBatteryChargeRate = Config.Bind("Balancing", "Max Battery charge rate", 0.01f, "Maximum Stationary battery charge rate, in % of max charge");
             configMaxBatteryDischargeRate = Config.Bind("Balancing", "Max Battery discharge rate", 0.05f, "Maximum Stationary battery discharge rate, in % of max charge");
@@ -23,13 +23,12 @@ namespace ReVolt
             // Content config
             configEnablePrefabs = Config.Bind("Content", "Enable Custom Objects", true, "Enable Re-Volt circuit breakers");
 
-            UnityEngine.Debug.Log(new StackTrace().GetFrame(0).GetMethod().ReflectedType.Assembly.FullName);
-            UnityEngine.Debug.Log("Applying ReVolt patches...");
+            // Now set up the patches and content loader (via patch)
             Harmony harmony = new("ReVolt");
             PrefabPatch.prefabs = contentHandler.prefabs;
             harmony.PatchAll();
 
-            UnityEngine.Debug.Log("Re-Volt Loaded with " + contentHandler.prefabs.Count + " prefab(s)");
+            UnityEngine.Debug.Log("Re-Volt is loaded and ready");
         }
     }
 }
