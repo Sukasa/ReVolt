@@ -99,10 +99,10 @@ namespace ReVolt
                 return null;
 
             // Do a cheap calculation to get the % chance to burn the cable
-            var burnChance = (powerUsed / AllCables.Keys[0]) - 1.03f;
+            var burnChance = (powerUsed / AllCables.Keys[0]) - 1.0f;
 
             // If we fail the chance, no burn
-            if ((float)RNG.NextDouble() > burnChance)
+            if ((float)RNG.NextDouble() > burnChance * ReVolt.configCableBurnFactor.Value)
                 return null;
 
             // Otherwise we'll burn one of the weak points
@@ -184,7 +184,7 @@ namespace ReVolt
                     currentDevice.ReceivePower(CableNetwork, powerAvailable);
 
                     // Depending on the power available, maybe or maybe don't power the device
-                    // (Honestly, about 95% of this is lifted from the original PowerTick because it works and I don't need to mess with it... yet.
+                    // TODO later on implement brownouts here
                     if (powerAvailable > 0.0f && (IsPowerMet || (currentDevice.IsPowerProvider && ProvidedPower[idx] > 0.0f)))
                     {
                         if (!currentDevice.Powered)
