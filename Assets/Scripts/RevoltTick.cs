@@ -18,8 +18,8 @@ namespace ReVolt
         public SortedList<float, List<Cable>> AllCables = new();
         public SortedList<float, List<CableFuse>> AllFuses = new();
 
-        PropertyInfo ProviderSetter;
-        PropertyInfo IODevSetter;
+        private static readonly PropertyInfo ProviderSetter;
+        private static readonly PropertyInfo IODevSetter;
 
         float[] UsedPower = new float[1];
         float[] ProvidedPower = new float[1];
@@ -29,13 +29,15 @@ namespace ReVolt
         public float PowerRatio;
         public bool IsPowerMet;
 
-        public RevoltTick()
+        static RevoltTick()
         {
-            // Constructor.  All we need to do here is get some reflection setters prepped
             ProviderSetter = typeof(PowerTick).GetProperty(nameof(Providers));
             IODevSetter = typeof(PowerTick).GetProperty(nameof(InputOutputDevices));
-            RNG = new System.Random();
+        }
 
+        public RevoltTick()
+        {
+            RNG = new System.Random();
         }
 
         public void Initialize_New(CableNetwork from)
