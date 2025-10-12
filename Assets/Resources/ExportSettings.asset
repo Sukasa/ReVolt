@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: ExportSettings
   m_EditorClassIdentifier: 
   _author: Sukasa
-  _description: tests
+  _description: A Stationeers power simulation overhaul
   _name: ReVolt
   _outputDirectory: C:/Users/Sukasa/OneDrive/Documents/My Games/Stationeers/mods
   _stationeersDirectory: F:/Program Files (x86)/Steam/steamapps/common/Stationeers
   _stationeersArguments: 
-  _version: 0.1.0
+  _version: 1.0.0
   _assemblies:
   - Assets/ReVolt.asmdef
   _artifacts: []
