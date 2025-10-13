@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: ExportSettings
   m_EditorClassIdentifier: 
   _author: Sukasa
-  _description: A Stationeers power simulation overhaul
-  _name: ReVolt
+  _description: An electrical overhaul mod for Stationeers
+  _name: Re-Volt
   _outputDirectory: C:/Users/Sukasa/OneDrive/Documents/My Games/Stationeers/mods
   _stationeersDirectory: F:/Program Files (x86)/Steam/steamapps/common/Stationeers
   _stationeersArguments: 
-  _version: 1.0.0
+  _version: 1.1.0
   _assemblies:
   - Assets/ReVolt.asmdef
   _artifacts: []
-  _contentTypes: 2
+  _contentTypes: -1
   _includePdbs: 1
-  _waitForDebugger: 1
+  _waitForDebugger: 0
   _bootType: 0
   _startupPrefab: {fileID: 0}
   _startupClass: ReVolt

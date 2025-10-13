@@ -1,11 +1,14 @@
 using BepInEx.Configuration;
 using HarmonyLib;
-using ReVolt.Assets.Scripts.patches;
+using LaunchPadBooster;
+using ReVolt.Assets.Scripts;
+using ReVolt.patches;
 using StationeersMods.Interface;
+using UnityEngine;
 
 namespace ReVolt
 {
-    [StationeersMod("ReVolt", "Re-Volt [StationeersMods]", "1.0.0")]
+    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.0.1")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
@@ -14,9 +17,11 @@ namespace ReVolt
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> configEnablePrefabs;
 
+        public static readonly Mod MOD = new("Re-Volt", "1.0.1");
+
         public override void OnLoaded(ContentHandler contentHandler)
         {
-            UnityEngine.Debug.Log("Re-Volt is charging up!");
+            Debug.Log("Re-Volt loading");
 
             // Balancing config
             configMaxBatteryChargeRate = Config.Bind("Balancing", "Max Battery charge rate", 0.01f, "Maximum Stationary battery charge rate, in % of max charge");
@@ -28,10 +33,11 @@ namespace ReVolt
 
             // Now set up the patches and content loader (via patch)
             Harmony harmony = new("ReVolt");
-            PrefabPatch.PrefabContent = contentHandler.prefabs;
+            PrefabPatcher.PrefabContent = contentHandler.prefabs;
             harmony.PatchAll();
 
-            UnityEngine.Debug.Log("Re-Volt is loaded and ready");
+            MOD.AddSaveDataType<CircuitBreakerSaveData>();
+            MOD.SetMultiplayerRequired();
         }
     }
 }

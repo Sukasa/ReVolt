@@ -2,7 +2,7 @@
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Util;
-using ReVolt.Assets.Scripts.patches;
+using ReVolt.patches;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -57,7 +57,7 @@ namespace ReVolt
 
             RNG = new System.Random((int)from.ReferenceId);
 
-            ConsoleWindow.PrintAction($"Cable network {from.ReferenceId} is dirty, reinitializing lists");
+            //ConsoleWindow.PrintAction($"Cable network {from.ReferenceId} is dirty, reinitializing lists");
 
             // We're dirty.  Reinitialize data
             Devices.Clear();
@@ -150,12 +150,14 @@ namespace ReVolt
                 }
             }
 
+            // Write some data for tablets/etc to use
             ProviderSetter.SetValue(this, newProviders.ToArray());
             IODevSetter.SetValue(this, newIODevs.ToArray());
         }
 
         public void ApplyState_New()
         {
+            // Some some basic bookkeeping and prep state data for below
             PowerTickPatches.CacheState(this);
             PowerRatio = Required == 0.0f ? 0.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
             IsPowerMet = Potential >= Required;
@@ -199,9 +201,7 @@ namespace ReVolt
                     currentDevice.UsePower(CableNetwork, demandRatio * ProvidedPower[idx]);
             }
 
-            // Now that power has been passed, we need to blow any fusible elements.
-            // (Breakers will handle this themselves due to how they work)
-            // TODO: I need to check if there are upstream breakers and *not* burn cables in that case (if the breakers are small enough)
+            // Now that power has been passed, we need to blow any fusible elements.  Breakers handle their own tripping in their PowerTick() function.
             if (burnFuse != null)
                 burnFuse.Break();
             else if (burnCable != null) // Only burn a cable if the fuse wasn't there to protect it

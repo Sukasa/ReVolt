@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Name>English</Name>
+  <Code>EN</Code>
+  <Font>font_english</Font>
+  <Things>
+    <RecordThing>
+      <Key>SmallCircuitBreaker</Key>
+      <Value>Circuit Breaker</Value>
+      <Description>
+        A circuit breaker can protect a network from over-current, tripping to protect the cabling.
+        Breakers do not trip instantly - remember to leave headroom for your cables.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>ItemKitSmallBreaker</Key>
+      <Value>Kit (Circuit Breaker)</Value>
+      <Description>A {THING:SmallCircuitBreaker} construction kit</Description>
+    </RecordThing>
+  </Things>
+  <Interface>
+    <Record>
+      <Key>HoldForPreviousTrip</Key>
+      <Value>Hold {KEY:QuantityModifier} for previous trip point</Value>
+    </Record>
+    <Record>
+      <Key>ResetBreakerToClear</Key>
+      <Value>Turn breaker off to clear trip</Value>
+    </Record>
+  </Interface>
+</Language>

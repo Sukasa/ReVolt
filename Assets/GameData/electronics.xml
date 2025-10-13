@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GameData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ElectronicsPrinterRecipes>
+    <RecipeData>
+      <PrefabName>ItemKitSmallBreaker</PrefabName>
+      <Recipe>
+        <Time>20</Time>
+        <Energy>500</Energy>
+        <Copper>5</Copper>
+        <Iron>15</Iron>
+        <Silicon>4</Silicon>
+      </Recipe>
+    </RecipeData>
+  </ElectronicsPrinterRecipes>
+</GameData>

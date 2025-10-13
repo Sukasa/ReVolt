@@ -19,7 +19,8 @@
                                   "StationeersMods.Interface.dll",
                                   "0Harmony.dll",
                                   "BepInEx.dll",
-                                  "UniTask.dll"
+                                  "UniTask.dll",
+                                  "LaunchPadBooster.dll"
                               ],
     "name":  "ReVolt",
     "rootNamespace":  "ReVolt",

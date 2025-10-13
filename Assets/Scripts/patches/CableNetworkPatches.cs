@@ -4,7 +4,7 @@ using HarmonyLib;
 using System;
 using System.Reflection;
 
-namespace ReVolt.Assets.Scripts.patches
+namespace ReVolt.patches
 {
     [HarmonyPatch(typeof(CableNetwork))]
     public class CableNetworkPatches
