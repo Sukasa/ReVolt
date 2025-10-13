@@ -20,3 +20,14 @@ A stationeers mod which overhauls the game's electrical simulation.
 # Development
 
 This is still very much in development, and reach out on the Stationeers modding discord if you need any assistance!
+
+# Credits
+
+This mod stands on the shoulders of some serious giants.  None of this could have happened without the Stationeers modding community, but I'd like to give some extra-special thanks to the many folks who helped me, including:
+
+- tom_is_unlucky, for sharing the FPGA mod as a reference, and for so much of the framework code
+- Inaki, for general help and for their modding tools
+- Chipstix213, for general advice and for the Ball example mod
+- WIKUS, for doing such a damn good job with Modular Consoles that it inspired me to give this a shot
+- Spacebuilder2020, for help and encouragement
+- Thyra, whose troubles with their Elevator project indirectly gave me a lot of answers right before I needed them
