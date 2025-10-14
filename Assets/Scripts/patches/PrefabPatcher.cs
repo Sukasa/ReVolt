@@ -11,6 +11,7 @@ namespace ReVolt.patches
     [HarmonyPatch]
     public class PrefabPatcher
     {
+        // Material matching functions adapted from tom_is_unlucky's FPGA mod material processor
         private static readonly Dictionary<string, StationeersColor> MATERIAL_MAP = new() {
             {"Blu", StationeersColor.BLUE},
             {"Gra", StationeersColor.GRAY},
