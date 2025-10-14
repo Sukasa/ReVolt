@@ -77,7 +77,11 @@ namespace ReVolt
         public void Trip()
         {
             if (Mode == MODE_ON)
+            {
                 UpdateModeNextFrame(MODE_TRIPPED).Forget();
+
+                PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, Vector3.zero);
+            }
         }
 
         public bool CanSupplyPower(CableNetwork cableNetwork) => Mode == MODE_ON && (cableNetwork == OutputNetwork) && (InputNetwork.PotentialLoad - _deficit) > 0.0f;
@@ -233,6 +237,7 @@ namespace ReVolt
                     else
                         OnOff = !OnOff;
 
+                    PlayPooledAudioSound(OnOff ? Defines.Sounds.ApcOn : Defines.Sounds.ApcOff, Vector3.zero);
                     UpdateMode();
 
                     return action;
