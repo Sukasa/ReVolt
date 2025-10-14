@@ -181,7 +181,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 0}
+  PaintableMaterial: {fileID: 2100000, guid: 6f16e8502ae2d5640b40872988cd4401, type: 2}
   CustomColor:
     Name: 
     Bit: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   IsCustomThing: 0
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
-  Thumbnail: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  Thumbnail: {fileID: 21300000, guid: 5c18ff9dc4412ed459629a3470f6c7dd, type: 3}
   Thumbnails: []
   IsEntity: 0
   _isOccluded: 0

@@ -563,7 +563,7 @@ MonoBehaviour:
   maxPressureDelta: -1
   BuildingTip: 
   BuildStates:
-  - Thumbnail: {fileID: 0}
+  - Thumbnail: {fileID: 21300000, guid: 6a5323c5b9dcfa547be9c30211d3f076, type: 3}
     DamagedBuildState: 0
     BlockAir: 0
     AlwaysBlockAir: 0
