@@ -8,14 +8,13 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Motherboards;
 using Assets.Scripts.Util;
 using Cysharp.Threading.Tasks;
-using LaunchPadBooster.Utils;
 using ReVolt.Assets.Scripts;
 using StationeersMods.Interface;
 using UnityEngine;
 
 namespace ReVolt
 {
-    public class CircuitBreaker : ElectricalInputOutput, IPatchable, ISetable
+    public class CircuitBreaker : ElectricalInputOutput, IPatchable, ISetable, IBreaker
     {
         public float MaxTripCurrent;
         public float MinTripCurrent;
@@ -35,7 +34,11 @@ namespace ReVolt
         protected const int MODE_TRIPPED = 1;
         protected const int MODE_OFF = 0;
 
-        static readonly string[] BreakerModeStrings = { "Breaker is Open", "Breaker is Tripped", "Breaker is Closed" };
+        public override string[] ModeStrings => _breakerModeStrings;
+        static readonly string[] _breakerModeStrings = { "Breaker is Open", "Breaker is Tripped", "Breaker is Closed" };
+
+
+        public float LimitCurrent => Mode == MODE_ON ? (float)Setting : 0.0f;
 
         [ByteArraySync]
         public double Setting
@@ -54,15 +57,32 @@ namespace ReVolt
         private float _transferredLast;
         private System.Random RNG;
 
-        #region Power Simulation
-
-        protected override bool IsOperable => (Mode == MODE_ON) && base.IsOperable;
-
         public override void Awake()
         {
             base.Awake();
             RNG = new System.Random((int)ReferenceId);
+            if (Setting == 0.0)
+                Setting = MinTripCurrent;
         }
+        
+        public void PatchPrefab()
+        {
+            BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
+            BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
+            BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
+        }
+
+        #region Power Simulation
+
+        public void Trip()
+        {
+            if (Mode == MODE_ON)
+                UpdateModeNextFrame(MODE_TRIPPED).Forget();
+        }
+
+        public bool CanSupplyPower(CableNetwork cableNetwork) => Mode == MODE_ON && (cableNetwork == OutputNetwork) && (InputNetwork.PotentialLoad - _deficit) > 0.0f;
+
+        protected override bool IsOperable => (Mode == MODE_ON) && base.IsOperable;
 
         public override void OnPowerTick()
         {
@@ -75,9 +95,7 @@ namespace ReVolt
 
                 // If we fail the chance then trip, *or* if we're a smart breaker then trip instantly.
                 if (isSmartBreaker || (float)RNG.NextDouble() <= tripChance * ReVolt.configCableBurnFactor.Value)
-                {
-                    UpdateModeNextFrame(MODE_TRIPPED).Forget();
-                }
+                    Trip();
 
             }
             _transferredLast = _transferred;
@@ -139,8 +157,6 @@ namespace ReVolt
             _breakerHandleAnimator?.RefreshState(skipAnimation);
         }
 
-        public override string[] ModeStrings => BreakerModeStrings;
-
         public override string GetContextualName(Interactable interactable)
         {
             switch (interactable.Action)
@@ -174,7 +190,7 @@ namespace ReVolt
 
             switch (interactable.Action)
             {
-                case InteractableType.Button1:
+                case InteractableType.Button1: // Cycle Setpoint
                     if (!interaction.SourceSlot.Contains<Screwdriver>())
                         return action.Fail(GameStrings.RequiresScrewdriver);
 
@@ -202,7 +218,7 @@ namespace ReVolt
 
                     return action;
 
-                case InteractableType.OnOff:
+                case InteractableType.OnOff: // Toggle Breaker
                     if (Mode == MODE_TRIPPED)
                         action.AppendStateMessage(ReVoltStrings.ResetBreakerToClear);
 
@@ -221,12 +237,30 @@ namespace ReVolt
 
                     return action;
 
-                case InteractableType.Mode:
+                case InteractableType.Mode: // View state
                     if (Mode != MODE_TRIPPED)
                         return action.Succeed();
 
                     action.AppendStateMessage(ReVoltStrings.ResetBreakerToClear);
                     return action.Fail();
+
+                case InteractableType.Button2: // Close Breaker
+                    return action.Fail("Not Implemented");
+
+                case InteractableType.Button3: // Open Breaker
+                    return action.Fail("Not Implemented");
+
+                case InteractableType.Button4: // Trip Test
+                    return action.Fail("Not Implemented");
+
+                case InteractableType.Button5: // Cycle Input Conn.
+                    return action.Fail("Not Implemented");
+
+                case InteractableType.Button6: // Cycle Output Conn.
+                    return action.Fail("Not Implemented");
+
+                case InteractableType.Button7: // Cycle Data Conn.
+                    return action.Fail("Not Implemented");
 
                 default:
                     return base.InteractWith(interactable, interaction, doAction);
@@ -307,10 +341,8 @@ namespace ReVolt
                 return;
 
             Setting = saveData.TripPoint;
-
             _transferredLast = saveData.TransferredLast;
 
-            ConsoleWindow.PrintAction($"Reading saved mode: {saveData.Mode}");
             UpdateModeNextFrame(saveData.Mode).Forget();
         }
 
@@ -395,11 +427,5 @@ namespace ReVolt
 
         #endregion
 
-        public void PatchPrefab()
-        {
-            BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
-            BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
-            BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
-        }
     }
 }
