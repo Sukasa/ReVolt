@@ -477,11 +477,11 @@ MonoBehaviour:
   - StringKey: Breaker State
     StringHash: -1687922867
     Parent: {fileID: 9040551235344435843}
-    Collider: {fileID: 4579436129622706050}
+    Collider: {fileID: 0}
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: -0.07, y: 0.05, z: 0.175}
-      m_Extent: {x: 0.043, y: 0.036, z: 0.011}
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
     Action: 37
     Animator: {fileID: 0}
     JoinInProgressSync: 1
@@ -605,6 +605,23 @@ MonoBehaviour:
       MaterialCostMultiplier: 0
     InteractableParent: {fileID: 5058304014536829483}
     Interactables:
+    - StringKey: Power
+      StringHash: 1783312036
+      Parent: {fileID: 9040551235344435843}
+      Collider: {fileID: 0}
+      FakeCollider: {fileID: 0}
+      Bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+      Action: 36
+      Animator: {fileID: 0}
+      JoinInProgressSync: 1
+      Layer: 0
+      CanKeyInteract: 0
+      KeyMap: 
+      AssociatedAudioEvents: []
+      ActionName: 
+      _state: 0
     - StringKey: Trip Point
       StringHash: 419881127
       Parent: {fileID: 9040551235344435843}
@@ -616,6 +633,40 @@ MonoBehaviour:
       Action: 31
       Animator: {fileID: 0}
       JoinInProgressSync: 0
+      Layer: 0
+      CanKeyInteract: 0
+      KeyMap: 
+      AssociatedAudioEvents: []
+      ActionName: 
+      _state: 0
+    - StringKey: Breaker State
+      StringHash: -1687922867
+      Parent: {fileID: 9040551235344435843}
+      Collider: {fileID: 0}
+      FakeCollider: {fileID: 0}
+      Bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+      Action: 37
+      Animator: {fileID: 0}
+      JoinInProgressSync: 1
+      Layer: 0
+      CanKeyInteract: 0
+      KeyMap: 
+      AssociatedAudioEvents: []
+      ActionName: 
+      _state: 0
+    - StringKey: Error
+      StringHash: -1675848843
+      Parent: {fileID: 9040551235344435843}
+      Collider: {fileID: 0}
+      FakeCollider: {fileID: 0}
+      Bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+      Action: 43
+      Animator: {fileID: 0}
+      JoinInProgressSync: 1
       Layer: 0
       CanKeyInteract: 0
       KeyMap: 
@@ -686,14 +737,31 @@ MonoBehaviour:
       AssociatedAudioEvents: []
       ActionName: 
       _state: 0
+    - StringKey: Trip Point
+      StringHash: 419881127
+      Parent: {fileID: 9040551235344435843}
+      Collider: {fileID: 0}
+      FakeCollider: {fileID: 0}
+      Bounds:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+      Action: 31
+      Animator: {fileID: 0}
+      JoinInProgressSync: 0
+      Layer: 0
+      CanKeyInteract: 0
+      KeyMap: 
+      AssociatedAudioEvents: []
+      ActionName: 
+      _state: 0
     - StringKey: Breaker State
       StringHash: -1687922867
       Parent: {fileID: 9040551235344435843}
-      Collider: {fileID: 4579436129622706050}
+      Collider: {fileID: 0}
       FakeCollider: {fileID: 0}
       Bounds:
-        m_Center: {x: -0.07, y: 0.05, z: 0.175}
-        m_Extent: {x: 0.043, y: 0.036, z: 0.011}
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
       Action: 37
       Animator: {fileID: 0}
       JoinInProgressSync: 1
@@ -706,11 +774,11 @@ MonoBehaviour:
     - StringKey: Error
       StringHash: -1675848843
       Parent: {fileID: 9040551235344435843}
-      Collider: {fileID: 0}
+      Collider: {fileID: 3541118521021108885}
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
-        m_Extent: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0.025, y: 0.025, z: 0.025}
       Action: 43
       Animator: {fileID: 0}
       JoinInProgressSync: 1
@@ -853,6 +921,7 @@ MonoBehaviour:
   DeltaTripCurrent: 500
   MaxInterruptCurrent: 10000
   isSmartBreaker: 0
+  tooltipCollider: {fileID: 4579436129622706050}
   _breakerStateAnimator: {fileID: 7453914056150334515}
   _breakerHandleAnimator: {fileID: 3215113521862588891}
 --- !u!1 &5815456492017013957

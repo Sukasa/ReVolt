@@ -9,23 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8292deeb45866e42883313cbc6251be, type: 3}
+  m_Script: {fileID: 1200417347, guid: bf4f8e9d381df7748a18799ffddf5ad5, type: 3}
   m_Name: ExportSettings
   m_EditorClassIdentifier: 
-  _author: Sukasa
-  _description: An electrical overhaul mod for Stationeers
-  _name: Re-Volt
-  _outputDirectory: C:/Users/Sukasa/OneDrive/Documents/My Games/Stationeers/mods
-  _stationeersDirectory: F:/Program Files (x86)/Steam/steamapps/common/Stationeers
+  _author: 
+  _description: 
+  _name: 
+  _outputDirectory: 
+  _stationeersDirectory: 
   _stationeersArguments: 
-  _version: 1.1.0
-  _assemblies:
-  - Assets/ReVolt.asmdef
+  _version: 
+  _assemblies: []
   _artifacts: []
-  _contentTypes: -1
-  _includePdbs: 1
+  _contentTypes: 0
+  _includePdbs: 0
   _waitForDebugger: 0
   _bootType: 0
   _startupPrefab: {fileID: 0}
-  _startupClass: ReVolt
+  _startupClass: 
   _startupScene: 

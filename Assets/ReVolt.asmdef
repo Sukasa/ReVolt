@@ -20,7 +20,8 @@
                                   "0Harmony.dll",
                                   "BepInEx.dll",
                                   "UniTask.dll",
-                                  "LaunchPadBooster.dll"
+                                  "LaunchPadBooster.dll",
+                                  "LibConstruct.dll"
                               ],
     "name":  "ReVolt",
     "rootNamespace":  "ReVolt",

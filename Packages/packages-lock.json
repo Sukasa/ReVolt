@@ -141,7 +141,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "82ab251b7f71a83fedfd31a808a4787538f3c9a5"
+      "hash": "497b7f6a5458a383aa7e41759b7c9e5af4291f2a"
+    },
+    "stationeers.modding.exporter": {
+      "version": "https://github.com/ilodev/stationeers.modding.exporter.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9bf88e95d6305dc53e6039e6ca46c5570ea7c364"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

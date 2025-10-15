@@ -13,6 +13,7 @@
     "com.unity.visualscripting": "1.8.0",
     "ilodev.stationeers.stationeersmodsexporter": "https://github.com/ilodev/StationeersModsExport.git",
     "ilodev.stationeersmods.tools": "https://github.com/ilodev/StationeersModdingTools.git",
+    "stationeers.modding.exporter": "https://github.com/ilodev/stationeers.modding.exporter.git",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",

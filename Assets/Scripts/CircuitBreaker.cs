@@ -6,10 +6,12 @@ using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Motherboards;
+using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
 using StationeersMods.Interface;
+using System.Text;
 using UnityEngine;
 
 namespace ReVolt
@@ -21,6 +23,7 @@ namespace ReVolt
         public float DeltaTripCurrent;
         public float MaxInterruptCurrent;
         public bool isSmartBreaker;
+        public Collider TooltipCollider;
 
         [SerializeField]
         private ReVoltMultiStateAnimator _breakerStateAnimator;
@@ -30,6 +33,8 @@ namespace ReVolt
         private float _tripPoint;
 
         protected const int FLAG_TRIPSP = 1024;
+        protected const int FLAG_MODE = 2048;
+
         protected const int MODE_ON = 2;
         protected const int MODE_TRIPPED = 1;
         protected const int MODE_OFF = 0;
@@ -64,12 +69,17 @@ namespace ReVolt
             if (Setting == 0.0)
                 Setting = MinTripCurrent;
         }
-        
+
         public void PatchPrefab()
         {
             BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
             BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
             BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
+        }
+
+        public override string GetStationpediaCategory()
+        {
+            return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
         }
 
         #region Power Simulation
@@ -143,7 +153,7 @@ namespace ReVolt
 
         #region Animations & Interactions
 
-        private async UniTaskVoid RefreshAnimStateFromThread()
+        protected async UniTaskVoid RefreshAnimStateFromThread()
         {
             await UniTask.SwitchToMainThread();
             RefreshAnimState();
@@ -174,11 +184,6 @@ namespace ReVolt
                 default:
                     return base.GetContextualName(interactable);
             }
-        }
-
-        public override void OnInteractableStateChanged(Interactable interactable, int newState, int oldState)
-        {
-            base.OnInteractableStateChanged(interactable, newState, oldState);
         }
 
         public override DelayedActionInstance InteractWith(Interactable interactable, Interaction interaction, bool doAction = true)
@@ -276,24 +281,74 @@ namespace ReVolt
         public override void OnFinishedInteractionSync(Interactable interactable)
         {
             base.OnFinishedInteractionSync(interactable);
-            RefreshAnimState();
+
+            if (NetworkManager.IsServer)
+                NetworkUpdateFlags |= FLAG_MODE;
+
+            if (NetworkManager.IsClient)
+            {
+                if (interactable != GetInteractable(interactable.Action))
+                    GetInteractable(interactable.Action).Interact(interactable.State);
+                
+            }
         }
 
-        private async UniTaskVoid UpdateModeNextFrame(int NewMode, bool SkipAnimation = false)
+        protected async UniTaskVoid UpdateModeNextFrame(int NewMode, bool SkipAnimation = false)
         {
             await UniTask.NextFrame();
             UpdateMode(NewMode, SkipAnimation);
         }
 
-        private void UpdateMode(int NewMode, bool SkipAnimation = false)
+        protected void UpdateMode(int NewMode, bool SkipAnimation = false)
         {
             OnServer.Interact(GetInteractable(InteractableType.Mode), NewMode, SkipAnimation);
-            Error = NewMode == MODE_TRIPPED ? 1 : 0;
-            OnOff = NewMode > 0;
-            Mode = NewMode;
+
+            var _error = NewMode == MODE_TRIPPED ? 1 : 0;
+            var _onOff = NewMode > 0;
+
+            if (Error != _error)
+                Error = _error;
+
+            if (OnOff != _onOff)
+                OnOff = _onOff;
+
+            if (Mode != NewMode)
+                Mode = NewMode;
+
+            if (NetworkManager.IsServer)
+                NetworkUpdateFlags |= FLAG_MODE;
+
+            if (NetworkManager.IsClient)
+            {
+                RefreshAnimState();
+            }
         }
 
-        private void UpdateMode() => UpdateMode(Error > 0 ? MODE_TRIPPED : (OnOff ? MODE_ON : MODE_OFF));
+        protected void UpdateMode() => UpdateMode(Error > 0 ? MODE_TRIPPED : (OnOff ? MODE_ON : MODE_OFF));
+
+        protected virtual string StateTooltip()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(ModeStrings[Mode]);
+            if (Mode == MODE_TRIPPED)
+                sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
+
+            return sb.ToString();
+
+        }
+
+        public override PassiveTooltip GetPassiveTooltip(Collider hitCollider)
+        {
+            if (hitCollider == TooltipCollider)
+                return new PassiveTooltip()
+                {
+                    Title = DisplayName,
+                    Extended = StateTooltip()
+                };
+            else
+                return base.GetPassiveTooltip(hitCollider);
+        }
 
         #endregion
 
@@ -302,20 +357,29 @@ namespace ReVolt
         public override void BuildUpdate(RocketBinaryWriter writer, ushort networkUpdateType)
         {
             base.BuildUpdate(writer, networkUpdateType);
+
             if (IsNetworkUpdateRequired(FLAG_TRIPSP, networkUpdateType))
                 writer.WriteDouble(Setting);
+
+            if (IsNetworkUpdateRequired(FLAG_MODE, networkUpdateType))
+                writer.WriteInt32(Mode);
         }
 
         public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
         {
             base.ProcessUpdate(reader, networkUpdateType);
+
             if (IsNetworkUpdateRequired(FLAG_TRIPSP, networkUpdateType))
                 Setting = (float)reader.ReadDouble();
+
+            if (IsNetworkUpdateRequired(FLAG_MODE, networkUpdateType))
+                UpdateMode(reader.ReadInt32());
         }
 
         public override void SerializeOnJoin(RocketBinaryWriter writer)
         {
             base.SerializeOnJoin(writer);
+
             writer.WriteDouble(Setting);
             writer.WriteDouble(_transferredLast);
             writer.WriteInt32(Mode);
@@ -324,10 +388,11 @@ namespace ReVolt
         public override void DeserializeOnJoin(RocketBinaryReader reader)
         {
             base.DeserializeOnJoin(reader);
-            Setting = (float)reader.ReadDouble();
 
+            Setting = (float)reader.ReadDouble();
             _transferredLast = (float)reader.ReadDouble();
             var NewMode = reader.ReadInt32();
+
             UpdateModeNextFrame(NewMode).Forget();
         }
 
