@@ -12,7 +12,7 @@ namespace ReVolt.patches
         private static readonly FieldInfo TickSetter = typeof(CableNetwork).GetField(nameof(CableNetwork.PowerTick));
 
         [HarmonyPostfix, HarmonyPatch(nameof(CableNetwork.DirtyPowerAndDataDeviceLists))]
-        public static void DirtyListsPatch(CableNetwork __instance)
+        public static void DirtyPowerAndDataDeviceListsPatch(CableNetwork __instance)
         {
             if (__instance.PowerTick is RevoltTick revoltTick)
                 revoltTick.IsDirty = true;

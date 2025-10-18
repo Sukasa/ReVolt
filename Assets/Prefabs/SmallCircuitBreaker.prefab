@@ -921,7 +921,7 @@ MonoBehaviour:
   DeltaTripCurrent: 500
   MaxInterruptCurrent: 10000
   isSmartBreaker: 0
-  tooltipCollider: {fileID: 4579436129622706050}
+  TooltipCollider: {fileID: 4579436129622706050}
   _breakerStateAnimator: {fileID: 7453914056150334515}
   _breakerHandleAnimator: {fileID: 3215113521862588891}
 --- !u!1 &5815456492017013957

@@ -8,16 +8,21 @@ using UnityEngine;
  
 namespace ReVolt
 {
-    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.1.0")]
+    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.1.6")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
         internal static ConfigEntry<float> configCableBurnFactor;
-        internal static ConfigEntry<bool> configEnablePrefabs;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.1.0");
+        internal static ConfigEntry<bool> enablePrefabContent;
+
+        internal static ConfigEntry<bool> enableTransformerExploitMitigation;
+        internal static ConfigEntry<bool> enableAreaPowerControlFix;
+        internal static ConfigEntry<bool> enableBatteryLimitsPatch;
+
+        public static readonly Mod MOD = new("Re-Volt", "1.1.6");
 
         public override void OnLoaded(ContentHandler contentHandler)
         {
@@ -28,8 +33,13 @@ namespace ReVolt
             configMaxBatteryDischargeRate = Config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
             configCableBurnFactor = Config.Bind("Balancing", "Cable burn factor", 1.0f, "Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.");
 
+            // Patches config
+            enableTransformerExploitMitigation = Config.Bind("Patches", "Enable Transformer Exploit Mitigation", true, "Patch transformers to mitigate the free-power exploit, and restore quiescent current draw");
+            enableAreaPowerControlFix = Config.Bind("Patches", "Enable APC Power Fix", true, "Patch APCs to mitigate a 10W free-power discrepancy, and restore quiescent current draw");
+            enableBatteryLimitsPatch = Config.Bind("Patches", "Enable Battery Limits", true, "Patch station batteries to limit charge/discharge rate");
+
             // Content config
-            configEnablePrefabs = Config.Bind("Content", "Enable Custom Objects", true, "Enable Re-Volt circuit breakers");
+            enablePrefabContent = Config.Bind("Content", "Enable Custom Objects", true, "Enable Re-Volt circuit breakers");
 
             // Now set up the patches and content loader (via patch)
             Harmony harmony = new("ReVolt");

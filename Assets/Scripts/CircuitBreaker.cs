@@ -10,6 +10,7 @@ using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
+using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System.Text;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace ReVolt
         public float MaxInterruptCurrent;
         public bool isSmartBreaker;
         public Collider TooltipCollider;
+        public InfoScreenComponent InfoScreen;
 
         [SerializeField]
         private ReVoltMultiStateAnimator _breakerStateAnimator;
@@ -35,9 +37,9 @@ namespace ReVolt
         protected const int FLAG_TRIPSP = 1024;
         protected const int FLAG_MODE = 2048;
 
-        protected const int MODE_ON = 2;
-        protected const int MODE_TRIPPED = 1;
-        protected const int MODE_OFF = 0;
+        public const int MODE_ON = 2;
+        public const int MODE_TRIPPED = 1;
+        public const int MODE_OFF = 0;
 
         public override string[] ModeStrings => _breakerModeStrings;
         static readonly string[] _breakerModeStrings = { "Breaker is Open", "Breaker is Tripped", "Breaker is Closed" };
@@ -83,6 +85,11 @@ namespace ReVolt
         }
 
         #region Power Simulation
+
+        public override bool AllowSetPower(CableNetwork cableNetwork)
+        {
+            return InputNetwork == cableNetwork;
+        }
 
         public void Trip()
         {
@@ -130,15 +137,18 @@ namespace ReVolt
             if (!IsOperable || cableNetwork != InputNetwork)
                 return;
 
-            _deficit -= powerAdded;
+            _deficit -= powerAdded - UsedPower;
         }
 
         public override float GetUsedPower(CableNetwork cableNetwork)
         {
-            if (!IsOperable || cableNetwork != InputNetwork)
+            if (cableNetwork != InputNetwork)
                 return 0.0f;
 
-            return _deficit;
+            if (!IsOperable)
+                return base.IsOperable && isSmartBreaker ? UsedPower : 0.0f;
+
+            return _deficit + UsedPower;
         }
 
         public override float GetGeneratedPower(CableNetwork cableNetwork)
@@ -169,6 +179,7 @@ namespace ReVolt
             base.RefreshAnimState(skipAnimation);
             _breakerStateAnimator?.RefreshState(skipAnimation);
             _breakerHandleAnimator?.RefreshState(skipAnimation);
+            InfoScreen?.RefreshState(this);
         }
 
         public override string GetContextualName(Interactable interactable)
@@ -289,7 +300,7 @@ namespace ReVolt
             {
                 if (interactable != GetInteractable(interactable.Action))
                     GetInteractable(interactable.Action).Interact(interactable.State);
-                
+
             }
         }
 
@@ -297,6 +308,11 @@ namespace ReVolt
         {
             await UniTask.NextFrame();
             UpdateMode(NewMode, SkipAnimation);
+        }
+
+        protected override void AssessPower(CableNetwork cableNetwork, bool isOn)
+        {
+            // NOP out - let powered state be set by the PowerTick, if at all
         }
 
         protected void UpdateMode(int NewMode, bool SkipAnimation = false)
@@ -330,9 +346,35 @@ namespace ReVolt
         {
             var sb = new StringBuilder();
 
+            sb.Append(ModeStrings[Mode]);
+            if (Mode == MODE_TRIPPED)
+                sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
+
+            return sb.ToString();
+
+        }
+        
+        protected virtual string InfoScreenTooltip()
+        {
+            if (!Powered)
+                return "The screen is dark";
+
+            var sb = new StringBuilder();
+
             sb.AppendLine(ModeStrings[Mode]);
             if (Mode == MODE_TRIPPED)
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
+
+            if (OutputNetwork != null)
+            {
+                sb.Append(GameStrings.CableAnalyserActual.AsString(OutputNetwork.CurrentLoad.ToStringPrefix("W", "yellow")));
+                sb.AppendLine();
+                sb.Append(GameStrings.CableAnalyserRequired.AsString(OutputNetwork.RequiredLoad.ToStringPrefix("W", "yellow")));
+                sb.AppendLine();
+                sb.Append(GameStrings.CableAnalyserPotential.AsString(OutputNetwork.PotentialLoad.ToStringPrefix("W", "yellow")));
+
+            }
+
 
             return sb.ToString();
 
@@ -340,14 +382,22 @@ namespace ReVolt
 
         public override PassiveTooltip GetPassiveTooltip(Collider hitCollider)
         {
+            if (InfoScreen != null && hitCollider == InfoScreen.InfoTrigger)
+                return new PassiveTooltip(toDefault: true)
+                {
+                    Title = DisplayName,
+                    Extended = InfoScreenTooltip()
+                };
+
             if (hitCollider == TooltipCollider)
-                return new PassiveTooltip()
+                return new PassiveTooltip(toDefault: true)
                 {
                     Title = DisplayName,
                     Extended = StateTooltip()
                 };
-            else
-                return base.GetPassiveTooltip(hitCollider);
+
+
+            return base.GetPassiveTooltip(hitCollider);
         }
 
         #endregion

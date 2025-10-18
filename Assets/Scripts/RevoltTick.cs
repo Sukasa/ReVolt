@@ -1,7 +1,9 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
+using Assets.Scripts.Objects.Pipes;
 using Assets.Scripts.Util;
+using ReVolt.Interfaces;
 using ReVolt.patches;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,15 @@ namespace ReVolt
 {
     public class RevoltTick : PowerTick
     {
+        public struct PowerUsage
+        {
+            public Device Device;
+            public float Ratio;
+            public float PowerUsed;
+            public float PowerProvided;
+            internal int Category;
+        }
+
         public bool IsDirty = true;
 
         private SortedList<float, List<Cable>> _allCAbles = new();
@@ -21,8 +32,7 @@ namespace ReVolt
         private static readonly PropertyInfo _providerSetter;
         private static readonly PropertyInfo _IODevSetter;
 
-        private float[] UsedPower = new float[1];
-        private float[] ProvidedPower = new float[1];
+        private PowerUsage[] PowerData = null;
 
         private IBreaker[] _breakers;
 
@@ -92,10 +102,9 @@ namespace ReVolt
                         _allCAbles[cable.MaxVoltage].Add(cable);
 
             // Allocate our memoization arrays, if they've changed
-            if (UsedPower.Length != Devices.Count)
+            if (PowerData is null || PowerData.Length != Devices.Count)
             {
-                UsedPower = new float[Devices.Count];
-                ProvidedPower = new float[Devices.Count];
+                PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = 0 }).ToArray();
             }
         }
 
@@ -142,16 +151,16 @@ namespace ReVolt
                     continue;
 
                 // Get how much power the device consumes and provides on this network
-                UsedPower[idx] = currentDevice.GetUsedPower(CableNetwork);
-                ProvidedPower[idx] = currentDevice.GetGeneratedPower(CableNetwork);
+                PowerData[idx].PowerUsed = currentDevice.GetUsedPower(CableNetwork);
+                PowerData[idx].PowerProvided = currentDevice.GetGeneratedPower(CableNetwork);
 
                 // Sum network power requirement
-                Required += UsedPower[idx];
+                Required += PowerData[idx].PowerUsed;
 
 
 
                 // If this is a power provider, we need to do some clerical work to keep the Network Analyzer cartridge happy
-                if (ProvidedPower[idx] != 0)
+                if (PowerData[idx].PowerProvided != 0.0f)
                 {
                     if (currentDevice is IBreaker asBreaker && asBreaker.CanSupplyPower(CableNetwork))
                     {
@@ -159,7 +168,7 @@ namespace ReVolt
                         _breakerLimit += asBreaker.LimitCurrent;
                     }
 
-                    Potential += ProvidedPower[idx];
+                    Potential += PowerData[idx].PowerProvided;
                     var Provider = new PowerProvider(currentDevice, CableNetwork);
                     newProviders.Add(Provider);
 
@@ -175,9 +184,15 @@ namespace ReVolt
 
         public void ApplyState_New()
         {
+
+            Potential = Mathf.Max(Potential, 0.0f);
+            Required = Mathf.Max(Required, 0.0f);
+            Consumed = Mathf.Min(Potential, Required);
+
             // Some some basic bookkeeping and prep state data for below
             PowerTickPatches.CacheState(this);
-            _powerRatio = Required == 0.0f ? 0.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
+
+            _powerRatio = Required == 0.0f ? 1.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
             _isPowerMet = Potential >= Required;
 
             var demandRatio = Potential == 0.0f ? 0.0f : Mathf.Clamp(Required / Potential, 0.0f, 1.0f);
@@ -229,27 +244,30 @@ namespace ReVolt
                     continue;
 
                 // If this device is a power consumer then give power to it based on power ratio + turn it on/off if it has power
-                if (UsedPower[idx] >= 0.0f)
+                if (PowerData[idx].PowerUsed >= 0.0f)
                 {
-                    float powerAvailable = UsedPower[idx] * _powerRatio; // Check and see how much of its demand was met
+                    float powerAvailable = PowerData[idx].PowerUsed * _powerRatio; // Check and see how much of its demand was met
 
                     // We know how much power this device is going to receive, so give it that much power (even if it can't make use of it effectively)
                     currentDevice.ReceivePower(CableNetwork, powerAvailable);
 
                     // Depending on the power available, maybe or maybe don't power the device
                     // TODO later on implement brownouts here
-                    if (powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && ProvidedPower[idx] > 0.0f)))
+
+                    if (powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
                     {
                         if (!currentDevice.Powered)
                             currentDevice.SetPowerFromThread(CableNetwork, true).Forget();
                     }
                     else if (currentDevice.Powered && currentDevice.AllowSetPower(CableNetwork))
                         currentDevice.SetPowerFromThread(CableNetwork, false).Forget();
+                    
+                    
                 }
 
                 // If this was a power provider, draw power from it based on demand ratio
-                if (ProvidedPower[idx] >= 0.0f)
-                    currentDevice.UsePower(CableNetwork, demandRatio * ProvidedPower[idx]);
+                if (PowerData[idx].PowerProvided >= 0.0f)
+                    currentDevice.UsePower(CableNetwork, demandRatio * PowerData[idx].PowerProvided);
             }
 
         }

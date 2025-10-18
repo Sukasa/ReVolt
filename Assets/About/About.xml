@@ -2,7 +2,7 @@
 <ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.1.1</Version>
+  <Version>1.1.6</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -20,17 +20,19 @@
 
     [b]Stationary batteries are now charge- and discharge-rate limited.[/b]  A single battery isn't going to take 100kW anymore, and these babies can discharge a fair bit quicker than they charge.  You might need to re-design your power distribution, or use a few more batteries in parallel!
 
+    [b]Circuit Breakers![/b].  Like fuses, with a greater degree of control over the specific trip point - and which, after tripping, can be reset without having to build a new fuse.  These can also protect your wires if you get sudden surges of power...
+
     [b]Fuses still work.[/b]  As long as there is a fuse rated low enough to protect the cable, that fuse will ALWAYS blow instead of a cable.  And fuses blow instantly, no time delay.
 
-    [b]Complex/recursive electrical networks are allowed.[/b]  With the revised power simulation, the limit on transformers or batteries in recursive networks has been lifted.  Over-engineer your bases to your heart's delight!  Also, transformers are less exploitable now.
+    [b]Complex/recursive electrical networks are allowed.[/b]  With the revised power simulation, the limit on transformers or batteries in recursive networks has been lifted.  Over-engineer your bases to your heart's delight!  Also, transformers are less exploitable now - but take note, they also properly apply their own power requirements to the upstream!
 
     [h2]📅 Future Plans[/h2]
 
     In future, there are a few more components planned out:
     [list]
-    [*] Either reversed small breakers, or [b]bi-directional breakers[/b].  I'm not sure which, yet.
     [*] Heavy Breakers, capable of interrupting much larger amounts of power
     [*] Smart variants of both, able to be monitored and controlled over the data network!
+    [*] Load Centers, which attach to a single cable network and let you control power to groups of devices
     [/list]
 
     [h1]🧾 Credits[/h1]
@@ -57,10 +59,9 @@
   </InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.1.1:[/h3]
+    [h3]Version 1.1.6:[/h3]
     [list]
-    [*] Added a patch which helps mitigate the transformer power exploit.  Due to how the pwoer system works, it cannot be entirely eliminated.
-    [*] Improved the circuit breaker tooltip slightly
+    [*] Cleaned up the circuit breaker tooltips
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>

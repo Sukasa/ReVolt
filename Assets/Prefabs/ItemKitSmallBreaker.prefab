@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4353131885312287710}
   - component: {fileID: 6975181401244215202}
   - component: {fileID: 5266361385251605440}
-  - component: {fileID: 3298017893727283031}
+  - component: {fileID: 1844742640311736473}
   m_Layer: 0
   m_Name: ItemKitSmallBreaker
   m_TagString: Untagged
@@ -134,7 +134,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3952585, y: 0.47696105, z: 0.23508897}
   m_Center: {x: 0.0067704096, y: 0.0057110637, z: -0.026427671}
---- !u!114 &3298017893727283031
+--- !u!114 &1844742640311736473
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8419442123668928707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4357f88ae626cd54abfabdb5498454e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 18da089609050194f9f4e9ccffa2bf33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _referenceId: 0
@@ -181,7 +181,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 2100000, guid: 6f16e8502ae2d5640b40872988cd4401, type: 2}
+  PaintableMaterial: {fileID: 0}
   CustomColor:
     Name: 
     Bit: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
   AudioSources: []
   BaseAnimator: {fileID: 0}
   IsCursor: 0
-  Blueprint: {fileID: 0}
+  Blueprint: {fileID: 8311375169807572008, guid: 1e3b6e1ff9c6e2c4598f9843a4f38a10, type: 3}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -239,7 +239,7 @@ MonoBehaviour:
   EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   DiffuseIndex: 0
   SmoothnessIndex: 0
-  SortingClass: 1
+  SortingClass: 0
   RecipeTier: 1
   CollisionSound: 0
   SlotWearAction: 0
@@ -534,6 +534,7 @@ MonoBehaviour:
   DecayedFoodPrefab: {fileID: 0}
   StackedGeneCollections: []
   quantity: 1
-  MaxQuantity: 5
-  BuildStructure: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
-  QuantityUsed: 1
+  MaxQuantity: 10
+  Constructables:
+  - {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+  - {fileID: 6369823268974974226, guid: b4fa0706084b2a7428b99ad41369a3c4, type: 3}

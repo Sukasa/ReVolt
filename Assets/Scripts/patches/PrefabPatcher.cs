@@ -1,5 +1,7 @@
 using Assets.Scripts.Objects;
 using HarmonyLib;
+using LaunchPadBooster.Utils;
+using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System;
 using System.Collections.Generic;
@@ -39,7 +41,7 @@ namespace ReVolt.patches
         [HarmonyPatch(typeof(Prefab), "LoadAll")]
         public static void Prefix()
         {
-            if (!ReVolt.configEnablePrefabs.Value) // If the user has turned off adding prefabs, don't add prefabs.
+            if (!ReVolt.enablePrefabContent.Value) // If the user has turned off adding prefabs, don't add prefabs.
                 return;
 
             try
@@ -60,6 +62,9 @@ namespace ReVolt.patches
 
                         if (thing is IPatchable SelfPatcher)
                             SelfPatcher.PatchPrefab();
+
+                        if (thing.Blueprint != null)
+                            thing.Blueprint.GetComponent<MeshRenderer>().sharedMaterial = PrefabUtils.GetBlueprintMaterial();
 
                         if (thing.PaintableMaterial != null)
                             thing.PaintableMaterial = MatchMaterial(thing.PaintableMaterial);

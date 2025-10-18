@@ -13,6 +13,14 @@
       </Description>
     </RecordThing>
     <RecordThing>
+      <Key>SmallCircuitBreakerReversed</Key>
+      <Value>Circuit Breaker (Reversed)</Value>
+      <Description>
+        A circuit breaker can protect a network from over-current, tripping to protect the cabling.
+        Breakers do not trip instantly - remember to leave headroom for your cables.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
+      </Description>
+    </RecordThing>
+    <RecordThing>
       <Key>ItemKitSmallBreaker</Key>
       <Value>Kit (Circuit Breaker)</Value>
       <Description>A {THING:SmallCircuitBreaker} construction kit</Description>

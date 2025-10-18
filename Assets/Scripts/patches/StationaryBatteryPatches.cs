@@ -11,14 +11,16 @@ namespace ReVolt.patches
         [HarmonyPatch(nameof(Battery.GetUsedPower))]
         public static void LimitMaxChargeRate(Battery __instance, ref float __result)
         {
-            __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryChargeRate.Value);
+            if (ReVolt.enableBatteryLimitsPatch.Value)
+                __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryChargeRate.Value);
         }
 
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Battery.GetGeneratedPower))]
         public static void LimitMaxDischargeRate(Battery __instance, ref float __result)
         {
-            __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryDischargeRate.Value);
+            if (ReVolt.enableBatteryLimitsPatch.Value)
+                __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryDischargeRate.Value);
         }
     }
 }

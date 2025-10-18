@@ -1,4 +1,4 @@
-﻿namespace ReVolt
+﻿namespace ReVolt.Interfaces
 {
     interface IPatchable
     {

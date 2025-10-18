@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Networks;
 
-namespace ReVolt
+namespace ReVolt.Interfaces
 {
     public interface IBreaker
     {
