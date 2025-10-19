@@ -135,7 +135,7 @@ namespace ReVolt
                         return action.Succeed();
 
                     IsOpen = !IsOpen;
-                    PlayPooledAudioSound(IsOpen ? Defines.Sounds.LeverUp : Defines.Sounds.LeverDown, Vector3.zero);
+                    PlayPooledAudioSound(IsOpen ? Defines.Sounds.LeverUp : Defines.Sounds.LeverDown, new Vector3(0f, 0f, 0.125f));
 
                     return action;
 
@@ -148,7 +148,7 @@ namespace ReVolt
                     if (!doAction)
                         return action.Succeed();
 
-                    PlayPooledAudioSound(interactable.State == 0 ? Defines.Sounds.SwitchOn : Defines.Sounds.SwitchOff, Vector3.zero); 
+                    PlayPooledAudioSound(interactable.State == 0 ? Defines.Sounds.SwitchOn : Defines.Sounds.SwitchOff, new Vector3(0f, 0f, 0.125f)); 
                     interactable.Interact(interactable.State > 0 ? 0 : 1);
 
                     return action.Succeed();
