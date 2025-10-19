@@ -2,7 +2,7 @@
 using HarmonyLib;
 using System;
 
-namespace ReVolt.patches
+namespace ReVolt.Patches
 {
     [HarmonyPatch(typeof(Battery))]
     internal class StationaryBatteryPatches

@@ -3,7 +3,7 @@ using Assets.Scripts.Objects.Pipes;
 using HarmonyLib;
 using UnityEngine;
 
-namespace ReVolt.Assets.Scripts.Patches
+namespace ReVolt.Patches
 {
     [HarmonyPatch(typeof(Device))]
     public class DevicePatches

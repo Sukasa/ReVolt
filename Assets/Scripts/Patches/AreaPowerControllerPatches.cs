@@ -3,7 +3,7 @@ using Assets.Scripts.Objects.Electrical;
 using HarmonyLib;
 using UnityEngine;
 
-namespace ReVolt.patches
+namespace ReVolt.Patches
 {
     [HarmonyPatch(typeof(AreaPowerControl))]
     internal class AreaPowerControllerPatches

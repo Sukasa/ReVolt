@@ -148,7 +148,7 @@ namespace ReVolt
                     if (!doAction)
                         return action.Succeed();
 
-                    PlayPooledAudioSound(interactable.State == 0 ? Defines.Sounds.PipeDeviceOn : Defines.Sounds.PipeDeviceOff, Vector3.zero); 
+                    PlayPooledAudioSound(interactable.State == 0 ? Defines.Sounds.SwitchOn : Defines.Sounds.SwitchOff, Vector3.zero); 
                     interactable.Interact(interactable.State > 0 ? 0 : 1);
 
                     return action.Succeed();

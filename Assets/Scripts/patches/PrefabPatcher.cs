@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace ReVolt.patches
+namespace ReVolt.Patches
 {
     [HarmonyPatch]
     public class PrefabPatcher

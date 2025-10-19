@@ -1,7 +1,7 @@
 using Assets.Scripts.Networks;
 using HarmonyLib;
 
-namespace ReVolt.patches
+namespace ReVolt.Patches
 {
     [HarmonyPatch(typeof(PowerTick))]
     public class PowerTickPatches
