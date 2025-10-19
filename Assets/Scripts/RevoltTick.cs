@@ -2,14 +2,16 @@
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Objects.Pipes;
+using Assets.Scripts.Objects.Structures;
 using Assets.Scripts.Util;
+using Objects;
 using ReVolt.Interfaces;
 using ReVolt.patches;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
+using StationeersObjs = Assets.Scripts.Objects;
 
 namespace ReVolt
 {
@@ -21,12 +23,12 @@ namespace ReVolt
             public float Ratio;
             public float PowerUsed;
             public float PowerProvided;
-            internal int Category;
+            internal PowerClass Category;
         }
 
         public bool IsDirty = true;
 
-        private SortedList<float, List<Cable>> _allCAbles = new();
+        private SortedList<float, List<Cable>> _allCables = new();
         private SortedList<float, List<CableFuse>> _allFuses = new();
 
         private static readonly PropertyInfo _providerSetter;
@@ -42,6 +44,25 @@ namespace ReVolt
         private bool _isPowerMet;
         private float _breakerLimit;
         private int _breakerIndex;
+
+        private ILoadCenter _loadCenter;
+
+        public enum PowerClass
+        {
+            Lights,
+            Doors,
+            Atmospherics,
+            Equipment,
+            Logic,
+            Power,
+            Misc,
+
+            Max
+        }
+
+        private readonly bool[] PowerStates = new bool[(int)PowerClass.Max] { true, true, true, true, true, true, true };
+
+        public bool GetPowerState(PowerClass idx) => PowerStates[(int)idx];
 
         static RevoltTick()
         {
@@ -76,11 +97,12 @@ namespace ReVolt
             // We're dirty.  Reinitialize data
             Devices.Clear();
             Fuses.Clear();
-            _allCAbles.Clear();
+            _allCables.Clear();
 
             // For now, use the original lists for devices and fuses
             lock (CableNetwork.PowerDeviceList)
                 Devices.AddRange(CableNetwork.PowerDeviceList);
+
 
             // Allocate breaker list
             _breakers = new IBreaker[Devices.Count(x => x is IBreaker)];
@@ -96,33 +118,87 @@ namespace ReVolt
             // Add all cables in.  Since we want to preferentially burn weaker cables, we'll use a sorted list
             lock (CableNetwork.CableList)
                 foreach (var cable in CableNetwork.CableList.Where(x => x != null))
-                    if (!_allCAbles.ContainsKey(cable.MaxVoltage))
-                        _allCAbles.Add(cable.MaxVoltage, new List<Cable>(CableNetwork.CableList.Count) { cable });
+                    if (!_allCables.ContainsKey(cable.MaxVoltage))
+                        _allCables.Add(cable.MaxVoltage, new List<Cable>(CableNetwork.CableList.Count) { cable });
                     else
-                        _allCAbles[cable.MaxVoltage].Add(cable);
+                        _allCables[cable.MaxVoltage].Add(cable);
 
-            // Allocate our memoization arrays, if they've changed
+            // Allocate our memoization arrays, if they've changed, iuncluding power classifications
             if (PowerData is null || PowerData.Length != Devices.Count)
+                PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = ClassifyDevice(x) }).ToArray();
+            
+            // Now look for a load center and initialize it (and us)
+            _loadCenter = null;
+
+            var Devs = Devices.Where(x => x is ILoadCenter).ToList();
+            if (Devs.Count == 1)
             {
-                PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = 0 }).ToArray();
+                _loadCenter = (ILoadCenter)Devs[0];
+                _loadCenter.HasConflict = false;
+                _loadCenter.LoadControlData = PowerData;
             }
+            else if (Devs.Count > 1)
+            {
+                foreach (var item in Devs)
+                {
+                    var A = item as ILoadCenter;
+                    A.HasConflict = true;
+                }
+            }
+
+            if (_loadCenter == null)
+            {
+                PowerStates[(int)PowerClass.Lights] = true;
+                PowerStates[(int)PowerClass.Doors] = true;
+                PowerStates[(int)PowerClass.Atmospherics] = true;
+                PowerStates[(int)PowerClass.Equipment] = true;
+                PowerStates[(int)PowerClass.Logic] = true;
+                PowerStates[(int)PowerClass.Power] = true;
+                PowerStates[(int)PowerClass.Misc] = true;
+            }
+        }
+
+        public static PowerClass ClassifyDevice(Device DevUnderTest)
+        {
+            if (DevUnderTest is ILight)
+                return PowerClass.Lights;
+
+            if (DevUnderTest is Door)
+                return PowerClass.Doors;
+
+            if (DevUnderTest is LogicUnitBase || DevUnderTest is LogicUnit || DevUnderTest is PipeAnalysizer || DevUnderTest is GasSensor || DevUnderTest is Sensor || DevUnderTest is CableAnalyser)
+                return PowerClass.Logic;
+
+            if (DevUnderTest is DeviceAtmospherics || DevUnderTest is WallHeater || DevUnderTest is DeviceInputOutputCircuit || DevUnderTest is DevicePipeMounted || DevUnderTest is Igniter)
+                return PowerClass.Atmospherics;
+
+            if (DevUnderTest is SpawnPointAtmospherics || DevUnderTest is LargeElectrical || DevUnderTest is StationeersObjs.Electrical.Gyroscope || DevUnderTest is BatteryCellCharger)
+                return PowerClass.Equipment;
+
+            if (DevUnderTest is ElectricalInputOutput || DevUnderTest is Electrical || DevUnderTest is CableFuse || DevUnderTest is WindTurbineGenerator || DevUnderTest is TurbineGenerator)
+                return PowerClass.Power;
+
+            if (DevUnderTest is ILoadCenter)
+                return PowerClass.Misc;
+
+            return PowerClass.Equipment;
         }
 
         public Cable TestBurnCable(float powerUsed)
         {
             // If we're within the power rating of the cable, no burn
-            if (powerUsed <= _allCAbles.Keys[0])
+            if (powerUsed <= _allCables.Keys[0])
                 return null;
 
             // Do a cheap calculation to get the % chance to burn the cable
-            var burnChance = (powerUsed / _allCAbles.Keys[0]) - 1.0f;
+            var burnChance = (powerUsed / _allCables.Keys[0]) - 1.0f;
 
             // If we fail the chance, no burn
             if ((float)RNG.NextDouble() > burnChance * ReVolt.configCableBurnFactor.Value)
                 return null;
 
             // Otherwise we'll burn one of the weak points
-            return _allCAbles.Values[0].Pick();
+            return _allCables.Values[0].Pick();
         }
 
         public CableFuse TestBlowFuse(float powerUsed)
@@ -143,6 +219,17 @@ namespace ReVolt
             _breakerIndex = 0;
             _breakerLimit = 0.0f;
 
+            if (_loadCenter != null)
+            {
+                PowerStates[(int)PowerClass.Lights] = _loadCenter.EnableLights;
+                PowerStates[(int)PowerClass.Doors] = _loadCenter.EnableDoors;
+                PowerStates[(int)PowerClass.Atmospherics] = _loadCenter.EnableAtmos;
+                PowerStates[(int)PowerClass.Equipment] = _loadCenter.EnableEquip;
+                PowerStates[(int)PowerClass.Logic] = _loadCenter.EnableLogic;
+                PowerStates[(int)PowerClass.Power] = true;
+                PowerStates[(int)PowerClass.Misc] = true;
+            }
+
             int idx = Devices.Count;
             while (idx-- > 0)
             {
@@ -150,14 +237,17 @@ namespace ReVolt
                 if (currentDevice == null) // Sanity check for missing devices
                     continue;
 
-                // Get how much power the device consumes and provides on this network
-                PowerData[idx].PowerUsed = currentDevice.GetUsedPower(CableNetwork);
-                PowerData[idx].PowerProvided = currentDevice.GetGeneratedPower(CableNetwork);
+                var Enable = PowerStates[(int)PowerData[idx].Category];
 
+                // Get how much power the device consumes and provides on this network
+                if (Enable)
+                    PowerData[idx].PowerUsed = currentDevice.GetUsedPower(CableNetwork);
+                else
+                    PowerData[idx].PowerUsed = 0f;
+
+                PowerData[idx].PowerProvided = currentDevice.GetGeneratedPower(CableNetwork);
                 // Sum network power requirement
                 Required += PowerData[idx].PowerUsed;
-
-
 
                 // If this is a power provider, we need to do some clerical work to keep the Network Analyzer cartridge happy
                 if (PowerData[idx].PowerProvided != 0.0f)
@@ -180,11 +270,13 @@ namespace ReVolt
             // Write some data for tablets/etc to use
             _providerSetter.SetValue(this, newProviders.ToArray());
             _IODevSetter.SetValue(this, newIODevs.ToArray());
+
+            if (ReVolt.enableRecursiveNetworkLimits.Value)
+                PowerTickPatches.CheckForRecursiveProviders(this);
         }
 
         public void ApplyState_New()
         {
-
             Potential = Mathf.Max(Potential, 0.0f);
             Required = Mathf.Max(Required, 0.0f);
             Consumed = Mathf.Min(Potential, Required);
@@ -246,7 +338,7 @@ namespace ReVolt
                 // If this device is a power consumer then give power to it based on power ratio + turn it on/off if it has power
                 if (PowerData[idx].PowerUsed >= 0.0f)
                 {
-                    float powerAvailable = PowerData[idx].PowerUsed * _powerRatio; // Check and see how much of its demand was met
+                    float powerAvailable = PowerStates[(int)PowerData[idx].Category] ? PowerData[idx].PowerUsed * _powerRatio : 0.0f; // Check and see how much of its demand was met
 
                     // We know how much power this device is going to receive, so give it that much power (even if it can't make use of it effectively)
                     currentDevice.ReceivePower(CableNetwork, powerAvailable);
@@ -254,15 +346,13 @@ namespace ReVolt
                     // Depending on the power available, maybe or maybe don't power the device
                     // TODO later on implement brownouts here
 
-                    if (powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
+                    if (PowerStates[(int)PowerData[idx].Category] && powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
                     {
                         if (!currentDevice.Powered)
                             currentDevice.SetPowerFromThread(CableNetwork, true).Forget();
                     }
                     else if (currentDevice.Powered && currentDevice.AllowSetPower(CableNetwork))
                         currentDevice.SetPowerFromThread(CableNetwork, false).Forget();
-                    
-                    
                 }
 
                 // If this was a power provider, draw power from it based on demand ratio
