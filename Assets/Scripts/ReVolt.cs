@@ -32,6 +32,7 @@ namespace ReVolt
             configMaxBatteryChargeRate = Config.Bind("Balancing", "Max Battery charge rate", 0.002f, "Maximum Stationary battery charge rate, in % of max charge");
             configMaxBatteryDischargeRate = Config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
             configCableBurnFactor = Config.Bind("Balancing", "Cable burn factor", 1.0f, "Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.");
+            enableRecursiveNetworkLimits = Config.Bind("Balancing", "Enable Recursive Network Limits", false, "Re-enables the check that force-burns cables out if the power grid forms a loop through multiple transformers or batteries");
 
             // Patches config
             enableTransformerExploitMitigation = Config.Bind("Patches", "Enable Transformer Exploit Mitigation", true, "Patch transformers to mitigate the free-power exploit, and restore quiescent current draw");

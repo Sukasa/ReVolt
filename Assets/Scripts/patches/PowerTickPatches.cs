@@ -48,5 +48,14 @@ namespace ReVolt.patches
         {
             // Stub
         }
+
+        [HarmonyReversePatch]
+        [HarmonyPatch("CheckForRecursiveProviders")]
+        public static void CheckForRecursiveProviders(PowerTick _)
+        {
+            // Stub
+        }
+
+
     }
 }
