@@ -6,7 +6,7 @@ using Assets.Scripts.Objects.Structures;
 using Assets.Scripts.Util;
 using Objects;
 using ReVolt.Interfaces;
-using ReVolt.patches;
+using ReVolt.Patches;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;

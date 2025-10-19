@@ -2,7 +2,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using LaunchPadBooster;
 using ReVolt.Assets.Scripts;
-using ReVolt.patches;
+using ReVolt.Patches;
 using StationeersMods.Interface;
 using UnityEngine;
  
