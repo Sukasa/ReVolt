@@ -15,23 +15,23 @@ namespace ReVolt.patches
     {
         // Material matching functions adapted from tom_is_unlucky's FPGA mod material processor
         private static readonly Dictionary<string, StationeersColor> MATERIAL_MAP = new() {
-            {"Blu", StationeersColor.BLUE},
-            {"Gra", StationeersColor.GRAY},
-            {"Gre", StationeersColor.GREEN},
-            {"Ora", StationeersColor.ORANGE},
-            {"Red", StationeersColor.RED},
-            {"Yel", StationeersColor.YELLOW},
-            {"Whi", StationeersColor.WHITE},
-            {"Bla", StationeersColor.BLACK},
-            {"Bro", StationeersColor.BROWN},
-            {"Kha", StationeersColor.KHAKI},
-            {"Pin", StationeersColor.PINK},
-            {"Pur", StationeersColor.PURPLE},
+            {"blu", StationeersColor.BLUE},
+            {"gra", StationeersColor.GRAY},
+            {"gre", StationeersColor.GREEN},
+            {"ora", StationeersColor.ORANGE},
+            {"red", StationeersColor.RED},
+            {"yel", StationeersColor.YELLOW},
+            {"whi", StationeersColor.WHITE},
+            {"bla", StationeersColor.BLACK},
+            {"bro", StationeersColor.BROWN},
+            {"kha", StationeersColor.KHAKI},
+            {"pin", StationeersColor.PINK},
+            {"pur", StationeersColor.PURPLE},
         };
 
         private static Material MatchMaterial(Material checkMaterial)
         {
-            if (MATERIAL_MAP.TryGetValue(checkMaterial.name[5..8], out StationeersColor match))
+            if (MATERIAL_MAP.TryGetValue(checkMaterial.name[5..8].ToLower(), out StationeersColor match))
                 return StationeersModsUtility.GetMaterial(match, checkMaterial.name[^3..] == "ive" ? ShaderType.EMISSIVE : ShaderType.NORMAL);
 
             return checkMaterial;

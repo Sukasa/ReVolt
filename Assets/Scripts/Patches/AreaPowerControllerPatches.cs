@@ -52,10 +52,12 @@ namespace ReVolt.patches
 
             float usedPower = 0.0f;
             if (__instance.OnOff && __instance.OutputNetwork != null)
+            {
                 usedPower = ____powerProvided + __instance.UsedPower;
 
-            if ((bool)__instance.Battery && !__instance.Battery.IsCharged)
-                usedPower += Mathf.Min(__instance.BatteryChargeRate, __instance.Battery.PowerDelta);
+                if ((bool)__instance.Battery && !__instance.Battery.IsCharged)
+                    usedPower += Mathf.Min(__instance.BatteryChargeRate, __instance.Battery.PowerDelta);
+            }
 
 
             __result = usedPower;

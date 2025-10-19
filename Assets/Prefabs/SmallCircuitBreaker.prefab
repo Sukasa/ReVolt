@@ -583,7 +583,7 @@ MonoBehaviour:
       _visible: 0
     TemperatureRadiationFactor: 0
     Tool:
-      ToolEntry: {fileID: 3298017893727283031, guid: db30b0f803e9cb04b932d8ea1d576886, type: 3}
+      ToolEntry: {fileID: 1844742640311736473, guid: db30b0f803e9cb04b932d8ea1d576886, type: 3}
       ToolEntry2: {fileID: 0}
       EntryTime: 1
       EntryQuantity: 1
@@ -921,7 +921,10 @@ MonoBehaviour:
   DeltaTripCurrent: 500
   MaxInterruptCurrent: 10000
   isSmartBreaker: 0
+  canRemoteControl: 0
   TooltipCollider: {fileID: 4579436129622706050}
+  InfoScreen: {fileID: 0}
+  StatusIndicator: {fileID: 0}
   _breakerStateAnimator: {fileID: 7453914056150334515}
   _breakerHandleAnimator: {fileID: 3215113521862588891}
 --- !u!1 &5815456492017013957

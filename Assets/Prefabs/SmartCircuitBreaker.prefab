@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 2596785633590739844}
   - component: {fileID: 3696591458965636813}
   - component: {fileID: 9182542204721209967}
+  - component: {fileID: 4843285333339874740}
+  - component: {fileID: 1513163270737119101}
   m_Layer: 0
   m_Name: StatePanel
   m_TagString: Untagged
@@ -102,18 +104,61 @@ MonoBehaviour:
     materials:
     - {fileID: 2100000, guid: 6f16e8502ae2d5640b40872988cd4401, type: 2}
   - name: OffPowered
-    Id: -1172405318
+    Id: 765168642
     materials:
     - {fileID: 2100000, guid: 23f34ed4d0cb66d49b3c4d2a09d7d4cd, type: 2}
   - name: TripPowered
     Id: -1785657909
     materials:
-    - {fileID: 2100000, guid: 471196f98022a9940a9f3908b5f37561, type: 2}
+    - {fileID: 2100000, guid: ba446694ee0b98441a450310c9b6c988, type: 2}
   - name: OnPowered
     Id: -1172405318
     materials:
     - {fileID: 2100000, guid: 15a2ea2d7aa3fe446ad6d9f29449eb5c, type: 2}
+  - name: TripPowered2
+    Id: 385233968
+    materials:
+    - {fileID: 2100000, guid: 283789e437c655c4f9a5145a14051390, type: 2}
   renderer: {fileID: 3696591458965636813}
+--- !u!114 &4843285333339874740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079296052136652099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4416181a20c701b4abaa1711ed3fe4ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameObject: {fileID: 1079296052136652099}
+  Transform: {fileID: 6161721302013168625}
+  _materialChanger: {fileID: 9182542204721209967}
+  infoTrigger: {fileID: 1513163270737119101}
+  OnMesh: {fileID: 6463794766566043098, guid: a2862f6162e8a3449b42e27944568f34, type: 3}
+  BaseMesh: {fileID: 2189712430039001894, guid: 456342231e5137f4fa27507893899b57, type: 3}
+--- !u!65 &1513163270737119101
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079296052136652099}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.12, y: 0.045, z: 0.025}
+  m_Center: {x: 0.06, y: 0.1275, z: 0.18}
 --- !u!1 &7475263522971372097
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +227,7 @@ MonoBehaviour:
   - name: NotPowered
     Id: 1348757297
     materials:
-    - {fileID: 2100000, guid: fdccaf0e5eff8254a89d85cf28baf258, type: 2}
+    - {fileID: 2100000, guid: 6f16e8502ae2d5640b40872988cd4401, type: 2}
   - name: OnPowered
     Id: -1172405318
     materials:
@@ -356,6 +401,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+      propertyPath: StatusIndicator
+      value: 
+      objectReference: {fileID: 4843285333339874740}
+    - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: HasActivateState
       value: 1
       objectReference: {fileID: 0}
@@ -401,7 +450,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: Interactables.Array.data[5].StringKey
-      value: TripPowered
+      value: TripPowered2
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: OpenEnds.Array.data[0].ConnectionType
@@ -417,8 +466,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: Interactables.Array.data[5].StringHash
-      value: -1785657909
+      value: 385233968
       objectReference: {fileID: 0}
+    - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+      propertyPath: BuildStates.Array.data[0].Tool.ToolEntry
+      value: 
+      objectReference: {fileID: 1844742640311736473, guid: b099f4de5a019f84a987784f14294038, type: 3}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: Interactables.Array.data[4].Bounds.m_Extent.x
       value: 0.025
