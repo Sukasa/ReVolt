@@ -10,6 +10,7 @@ using Assets.Scripts.UI;
 using Assets.Scripts.Util;
 using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
+using ReVolt.Components;
 using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System.Text;
@@ -24,8 +25,10 @@ namespace ReVolt
         public float DeltaTripCurrent;
         public float MaxInterruptCurrent;
         public bool isSmartBreaker;
+        public bool canRemoteControl;
         public Collider TooltipCollider;
         public InfoScreenComponent InfoScreen;
+        public BreakerStatusScreen StatusIndicator;
 
         [SerializeField]
         private ReVoltMultiStateAnimator _breakerStateAnimator;
@@ -42,7 +45,8 @@ namespace ReVolt
         public const int MODE_OFF = 0;
 
         public override string[] ModeStrings => _breakerModeStrings;
-        static readonly string[] _breakerModeStrings = { "Breaker is Open", "Breaker is Tripped", "Breaker is Closed" };
+        static string[] _breakerModeStrings = {  };
+        static string[] _ColouredModeStrings = {  };
 
 
         public float LimitCurrent => Mode == MODE_ON ? (float)Setting : 0.0f;
@@ -70,6 +74,21 @@ namespace ReVolt
             RNG = new System.Random((int)ReferenceId);
             if (Setting == 0.0)
                 Setting = MinTripCurrent;
+
+            if (_breakerModeStrings.Length == 0)
+            {
+                _breakerModeStrings = new string[3] {
+                    ReVoltStrings.RevoltBreakerOpen,
+                    ReVoltStrings.RevoltBreakerTrippedNetwork,
+                    ReVoltStrings.RevoltBreakerClosed,
+                };
+
+                _ColouredModeStrings = new string[3] {
+                    ReVoltStrings.RevoltBreakerOpen,
+                    ReVoltStrings.RevoltBreakerTripped,
+                    ReVoltStrings.RevoltBreakerClosed,
+                };
+            }
         }
 
         public void PatchPrefab()
@@ -180,6 +199,7 @@ namespace ReVolt
             _breakerStateAnimator?.RefreshState(skipAnimation);
             _breakerHandleAnimator?.RefreshState(skipAnimation);
             InfoScreen?.RefreshState(this);
+            StatusIndicator?.RefreshState(this);
         }
 
         public override string GetContextualName(Interactable interactable)
@@ -197,6 +217,13 @@ namespace ReVolt
             }
         }
 
+        public override void UpdateStateVisualizer(bool visualOnly = false)
+        {
+            base.UpdateStateVisualizer(visualOnly);
+            if (CurrentBuildStateIndex == 1)
+                RefreshAnimState();
+        }
+        
         public override DelayedActionInstance InteractWith(Interactable interactable, Interaction interaction, bool doAction = true)
         {
             if (interactable == null)
@@ -346,14 +373,29 @@ namespace ReVolt
         {
             var sb = new StringBuilder();
 
-            sb.Append(ModeStrings[Mode]);
+            sb.AppendLine(_ColouredModeStrings[Mode]);
             if (Mode == MODE_TRIPPED)
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
             return sb.ToString();
 
         }
-        
+
+        protected virtual string IndicatorTooltip()
+        {
+            if (!Powered)
+                return "The screen is dark";
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine(_ColouredModeStrings[Mode]);
+            if (Mode == MODE_TRIPPED)
+                sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
+
+            return sb.ToString();
+
+        }
+
         protected virtual string InfoScreenTooltip()
         {
             if (!Powered)
@@ -361,18 +403,30 @@ namespace ReVolt
 
             var sb = new StringBuilder();
 
-            sb.AppendLine(ModeStrings[Mode]);
+            sb.AppendLine(_ColouredModeStrings[Mode]);
             if (Mode == MODE_TRIPPED)
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
+            sb.Append("Current Trip Point is <color=yellow>");
+            sb.Append(Setting.ToStringPrefix("W", "yellow", true));
+            sb.AppendLine("</color>");
+
             if (OutputNetwork != null)
             {
+                sb.Append("Providing ");
+                sb.AppendLine(_transferredLast.ToStringPrefix("W", "yellow"));
+                sb.AppendLine();
+                sb.AppendLine("Network:");
                 sb.Append(GameStrings.CableAnalyserActual.AsString(OutputNetwork.CurrentLoad.ToStringPrefix("W", "yellow")));
                 sb.AppendLine();
                 sb.Append(GameStrings.CableAnalyserRequired.AsString(OutputNetwork.RequiredLoad.ToStringPrefix("W", "yellow")));
                 sb.AppendLine();
                 sb.Append(GameStrings.CableAnalyserPotential.AsString(OutputNetwork.PotentialLoad.ToStringPrefix("W", "yellow")));
 
+            }
+            else
+            {
+                sb.Append(ReVoltStrings.SmartBreakerNoCableFound);
             }
 
 
@@ -387,6 +441,12 @@ namespace ReVolt
                 {
                     Title = DisplayName,
                     Extended = InfoScreenTooltip()
+                };
+            if (StatusIndicator != null && hitCollider == StatusIndicator.InfoTrigger)
+                return new PassiveTooltip(toDefault: true)
+                {
+                    Title = DisplayName,
+                    Extended = IndicatorTooltip()
                 };
 
             if (hitCollider == TooltipCollider)
@@ -500,9 +560,14 @@ namespace ReVolt
                 case LogicType.Maximum:
                 case LogicType.Ratio:
                 case LogicType.PowerActual:
+                case LogicType.PowerGeneration:
+                case LogicType.PowerPotential:
+                case LogicType.PowerRequired:
+                case LogicType.RequiredPower:
                 case LogicType.On:
                 case LogicType.Mode:
                 case LogicType.Error:
+                case LogicType.Power:
                     return isSmartBreaker;
 
                 default:
@@ -512,7 +577,7 @@ namespace ReVolt
 
         public override bool CanLogicWrite(LogicType logicType)
         {
-            return (logicType == LogicType.Setting || logicType == LogicType.Activate || logicType == LogicType.On) && isSmartBreaker;
+            return (logicType == LogicType.Setting || logicType == LogicType.Activate || logicType == LogicType.On) && canRemoteControl;
         }
 
         public override double GetLogicValue(LogicType logicType)
@@ -525,8 +590,16 @@ namespace ReVolt
                     return MaxTripCurrent;
                 case LogicType.Ratio:
                     return Setting / MaxTripCurrent;
-                case LogicType.PowerActual:
+                case LogicType.PowerGeneration:
                     return _transferredLast;
+                case LogicType.PowerActual:
+                    return OutputNetwork.CurrentLoad;
+                case LogicType.PowerRequired:
+                    return OutputNetwork.RequiredLoad;
+                case LogicType.PowerPotential:
+                    return OutputNetwork.PotentialLoad;
+                case LogicType.RequiredPower:
+                    return UsedPower;
                 default:
                     return base.GetLogicValue(logicType);
             }
