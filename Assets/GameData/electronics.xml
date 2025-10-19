@@ -5,10 +5,31 @@
       <PrefabName>ItemKitSmallBreaker</PrefabName>
       <Recipe>
         <Time>20</Time>
-        <Energy>500</Energy>
+        <Energy>350</Energy>
         <Copper>5</Copper>
         <Iron>15</Iron>
         <Silicon>4</Silicon>
+      </Recipe>
+    </RecipeData>
+    <RecipeData>
+      <PrefabName>ItemKitSmartBreaker</PrefabName>
+      <Recipe>
+        <Time>25</Time>
+        <Energy>500</Energy>
+        <Copper>10</Copper>
+        <Iron>18</Iron>
+        <Silicon>17</Silicon>
+        <Solder>6</Solder>
+      </Recipe>
+    </RecipeData>
+    <RecipeData>
+      <PrefabName>ItemKitLoadCenter</PrefabName>
+      <Recipe>
+        <Time>35</Time>
+        <Energy>400</Energy>
+        <Copper>16</Copper>
+        <Iron>24</Iron>
+        <Solder>9</Solder>
       </Recipe>
     </RecipeData>
   </ElectronicsPrinterRecipes>

@@ -8,13 +8,14 @@ using UnityEngine;
  
 namespace ReVolt
 {
-    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.1.6")]
+    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.3.0")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
         internal static ConfigEntry<float> configCableBurnFactor;
+        internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
 
         internal static ConfigEntry<bool> enablePrefabContent;
 
@@ -22,7 +23,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.1.6");
+        public static readonly Mod MOD = new("Re-Volt", "1.3.0");
 
         public override void OnLoaded(ContentHandler contentHandler)
         {

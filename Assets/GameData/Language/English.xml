@@ -5,10 +5,22 @@
   <Font>font_english</Font>
   <Things>
     <RecordThing>
+      <Key>LoadCenter</Key>
+      <Value>Load Center</Value>
+      <Description>
+        Sometimes you need finer control over power, without running a bajillion cables in every room.  The Load Center can control power to various classes of devices on your cable networks, and has Logic control for advanced use cases.
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>ItemKitLoadCenter</Key>
+      <Value>Kit (Load Center)</Value>
+      <Description>A {THING:LoadCenter} construction kit</Description>
+    </RecordThing>
+    <RecordThing>
       <Key>SmallCircuitBreaker</Key>
       <Value>Circuit Breaker</Value>
       <Description>
-        A circuit breaker can protect a network from over-current, tripping to protect the cabling.
+        A Circuit Breaker can protect a network from over-current, tripping to protect the cabling.
         Breakers do not trip instantly - remember to leave headroom for your cables.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
       </Description>
     </RecordThing>
@@ -16,14 +28,35 @@
       <Key>SmallCircuitBreakerReversed</Key>
       <Value>Circuit Breaker (Reversed)</Value>
       <Description>
-        A circuit breaker can protect a network from over-current, tripping to protect the cabling.
+        A Circuit Breaker can protect a network from over-current, tripping to protect the cabling.
         Breakers do not trip instantly - remember to leave headroom for your cables.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>SmartCircuitBreaker</Key>
+      <Value>Smart Breaker</Value>
+      <Description>
+        A Smart Breaker is an advanced {THING:SmallCircuitBreaker} with an in-built {THING:StructureCableAnalysizer}.  Additionally, it can trip immediately when in an over-current situation.
+        The data network information can be accessed from both power connections.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>SmartCircuitBreakerReversed</Key>
+      <Value>Smart Breaker (Reversed)</Value>
+      <Description>
+        A Smart Breaker is an advanced {THING:SmallCircuitBreaker} with an in-built {THING:StructureCableAnalysizer}.  Additionally, it can trip immediately when in an over-current situation.
+        The data network information can be accessed from both power connections.  You can set the trip limit during construction with a {THING:ItemScrewdriver}
       </Description>
     </RecordThing>
     <RecordThing>
       <Key>ItemKitSmallBreaker</Key>
       <Value>Kit (Circuit Breaker)</Value>
       <Description>A {THING:SmallCircuitBreaker} construction kit</Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>ItemKitSmartBreaker</Key>
+      <Value>Kit (Smart Breaker)</Value>
+      <Description>A {THING:SmartCircuitBreaker} construction kit</Description>
     </RecordThing>
   </Things>
   <Interface>
@@ -35,5 +68,69 @@
       <Key>ResetBreakerToClear</Key>
       <Value>Turn breaker off to clear trip</Value>
     </Record>
+    <Record>
+      <Key>SmartBreakerNoCableFound</Key>
+      <Value>&lt;color=red&gt;No cable network connected&lt;/color&gt;</Value>
+    </Record>
+    <Record>
+      <Key>RevoltBreakerTripped</Key>
+      <Value>&lt;color=red&gt;Breaker is Tripped&lt;/color&gt;</Value>
+    </Record>
+    <Record>
+      <Key>RevoltBreakerTrippedNetwork</Key>
+      <Value>Breaker is Tripped</Value>
+    </Record>
+    <Record>
+      <Key>RevoltBreakerOpen</Key>
+      <Value>Breaker is Open</Value>
+    </Record>
+    <Record>
+      <Key>RevoltBreakerClosed</Key>
+      <Value>Breaker is Closed</Value>
+    </Record>
   </Interface>
+  <Interactables>
+    <Record>
+      <Key>LCToggleLights</Key>
+      <Value>Toggle Light Power</Value>
+    </Record>
+    <Record>
+      <Key>LCToggleDoors</Key>
+      <Value>Toggle Door Power</Value>
+    </Record>
+    <Record>
+      <Key>LCToggleAtmos</Key>
+      <Value>Toggle Atmospherics Power</Value>
+    </Record>
+    <Record>
+      <Key>LCToggleEquipment</Key>
+      <Value>Toggle Equipment Power</Value>
+    </Record>
+    <Record>
+      <Key>LCToggleLogic</Key>
+      <Value>Toggle Logic Power</Value>
+    </Record>
+  </Interactables>
+  <Slots>
+    <Record>
+      <Key>LCLights</Key>
+      <Value>Lights Power</Value>
+    </Record>
+    <Record>
+      <Key>LCDoors</Key>
+      <Value>Door Power</Value>
+    </Record>
+    <Record>
+      <Key>LCAtmos</Key>
+      <Value>Atmospherics Power</Value>
+    </Record>
+    <Record>
+      <Key>LCEquipment</Key>
+      <Value>Equipment Power</Value>
+    </Record>
+    <Record>
+      <Key>LCLogic</Key>
+      <Value>Logic Power</Value>
+    </Record>
+  </Slots>
 </Language>

@@ -2,7 +2,7 @@
 <ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.1.6</Version>
+  <Version>1.3.0</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -14,25 +14,28 @@
 
     [h2]🔌 Features[/h2]
 
+    [b]Load Centers![/b]  With the new Load Center structure, you can control entire sets of devices without needing a separate power network.  Turn your lights, atmospherics, doors, equipment, or logic devices on and off en masse - and also supports data networking, with a secondary data port.
+
     [b]Electrical load is now proportionally shared among all sources on a cable network![/b]  No longer will you have to deal with one battery draining while the others are completely full!  And even better, this goes the same for charging them.  One battery won't hog all the power!
 
     [b]Wires no longer burn out instantly![/b]  Instead, wires will burn out with a random chance, based on how much you're overloading them.  It never made sense that a cable which could carry 5,000 watts continuously would violently rupture in half a second when carrying 5,001 watts.  And now it doesn't.
 
     [b]Stationary batteries are now charge- and discharge-rate limited.[/b]  A single battery isn't going to take 100kW anymore, and these babies can discharge a fair bit quicker than they charge.  You might need to re-design your power distribution, or use a few more batteries in parallel!
 
-    [b]Circuit Breakers![/b].  Like fuses, with a greater degree of control over the specific trip point - and which, after tripping, can be reset without having to build a new fuse.  These can also protect your wires if you get sudden surges of power...
+    [b]Circuit Breakers![/b]  Like fuses, with a greater degree of control over the specific trip point - and which, after tripping, can be reset without having to build a new fuse.  These can also protect your wires if you get sudden surges of power...
+
+    [b]Smart Breakers![/b]  If you wanted more information about what your breakers are doing, or need the instant trip?  Smart Breakers are your solution.
 
     [b]Fuses still work.[/b]  As long as there is a fuse rated low enough to protect the cable, that fuse will ALWAYS blow instead of a cable.  And fuses blow instantly, no time delay.
 
-    [b]Complex/recursive electrical networks are allowed.[/b]  With the revised power simulation, the limit on transformers or batteries in recursive networks has been lifted.  Over-engineer your bases to your heart's delight!  Also, transformers are less exploitable now - but take note, they also properly apply their own power requirements to the upstream!
+    [b]Complex/recursive electrical networks are allowed.[/b]  With the revised power simulation, the limit on transformers or batteries in recursive networks has been lifted.  Over-engineer your bases to your heart's delight!  Also, transformers are less exploitable now - but take note, they (and APCs) also properly apply their own power requirements to the upstream!
 
     [h2]📅 Future Plans[/h2]
 
-    In future, there are a few more components planned out:
+    There's still more content on the way:
     [list]
     [*] Heavy Breakers, capable of interrupting much larger amounts of power
-    [*] Smart variants of both, able to be monitored and controlled over the data network!
-    [*] Load Centers, which attach to a single cable network and let you control power to groups of devices
+    [*] Bug fixes, maintenance, and possibly more components in future!
     [/list]
 
     [h1]🧾 Credits[/h1]
@@ -59,9 +62,10 @@
   </InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.1.6:[/h3]
+    [h3]Version 1.3.0[/h3]
     [list]
-    [*] Cleaned up the circuit breaker tooltips
+    [*] Added Load Center
+    [*] Added configuration option to re-enable the vanilla no-recursive-network check
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
