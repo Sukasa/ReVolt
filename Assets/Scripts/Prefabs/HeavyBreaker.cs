@@ -21,7 +21,6 @@ namespace ReVolt.Prefabs
 
         private bool DirtyLists = true;
 
-        private readonly long[] ConnectionRefIds = new long[3];
         private readonly int[] ConnectionIndices = new int[3] { 0, 0, 0 };
 
         private static readonly float[] SettingOffsets = new float[4] { -10000.0f, -1000.0f, 1000.0f, 10000.0f };

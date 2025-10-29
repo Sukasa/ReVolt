@@ -15,6 +15,7 @@ using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System.Text;
 using UnityEngine;
+using static Assets.Scripts.Networking.NetworkUpdateType.Thing.LogicUnit;
 
 namespace ReVolt
 {
@@ -39,6 +40,7 @@ namespace ReVolt
 
         protected const int FLAG_TRIPSP = 1024;
         protected const int FLAG_MODE = 2048;
+        protected const int FLAG_CONNECTIONS = 4096;
 
         public const int MODE_ON = 2;
         public const int MODE_TRIPPED = 1;
@@ -47,6 +49,9 @@ namespace ReVolt
         public override string[] ModeStrings => _breakerModeStrings;
         static string[] _breakerModeStrings = {  };
         static string[] _ColouredModeStrings = {  };
+
+        // Moved here from Heavy Breaker.  This way I'm not having to have overrides on overrides in the serialization code (just keeps things cleaner)
+        protected readonly long[] ConnectionRefIds = new long[3];
 
 
         public float LimitCurrent => Mode == MODE_ON ? (float)Setting : 0.0f;
@@ -491,6 +496,13 @@ namespace ReVolt
 
             if (IsNetworkUpdateRequired(FLAG_MODE, networkUpdateType))
                 writer.WriteInt32(Mode);
+
+            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
+            {
+                writer.WriteInt64(ConnectionRefIds[0]);
+                writer.WriteInt64(ConnectionRefIds[1]);
+                writer.WriteInt64(ConnectionRefIds[2]);
+            }
         }
 
         public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
@@ -502,6 +514,13 @@ namespace ReVolt
 
             if (IsNetworkUpdateRequired(FLAG_MODE, networkUpdateType))
                 UpdateMode(reader.ReadInt32());
+
+            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
+            {
+                ConnectionRefIds[0] = reader.ReadInt64();
+                ConnectionRefIds[1] = reader.ReadInt64();
+                ConnectionRefIds[2] = reader.ReadInt64();
+            }
         }
 
         public override void SerializeOnJoin(RocketBinaryWriter writer)
@@ -511,6 +530,9 @@ namespace ReVolt
             writer.WriteDouble(Setting);
             writer.WriteDouble(_transferredLast);
             writer.WriteInt32(Mode);
+            writer.WriteInt64(ConnectionRefIds[0]);
+            writer.WriteInt64(ConnectionRefIds[1]);
+            writer.WriteInt64(ConnectionRefIds[2]);
         }
 
         public override void DeserializeOnJoin(RocketBinaryReader reader)
@@ -520,6 +542,10 @@ namespace ReVolt
             Setting = (float)reader.ReadDouble();
             _transferredLast = (float)reader.ReadDouble();
             var NewMode = reader.ReadInt32();
+
+            ConnectionRefIds[0] = reader.ReadInt64();
+            ConnectionRefIds[1] = reader.ReadInt64();
+            ConnectionRefIds[2] = reader.ReadInt64();
 
             UpdateModeNextFrame(NewMode).Forget();
         }
@@ -541,6 +567,13 @@ namespace ReVolt
             Setting = saveData.TripPoint;
             _transferredLast = saveData.TransferredLast;
 
+            if (saveData.ConnectionRefs != null)
+            {
+                ConnectionRefIds[0] = saveData.ConnectionRefs[0];
+                ConnectionRefIds[1] = saveData.ConnectionRefs[1];
+                ConnectionRefIds[2] = saveData.ConnectionRefs[2];
+            }
+
             UpdateModeNextFrame(saveData.Mode).Forget();
         }
 
@@ -553,6 +586,7 @@ namespace ReVolt
             saveData.TripPoint = (float)Setting;
             saveData.TransferredLast = _transferredLast;
             saveData.Mode = Mode;
+            saveData.ConnectionRefs = ConnectionRefIds;
         }
 
         public override void OnFinishedLoad()

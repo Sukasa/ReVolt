@@ -14,5 +14,8 @@ namespace ReVolt.Assets.Scripts
 
         [XmlElement]
         public int Mode;
+
+        [XmlElement]
+        public long[] ConnectionRefs;
     }
 }
