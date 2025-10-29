@@ -186,6 +186,10 @@ namespace ReVolt
 
         public Cable TestBurnCable(float powerUsed)
         {
+            // Bugfix: Power Transmitters create a "cable network" with no cables.
+            if (_allCables.Keys.Count < 1)
+                return null;
+
             // If we're within the power rating of the cable, no burn
             if (powerUsed <= _allCables.Keys[0])
                 return null;
