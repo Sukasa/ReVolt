@@ -293,21 +293,39 @@ namespace ReVolt
                     return action.Fail();
 
                 case InteractableType.Button2: // Close Breaker
-                    return action.Fail("Not Implemented");
+                    if (Mode != MODE_OFF)
+                        action.Fail(ReVoltStrings.RevoltBreakerNotOpen);
+
+                    if (!doAction)
+                        return action.Succeed();
+
+                    OnOff = true;
+
+                    PlayPooledAudioSound(Defines.Sounds.ApcOn, new Vector3(0f, 0f, 0.25f));
+                    UpdateMode();
+
+                    return action;
+
 
                 case InteractableType.Button3: // Open Breaker
-                    return action.Fail("Not Implemented");
+                    if (Mode == MODE_OFF)
+                        action.Fail(ReVoltStrings.RevoltBreakerAlreadyOpen);
 
-                case InteractableType.Button4: // Trip Test
-                    return action.Fail("Not Implemented");
+                    if (!doAction)
+                        return action.Succeed();
 
-                case InteractableType.Button5: // Cycle Input Conn.
-                    return action.Fail("Not Implemented");
+                    if (Mode != MODE_OFF)
+                    {
+                        OnOff = false;
+                        Error = 0;
+                    }
 
-                case InteractableType.Button6: // Cycle Output Conn.
-                    return action.Fail("Not Implemented");
+                    PlayPooledAudioSound(Defines.Sounds.ApcOff, new Vector3(0f, 0f, 0.25f));
+                    UpdateMode();
 
-                case InteractableType.Button7: // Cycle Data Conn.
+                    return action;
+
+                case InteractableType.Button4: // Test (trip) Breaker
                     return action.Fail("Not Implemented");
 
                 default:

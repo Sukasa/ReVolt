@@ -69,6 +69,14 @@
       <Value>Turn breaker off to clear trip</Value>
     </Record>
     <Record>
+      <Key>RevoltBreakerNotOpen</Key>
+      <Value>Breaker not open</Value>
+    </Record>
+    <Record>
+      <Key>RevoltBreakerAlreadyOpen</Key>
+      <Value>Breaker already open</Value>
+    </Record>
+    <Record>
       <Key>SmartBreakerNoCableFound</Key>
       <Value>&lt;color=red&gt;No cable network connected&lt;/color&gt;</Value>
     </Record>
