@@ -9,7 +9,7 @@ namespace ReVolt.Prefabs
 {
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
-        public static PseudoNetworkType<SwitchgearNetwork> SwitchgearNetwork = new();
+        public static PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
 
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
@@ -19,9 +19,8 @@ namespace ReVolt.Prefabs
         {
             get
             {
-                foreach (var openEnd in this.OpenEnds)
-                    // set connections to LandingPad type in unity to mark them for replacement with new connection type
-                    if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == MyNetworkType.ConnectionType)
+                foreach (var openEnd in OpenEnds)
+                    if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == SwitchgearNetwork.ConnectionType)
                         yield return openEnd;
             }
         }
