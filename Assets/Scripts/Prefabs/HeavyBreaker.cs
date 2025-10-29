@@ -96,7 +96,7 @@ namespace ReVolt.Prefabs
 
                     ConnectionIndices[conIdx] = nextIdx;
                     ConnectionRefIds[conIdx] = conList[nextIdx];
-                    UpdateConnections();
+                    CheckConnections();
 
                     // We should probably let clients know?
                     if (NetworkManager.IsServer)
@@ -140,11 +140,6 @@ namespace ReVolt.Prefabs
             ConnectionIndices[0] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[0]), 0);
             ConnectionIndices[1] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[1]), 0);
             ConnectionIndices[2] = Math.Max(DataEntries.IndexOf(ConnectionRefIds[2]), 0);
-        }
-
-        private void UpdateConnections()
-        {
-            CheckConnections();
         }
 
         // This is almost certainly buggy somewhere, since it's not tested yet.
@@ -230,7 +225,7 @@ namespace ReVolt.Prefabs
                 ConnectionIndices[idx] = 0;
 
                 UpdateEntryLists(true);
-                UpdateConnections();
+                CheckConnections();
             }
         }
 
