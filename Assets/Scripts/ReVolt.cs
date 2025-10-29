@@ -16,6 +16,7 @@ namespace ReVolt
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
+        internal static ConfigEntry<float> heavyBreakerMaxTripSetting;
 
         internal static ConfigEntry<bool> enablePrefabContent;
 
@@ -34,6 +35,7 @@ namespace ReVolt
             configMaxBatteryDischargeRate = Config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
             configCableBurnFactor = Config.Bind("Balancing", "Cable burn factor", 1.0f, "Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.");
             enableRecursiveNetworkLimits = Config.Bind("Balancing", "Enable Recursive Network Limits", false, "Re-enables the check that force-burns cables out if the power grid forms a loop through multiple transformers or batteries");
+            heavyBreakerMaxTripSetting = Config.Bind("Balancing", "Heavy Breaker Maximum Trip Setting", 75000.0f, "Maximum configurable trip current for a Heavy Breaker.  Adjust if you have cable mods installed");
 
             // Patches config
             enableTransformerExploitMitigation = Config.Bind("Patches", "Enable Transformer Exploit Mitigation", true, "Patch transformers to mitigate the free-power exploit, and restore quiescent current draw");
