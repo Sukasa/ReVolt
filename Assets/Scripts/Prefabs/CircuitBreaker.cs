@@ -15,7 +15,6 @@ using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System.Text;
 using UnityEngine;
-using static Assets.Scripts.Networking.NetworkUpdateType.Thing.LogicUnit;
 
 namespace ReVolt
 {
