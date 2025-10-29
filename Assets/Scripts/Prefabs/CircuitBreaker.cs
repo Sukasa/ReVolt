@@ -116,7 +116,7 @@ namespace ReVolt
             {
                 UpdateModeNextFrame(MODE_TRIPPED).Forget();
 
-                PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, Vector3.zero);
+                PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, new Vector3(0f, 0f, 0.125f));
             }
         }
 
@@ -261,7 +261,7 @@ namespace ReVolt
 
                     Setting = newSetting;
 
-                    PlayPooledAudioSound(Defines.Sounds.ScrewdriverSound, Vector3.zero);
+                    PlayPooledAudioSound(Defines.Sounds.ScrewdriverSound, new Vector3(0f, 0f, 0.125f));
 
                     return action;
 
@@ -280,7 +280,7 @@ namespace ReVolt
                     else
                         OnOff = !OnOff;
 
-                    PlayPooledAudioSound(OnOff ? Defines.Sounds.ApcOn : Defines.Sounds.ApcOff, Vector3.zero);
+                    PlayPooledAudioSound(OnOff ? Defines.Sounds.ApcOn : Defines.Sounds.ApcOff, new Vector3(0f, 0f, 0.125f));
                     UpdateMode();
 
                     return action;
