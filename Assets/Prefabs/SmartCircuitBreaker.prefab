@@ -134,8 +134,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameObject: {fileID: 1079296052136652099}
   Transform: {fileID: 6161721302013168625}
+  parentThing: {fileID: 0}
   _materialChanger: {fileID: 9182542204721209967}
   infoTrigger: {fileID: 1513163270737119101}
+  interactableAction: 0
   OnMesh: {fileID: 6463794766566043098, guid: a2862f6162e8a3449b42e27944568f34, type: 3}
   BaseMesh: {fileID: 2189712430039001894, guid: 456342231e5137f4fa27507893899b57, type: 3}
 --- !u!65 &1513163270737119101
@@ -513,6 +515,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+      propertyPath: Interactables.Array.data[4].ParentInteractableIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: BuildStates.Array.data[0].Interactables.Array.data[4].Action
       value: 42
       objectReference: {fileID: 0}
@@ -579,6 +585,14 @@ PrefabInstance:
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: BuildStates.Array.data[1].Interactables.Array.data[4].JoinInProgressSync
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+      propertyPath: BuildStates.Array.data[0].Interactables.Array.data[4].ParentInteractableIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
+      propertyPath: BuildStates.Array.data[1].Interactables.Array.data[4].ParentInteractableIndex
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

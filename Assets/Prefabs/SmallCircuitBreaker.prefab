@@ -54,6 +54,7 @@ MonoBehaviour:
   - AnimData:
     - name: HandleOff
       gameObject: {fileID: 8253091667413834517}
+      tOffset: 0
       transform: {fileID: 5083863291601599421}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 40, y: 0, z: 0}
@@ -61,6 +62,7 @@ MonoBehaviour:
   - AnimData:
     - name: HandleTripped
       gameObject: {fileID: 8253091667413834517}
+      tOffset: 0
       transform: {fileID: 5083863291601599421}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -68,6 +70,7 @@ MonoBehaviour:
   - AnimData:
     - name: HandleOn
       gameObject: {fileID: 8253091667413834517}
+      tOffset: 0
       transform: {fileID: 5083863291601599421}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: -40, y: 0, z: 0}
@@ -444,6 +447,7 @@ MonoBehaviour:
     StringHash: 1783312036
     Parent: {fileID: 9040551235344435843}
     Collider: {fileID: 4533119765367357441}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.06, y: 0.05, z: 0.02}
@@ -461,6 +465,7 @@ MonoBehaviour:
     StringHash: 419881127
     Parent: {fileID: 9040551235344435843}
     Collider: {fileID: 6683312136732297257}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: -0.095, y: 0.05, z: 0.095}
@@ -478,6 +483,7 @@ MonoBehaviour:
     StringHash: -1687922867
     Parent: {fileID: 9040551235344435843}
     Collider: {fileID: 0}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -495,11 +501,30 @@ MonoBehaviour:
     StringHash: -1675848843
     Parent: {fileID: 9040551235344435843}
     Collider: {fileID: 3541118521021108885}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0.025, y: 0.025, z: 0.025}
     Action: 43
+    Animator: {fileID: 0}
+    JoinInProgressSync: 1
+    Layer: 0
+    CanKeyInteract: 0
+    KeyMap: 
+    AssociatedAudioEvents: []
+    ActionName: 
+    _state: 0
+  - StringKey: Powered
+    StringHash: 87111221
+    Parent: {fileID: 5164694748061140286, guid: cc8718d64633e654a86e74de1f5b834e, type: 3}
+    Collider: {fileID: 0}
+    ParentInteractableIndex: 0
+    FakeCollider: {fileID: 0}
+    Bounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0.025, y: 0.025, z: 0.025}
+    Action: 42
     Animator: {fileID: 0}
     JoinInProgressSync: 1
     Layer: 0
@@ -529,13 +554,14 @@ MonoBehaviour:
   Renderers: []
   RocketRenderers: []
   HasErrorState: 1
-  HasPowerState: 0
+  HasPowerState: 1
   HasActivateState: 0
   HasLockState: 0
   HasOnOffState: 1
   HasModeState: 1
   HasOpenState: 0
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 0
@@ -609,6 +635,7 @@ MonoBehaviour:
       StringHash: 1783312036
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 0}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -626,6 +653,7 @@ MonoBehaviour:
       StringHash: 419881127
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 6683312136732297257}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: -0.095, y: 0.05, z: 0.095}
@@ -643,6 +671,7 @@ MonoBehaviour:
       StringHash: -1687922867
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 0}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -660,6 +689,7 @@ MonoBehaviour:
       StringHash: -1675848843
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 0}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -724,6 +754,7 @@ MonoBehaviour:
       StringHash: 1783312036
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 4533119765367357441}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0.06, y: 0.05, z: 0.02}
@@ -741,6 +772,7 @@ MonoBehaviour:
       StringHash: 419881127
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 0}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -758,6 +790,7 @@ MonoBehaviour:
       StringHash: -1687922867
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 0}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -775,6 +808,7 @@ MonoBehaviour:
       StringHash: -1675848843
       Parent: {fileID: 9040551235344435843}
       Collider: {fileID: 3541118521021108885}
+      ParentInteractableIndex: -1
       FakeCollider: {fileID: 0}
       Bounds:
         m_Center: {x: 0, y: 0, z: 0}
@@ -916,7 +950,7 @@ MonoBehaviour:
       z: 0
   ConnectionType: 1028
   OpenEndsPermutation: 00000000010000000200000003000000
-  MaxTripCurrent: 4500
+  MaxTripCurrent: 5000
   MinTripCurrent: 1000
   DeltaTripCurrent: 500
   MaxInterruptCurrent: 10000
@@ -1306,6 +1340,7 @@ MonoBehaviour:
   - AnimData:
     - name: On
       gameObject: {fileID: 5815456492017013957}
+      tOffset: 0
       transform: {fileID: 321549333705724855}
       position: {x: 0, y: 0.1089, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -1313,6 +1348,7 @@ MonoBehaviour:
   - AnimData:
     - name: Tripped
       gameObject: {fileID: 5815456492017013957}
+      tOffset: 0
       transform: {fileID: 321549333705724855}
       position: {x: 0, y: 0.05445, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -1320,6 +1356,7 @@ MonoBehaviour:
   - AnimData:
     - name: Off
       gameObject: {fileID: 5815456492017013957}
+      tOffset: 0
       transform: {fileID: 321549333705724855}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
