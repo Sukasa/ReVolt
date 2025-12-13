@@ -15,7 +15,7 @@ namespace ReVolt.Patches
             if (!ReVolt.enableAreaPowerControlFix.Value)
                 return true;
 
-            if (__instance.InputNetwork != null && cableNetwork != __instance.InputNetwork || __instance.InputNetwork == null)
+            if ((__instance.InputNetwork != null && cableNetwork != __instance.InputNetwork) || __instance.InputNetwork == null)
                 return false;
 
             powerAdded -= __instance.UsedPower;
