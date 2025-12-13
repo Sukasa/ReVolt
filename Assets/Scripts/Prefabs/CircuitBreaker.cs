@@ -208,17 +208,12 @@ namespace ReVolt
 
         public override string GetContextualName(Interactable interactable)
         {
-            switch (interactable.Action)
+            return interactable.Action switch
             {
-                case InteractableType.Button1:
-                    return $"Trip Point: {Setting}";
-
-                case InteractableType.Mode:
-                    return ModeStrings[InteractMode.State];
-
-                default:
-                    return base.GetContextualName(interactable);
-            }
+                InteractableType.Button1 => $"Trip Point: {Setting}",
+                InteractableType.Mode => ModeStrings[InteractMode.State],
+                _ => base.GetContextualName(interactable),
+            };
         }
 
         public override void UpdateStateVisualizer(bool visualOnly = false)
@@ -227,7 +222,7 @@ namespace ReVolt
             if (CurrentBuildStateIndex == 1)
                 RefreshAnimState();
         }
-        
+
         public override DelayedActionInstance InteractWith(Interactable interactable, Interaction interaction, bool doAction = true)
         {
             if (interactable == null)
@@ -348,7 +343,6 @@ namespace ReVolt
             {
                 if (interactable != GetInteractable(interactable.Action))
                     GetInteractable(interactable.Action).Interact(interactable.State);
-
             }
         }
 
