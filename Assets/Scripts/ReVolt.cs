@@ -8,12 +8,13 @@ using UnityEngine;
  
 namespace ReVolt
 {
-    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.3.1")]
+    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.3.3")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
+        internal static ConfigEntry<float> configBatteryChargeEfficiency;
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
         internal static ConfigEntry<float> heavyBreakerMaxTripSetting;
@@ -24,7 +25,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.3.1");
+        public static readonly Mod MOD = new("Re-Volt", "1.3.3");
 
         public override void OnLoaded(ContentHandler contentHandler)
         {
@@ -33,6 +34,7 @@ namespace ReVolt
             // Balancing config
             configMaxBatteryChargeRate = Config.Bind("Balancing", "Max Battery charge rate", 0.002f, "Maximum Stationary battery charge rate, in % of max charge");
             configMaxBatteryDischargeRate = Config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
+            configBatteryChargeEfficiency = Config.Bind("Balancing", "Battery Charge Efficiency", 1.0f, "Battery charging efficiency.  Reduce this to lose energy to charging inefficiencies.  If you really want to.");
             configCableBurnFactor = Config.Bind("Balancing", "Cable burn factor", 1.0f, "Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.");
             enableRecursiveNetworkLimits = Config.Bind("Balancing", "Enable Recursive Network Limits", false, "Re-enables the check that force-burns cables out if the power grid forms a loop through multiple transformers or batteries");
             heavyBreakerMaxTripSetting = Config.Bind("Balancing", "Heavy Breaker Maximum Trip Setting", 75000.0f, "Maximum configurable trip current for a Heavy Breaker.  Adjust if you have cable mods installed");
