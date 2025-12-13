@@ -7,6 +7,7 @@ using Assets.Scripts.Util;
 using Objects;
 using ReVolt.Interfaces;
 using ReVolt.Patches;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -44,6 +45,7 @@ namespace ReVolt
         private bool _isPowerMet;
         private float _breakerLimit;
         private int _breakerIndex;
+        private List<PowerProvider> PowerProviders;
 
         private ILoadCenter _loadCenter;
 
@@ -90,6 +92,8 @@ namespace ReVolt
                 return;
             IsDirty = false;
 
+            PowerProviders = new();
+
             RNG = new System.Random((int)from.ReferenceId);
 
             //ConsoleWindow.PrintAction($"Cable network {from.ReferenceId} is dirty, reinitializing lists");
@@ -126,7 +130,7 @@ namespace ReVolt
             // Allocate our memoization arrays, if they've changed, iuncluding power classifications
             if (PowerData is null || PowerData.Length != Devices.Count)
                 PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = ClassifyDevice(x) }).ToArray();
-            
+
             // Now look for a load center and initialize it (and us)
             _loadCenter = null;
 
@@ -217,7 +221,6 @@ namespace ReVolt
 
         public void CalculateState_New()
         {
-            List<PowerProvider> newProviders = new();
             List<PowerProvider> newIODevs = new();
 
             _breakerIndex = 0;
@@ -234,6 +237,8 @@ namespace ReVolt
                 PowerStates[(int)PowerClass.Misc] = true;
             }
 
+            bool dirtyProviderList = false;
+            int provIdx = 0;
             int idx = Devices.Count;
             while (idx-- > 0)
             {
@@ -264,6 +269,13 @@ namespace ReVolt
                 // If this is a power provider, we need to do some clerical work to keep the Network Analyzer cartridge happy
                 if (PowerData[idx].PowerProvided != 0.0f)
                 {
+                    if (PowerProviders.Count > provIdx && PowerProviders[provIdx].Device != currentDevice)
+                    {
+                        dirtyProviderList = true;
+                        PowerProviders[provIdx] = new PowerProvider(currentDevice, CableNetwork);
+                    }
+
+
                     if (currentDevice is IBreaker asBreaker && asBreaker.CanSupplyPower(CableNetwork))
                     {
                         _breakers[_breakerIndex++] = asBreaker;
@@ -271,17 +283,25 @@ namespace ReVolt
                     }
 
                     Potential += PowerData[idx].PowerProvided;
-                    var Provider = new PowerProvider(currentDevice, CableNetwork);
-                    newProviders.Add(Provider);
 
-                    if (currentDevice.IsPowerInputOutput)
-                        newIODevs.Add(Provider);
+                    if (PowerProviders.Count <= provIdx)
+                    {
+                        dirtyProviderList = true;
+                        PowerProviders.Add(new PowerProvider(currentDevice, CableNetwork));
+                    }
+
+                    provIdx++;
                 }
             }
 
-            // Write some data for tablets/etc to use
-            _providerSetter.SetValue(this, newProviders.ToArray());
-            _IODevSetter.SetValue(this, newIODevs.ToArray());
+            if (PowerProviders.Count > provIdx) 
+                PowerProviders.RemoveRange(provIdx, PowerProviders.Count - provIdx);
+
+            if (dirtyProviderList) // Write some data for tablets/etc to use, if it's changed
+            {
+                _providerSetter.SetValue(this, PowerProviders.ToArray());
+                _IODevSetter.SetValue(this, PowerProviders.Where(x => x.Device.IsPowerInputOutput).ToArray());
+            }
 
             if (ReVolt.enableRecursiveNetworkLimits.Value)
                 PowerTickPatches.CheckForRecursiveProviders(this);
