@@ -17,6 +17,10 @@ namespace ReVolt
         internal static readonly int RevoltBreakerNotOpenHash = Animator.StringToHash("RevoltBreakerNotOpen");
         internal static readonly int RevoltBreakerAlreadyOpenHash = Animator.StringToHash("RevoltBreakerAlreadyOpen");
 
+        internal static readonly int RevoltDoorMustBeClosedHash = Animator.StringToHash("RevoltDoorMustBeClosed");
+
+        internal static readonly int HeavyBreakerNoConnectionAvailableHash = Animator.StringToHash("HeavyBreakerNoConnectionAvailable");
+
         public static string HoldForPreviousTrip => Localization.GetInterface(HoldForPreviousTripHash);
 
         public static string ResetBreakerToClear => Localization.GetInterface(ResetBreakerToClearHash);
@@ -29,5 +33,8 @@ namespace ReVolt
         public static string RevoltBreakerTrippedNetwork => Localization.GetInterface(RevoltBreakerTrippedNetworkHash);
         public static string RevoltBreakerNotOpen => Localization.GetInterface(RevoltBreakerNotOpenHash);
         public static string RevoltBreakerAlreadyOpen => Localization.GetInterface(RevoltBreakerAlreadyOpenHash);
+        public static string RevoltDoorMustBeClosed => Localization.GetInterface(RevoltDoorMustBeClosedHash);
+
+        public static string HeavyBreakerNoConnectionAvailable => Localization.GetInterface(HeavyBreakerNoConnectionAvailableHash);
     }
 }
