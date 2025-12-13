@@ -276,13 +276,12 @@ namespace ReVolt
                     if (!doAction)
                         return action.Succeed();
 
+                    var newOnOff = Mode == MODE_OFF;
+
                     if (Mode == MODE_TRIPPED)
-                    {
-                        OnOff = false;
                         Error = 0;
-                    }
-                    else
-                        OnOff = !OnOff;
+
+                    OnOff = newOnOff;
 
                     PlayPooledAudioSound(OnOff ? Defines.Sounds.ApcOn : Defines.Sounds.ApcOff, new Vector3(0f, 0f, 0.125f));
                     UpdateMode();
