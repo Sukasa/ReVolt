@@ -32,5 +32,15 @@
         <Solder>9</Solder>
       </Recipe>
     </RecipeData>
+    <!--<RecipeData>
+      <PrefabName>ItemKitHeavyBreaker</PrefabName>
+      <Recipe>
+        <Time>35</Time>
+        <Energy>400</Energy>
+        <Copper>20</Copper>
+        <Iron>25</Iron>
+        <Stellite>5</Stellite>
+      </Recipe>
+    </RecipeData>-->
   </ElectronicsPrinterRecipes>
 </GameData>

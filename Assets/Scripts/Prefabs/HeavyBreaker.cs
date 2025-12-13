@@ -2,6 +2,7 @@
 using Assets.Scripts.Localization2;
 using Assets.Scripts.Networking;
 using Assets.Scripts.Objects;
+using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
@@ -71,10 +72,40 @@ namespace ReVolt.Prefabs
 
             switch (interactable.Action)
             {
+                case InteractableType.Slot1:
+                case InteractableType.Slot2:
+                    if (!interaction.SourceSlot.Contains<Screwdriver>())
+                        return action.Fail(GameStrings.RequiresScrewdriver);
+
+                    if (InteractOpen.State > 0)
+                        return action.Fail(ReVoltStrings.RevoltDoorMustBeClosed);
+
+                    if (!doAction)
+                        return action.Succeed();
+
+                    interactable.State = 1 - interactable.State;
+
+                    return action;
+
+                case InteractableType.Open:
+
+                    if (GetInteractable(InteractableType.Slot1).State != 1 || GetInteractable(InteractableType.Slot2).State != 1)
+                        return action.Fail(ReVoltStrings.RevoltDoorMustBeClosed);
+
+                    if (!doAction)
+                        return action.Succeed();
+
+                    interactable.State = 1 - interactable.State;
+
+                    return action;
+
                 case InteractableType.Button6: // Cycle Input Conn.
                 case InteractableType.Button7: // Cycle Output Conn.
                 case InteractableType.Button8: // Cycle Data Conn.
                     UpdateEntryLists();
+
+                    if (!interaction.SourceSlot.Contains<Screwdriver>())
+                        return action.Fail(GameStrings.RequiresScrewdriver);
 
                     // We get which connection from the interactable type (they're in linear contiguous order), then figure out the next in the list.
                     // Then display and/or apply it
@@ -86,11 +117,15 @@ namespace ReVolt.Prefabs
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
 
                     List<long> conList = conIdx == 2 ? DataEntries : PowerEntries;
+
+                    if (conList.Count == 0)
+                        return action.Fail(ReVoltStrings.HeavyBreakerNoConnectionAvailable);
+
                     int nextIdx = (ConnectionIndices[conIdx] + dir + conList.Count) % conList.Count;
 
                     var newName = NameByRefId(conList[nextIdx]);
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newName);
-
+                    
                     if (!doAction)
                         return action.Succeed();
 
@@ -125,7 +160,7 @@ namespace ReVolt.Prefabs
             }
         }
 
-        private ISwitchgearComponent ThingByRefId(long ReferenceId) => SwitchgearNetwork.MemberNetwork(this).Members.First(x => x.ReferenceId == ReferenceId);
+        private ISwitchgearComponent ThingByRefId(long ReferenceId) => SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == ReferenceId);
 
         private string NameByRefId(long ReferenceId) => ThingByRefId(ReferenceId).DisplayName;
 

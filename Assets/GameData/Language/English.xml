@@ -65,6 +65,10 @@
       <Value>Hold {KEY:QuantityModifier} for previous trip point</Value>
     </Record>
     <Record>
+      <Key>HeavyBreakerNoConnectionAvailable</Key>
+      <Value>No suitable connection available</Value>
+    </Record>
+    <Record>
       <Key>ResetBreakerToClear</Key>
       <Value>Turn breaker off to clear trip</Value>
     </Record>
@@ -75,6 +79,10 @@
     <Record>
       <Key>RevoltBreakerAlreadyOpen</Key>
       <Value>Breaker already open</Value>
+    </Record>
+    <Record>
+      <Key>RevoltDoorMustBeClosed</Key>
+      <Value>Door must be closed</Value>
     </Record>
     <Record>
       <Key>SmartBreakerNoCableFound</Key>
@@ -96,7 +104,8 @@
       <Key>RevoltBreakerClosed</Key>
       <Value>Breaker is Closed</Value>
     </Record>
-  </Interface>
+  
+</Interface>
   <Interactables>
     <Record>
       <Key>LCToggleLights</Key>
