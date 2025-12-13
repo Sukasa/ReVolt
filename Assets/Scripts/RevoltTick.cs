@@ -250,6 +250,14 @@ namespace ReVolt
                     PowerData[idx].PowerUsed = 0f;
 
                 PowerData[idx].PowerProvided = currentDevice.GetGeneratedPower(CableNetwork);
+
+                // Bug in vanilla: it's possible for a device to draw NaN watts.  This was breaking the power simulation - fix this by converting NaNs to 0.
+                if (!float.IsNormal(PowerData[idx].PowerUsed))
+                    PowerData[idx].PowerUsed = 0.0f;
+
+                if (!float.IsNormal(PowerData[idx].PowerProvided))
+                    PowerData[idx].PowerProvided = 0.0f;
+
                 // Sum network power requirement
                 Required += PowerData[idx].PowerUsed;
 
