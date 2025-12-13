@@ -46,8 +46,8 @@ namespace ReVolt
         public const int MODE_OFF = 0;
 
         public override string[] ModeStrings => _breakerModeStrings;
-        static string[] _breakerModeStrings = {  };
-        static string[] _ColouredModeStrings = {  };
+        static string[] _breakerModeStrings = { };
+        static string[] _ColouredModeStrings = { };
 
         // Moved here from Heavy Breaker.  This way I'm not having to have overrides on overrides in the serialization code (just keeps things cleaner)
         protected readonly long[] ConnectionRefIds = new long[3];
@@ -330,7 +330,7 @@ namespace ReVolt
                     return action;
 
                 case InteractableType.Button4: // Test (trip) Breaker
-                    return action.Fail("Not Implemented");
+                    return action.Fail("Not Implemented");                           
 
                 default:
                     return base.InteractWith(interactable, interaction, doAction);
@@ -361,7 +361,7 @@ namespace ReVolt
 
         protected override void AssessPower(CableNetwork cableNetwork, bool isOn)
         {
-            // NOP out - let powered state be set by the PowerTick, if at all
+            // NOP out
         }
 
         protected void UpdateMode(int NewMode, bool SkipAnimation = false)
@@ -384,9 +384,7 @@ namespace ReVolt
                 NetworkUpdateFlags |= FLAG_MODE;
 
             if (NetworkManager.IsClient)
-            {
                 RefreshAnimState();
-            }
         }
 
         protected void UpdateMode() => UpdateMode(Error > 0 ? MODE_TRIPPED : (OnOff ? MODE_ON : MODE_OFF));
@@ -559,9 +557,10 @@ namespace ReVolt
 
         public override void DeserializeSave(ThingSaveData baseData)
         {
-            base.DeserializeSave(baseData);
             if (baseData is not CircuitBreakerSaveData saveData)
                 return;
+
+            base.DeserializeSave(baseData);
 
             Setting = saveData.TripPoint;
             _transferredLast = saveData.TransferredLast;
