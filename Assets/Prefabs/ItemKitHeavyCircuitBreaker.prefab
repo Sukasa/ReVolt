@@ -110,7 +110,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 2100000, guid: c17459ae8e3761440afe72e812381ea7, type: 2}
+  PaintableMaterial: {fileID: 2100000, guid: d694eea87117f4f4a9515578376669b4, type: 2}
   CustomColor:
     Name: 
     Bit: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   AudioSources: []
   BaseAnimator: {fileID: 0}
   IsCursor: 0
-  Blueprint: {fileID: 3884758903075659802, guid: ca669becc89ae29478c9f55691a43b4d, type: 3}
+  Blueprint: {fileID: 7269250600997953697, guid: ca669becc89ae29478c9f55691a43b4d, type: 3}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -161,6 +161,7 @@ MonoBehaviour:
   HasModeState: 0
   HasOpenState: 0
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 0
@@ -224,7 +225,6 @@ MonoBehaviour:
   IsForceKinematic: 0
   AddExtraGravity: 1
   _isBuoyant: 1
-  IsKinematic: 0
   ChildSlotOffset: {x: 0, y: 0, z: 0}
   ChildSlotOffsetPosition: {x: 0, y: 0, z: 0}
   IsUnderLava: 0
@@ -369,6 +369,9 @@ MonoBehaviour:
       _quantity: 0
     Cocoa:
       ReagentId: 44
+      _quantity: 0
+    Cheese:
+      ReagentId: 45
       _quantity: 0
   AllowSelfUse: 0
   AllowForwardCursor: 0

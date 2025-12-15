@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 563426397044966350}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.75, y: 0.25, z: 0.7501}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -138,8 +138,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.12131393, y: 0.527774, z: 0.10545272}
-  m_Center: {x: -0.86725706, y: 0.003343463, z: 0.08149752}
+  m_Size: {x: 0.12131393, y: 0.527774, z: 0.19919765}
+  m_Center: {x: -0.86725706, y: 0.003343463, z: 0.034625053}
 --- !u!1 &645787629696797491
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +149,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3059351042581775959}
+  - component: {fileID: 7694057951428810699}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -165,7 +166,7 @@ Transform:
   m_GameObject: {fileID: 645787629696797491}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.75, y: 0.25, z: 0.7501}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -175,6 +176,41 @@ Transform:
   - {fileID: 8978711805811111504}
   m_Father: {fileID: 6003591366283231966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7694057951428810699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645787629696797491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd7b8cc13928d7a42a4d36f5ded4ae2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameObject: {fileID: 645787629696797491}
+  Transform: {fileID: 3059351042581775959}
+  parentThing: {fileID: 6661527474186255037}
+  time: 0.4
+  interactableCollider: {fileID: 0}
+  states:
+  - AnimData:
+    - name: Closed
+      gameObject: {fileID: 645787629696797491}
+      tOffset: 0
+      transform: {fileID: 3059351042581775959}
+      position: {x: 0.75, y: 0.25, z: 0.7501}
+      rotation: {x: 0, y: 0, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+  - AnimData:
+    - name: Open
+      gameObject: {fileID: 645787629696797491}
+      tOffset: 0
+      transform: {fileID: 3059351042581775959}
+      position: {x: 0.75, y: 0.25, z: 0.7501}
+      rotation: {x: 0, y: 165, z: 0}
+      scale: {x: 1, y: 1, z: 1}
+  interactableAction: 0
 --- !u!1 &1178315109937461221
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +418,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 0}
+  PaintableMaterial: {fileID: 2100000, guid: d694eea87117f4f4a9515578376669b4, type: 2}
   CustomColor:
     Name: 
     Bit: 0
@@ -397,6 +433,7 @@ MonoBehaviour:
     StringHash: 942424251
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 5921278765632863921}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.2657502, y: 0.3550446, z: 0.6274672}
@@ -414,6 +451,7 @@ MonoBehaviour:
     StringHash: -1232180412
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 3596885165106013803}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.349303, y: 0.3550446, z: 0.6274672}
@@ -431,10 +469,11 @@ MonoBehaviour:
     StringHash: -2054856380
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 8897266731267518086}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: 0.349303, y: 0.3550446, z: 0.6274672}
-      m_Extent: {x: 0.03252, y: 0.018, z: 0.00992}
+      m_Center: {x: 0.2720311, y: 0.2624, z: 0.6274672}
+      m_Extent: {x: 0.03105694, y: 0.016940825, z: 0.011919855}
     Action: 132
     Animator: {fileID: 0}
     JoinInProgressSync: 1
@@ -448,10 +487,11 @@ MonoBehaviour:
     StringHash: -281285564
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 2086511218534579132}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: 0.349303, y: 0.3550446, z: 0.6274672}
-      m_Extent: {x: 0.03252, y: 0.018, z: 0.00992}
+      m_Center: {x: 0.2720311, y: 0.2271, z: 0.6274672}
+      m_Extent: {x: 0.03105694, y: 0.016940825, z: 0.011919855}
     Action: 131
     Animator: {fileID: 0}
     JoinInProgressSync: 1
@@ -465,10 +505,11 @@ MonoBehaviour:
     StringHash: -1557499147
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 219941120418963267}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: 0.349303, y: 0.3550446, z: 0.6274672}
-      m_Extent: {x: 0.03252, y: 0.018, z: 0.00992}
+      m_Center: {x: 0.2720311, y: 0.1918, z: 0.6274672}
+      m_Extent: {x: 0.03105694, y: 0.016940825, z: 0.011919855}
     Action: 130
     Animator: {fileID: 0}
     JoinInProgressSync: 1
@@ -482,10 +523,11 @@ MonoBehaviour:
     StringHash: 967832512
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 8320171811617409692}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: 0.349303, y: 0.3550446, z: 0.6274672}
-      m_Extent: {x: 0.03252, y: 0.018, z: 0.00992}
+      m_Center: {x: 0.2720311, y: 0.1565, z: 0.6274672}
+      m_Extent: {x: 0.03105694, y: 0.016940825, z: 0.011919855}
     Action: 129
     Animator: {fileID: 0}
     JoinInProgressSync: 1
@@ -499,9 +541,10 @@ MonoBehaviour:
     StringHash: -1406288622
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 8450909821359473906}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: -0.976016, y: 0.371355, z: 0.05441749}
+      m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0.035, y: 0.05, z: 0.05}
     Action: 1
     Animator: {fileID: 0}
@@ -516,9 +559,10 @@ MonoBehaviour:
     StringHash: 891612328
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 7718606653569894974}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
-      m_Center: {x: -0.976016, y: -0.371355, z: 0.05441749}
+      m_Center: {x: 0, y: 0, z: 0}
       m_Extent: {x: 0.035, y: 0.05, z: 0.05}
     Action: 2
     Animator: {fileID: 0}
@@ -533,6 +577,7 @@ MonoBehaviour:
     StringHash: 71445658
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 1682308613821143935}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: -0.8672571, y: 0.003343463, z: 0.08149752}
@@ -550,6 +595,7 @@ MonoBehaviour:
     StringHash: -642269271
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 5429759468189932053}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.4721, y: -0.153453, z: 0.4993289}
@@ -567,6 +613,7 @@ MonoBehaviour:
     StringHash: 309339922
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 8634301783110451667}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.3595, y: -0.153453, z: 0.4993289}
@@ -584,6 +631,7 @@ MonoBehaviour:
     StringHash: 1283510980
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 6766197092911877406}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.2469, y: -0.153453, z: 0.4993289}
@@ -601,6 +649,7 @@ MonoBehaviour:
     StringHash: -1687922867
     Parent: {fileID: 6661527474186255037}
     Collider: {fileID: 1490431389304189087}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0.3520458, y: 0.250374, z: 0.628338}
@@ -642,6 +691,7 @@ MonoBehaviour:
   HasModeState: 1
   HasOpenState: 1
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 0
@@ -675,7 +725,7 @@ MonoBehaviour:
     AlwaysBlockAir: 0
     BlockLight: 0
     BlockGravity: 0
-    RenderMode: 0
+    RenderMode: 1
     Visualizer: {fileID: 8843611206857569179}
     StateMeshes: []
     RendererInstance:
@@ -689,14 +739,14 @@ MonoBehaviour:
       _visible: 0
     TemperatureRadiationFactor: 0
     Tool:
-      ToolEntry: {fileID: 0}
+      ToolEntry: {fileID: 2070077420089895156, guid: 9c4e3ac61fcb1824d9c8eed068dbdad4, type: 3}
       ToolEntry2: {fileID: 0}
-      EntryTime: 0
-      EntryQuantity: 0
+      EntryTime: 5
+      EntryQuantity: 1
       EntryQuantity2: 0
       ToolUseType: 0
       ToolExit: {fileID: 0}
-      ExitTime: 0
+      ExitTime: 5
       ExitQuantity: 0
     ColliderMode: 0
     Colliders: []
@@ -736,12 +786,12 @@ MonoBehaviour:
     Tool:
       ToolEntry: {fileID: 0}
       ToolEntry2: {fileID: 0}
-      EntryTime: 0
+      EntryTime: 5
       EntryQuantity: 0
       EntryQuantity2: 0
       ToolUseType: 0
       ToolExit: {fileID: 0}
-      ExitTime: 0
+      ExitTime: 5
       ExitQuantity: 0
     ColliderMode: 0
     Colliders: []
@@ -774,7 +824,7 @@ MonoBehaviour:
       EntryQuantity: 0
       EntryQuantity2: 0
     Prefab: {fileID: 0}
-  GridSize: 2
+  GridSize: 1
   GridOffset: 0
   _useAxisIndependentGridSnapping: 0
   _gridSize3d: {x: 0, y: 0, z: 0}
@@ -967,17 +1017,21 @@ MonoBehaviour:
       z: 0
   ConnectionType: 8
   OpenEndsPermutation: 000000000100000002000000030000000400000005000000
-  MaxTripCurrent: 0
-  MinTripCurrent: 0
+  MaxTripCurrent: 500000
+  MinTripCurrent: 1000
   DeltaTripCurrent: 0
   MaxInterruptCurrent: 0
-  isSmartBreaker: 0
-  canRemoteControl: 0
+  isSmartBreaker: 1
+  canRemoteControl: 1
   TooltipCollider: {fileID: 0}
   InfoScreen: {fileID: 0}
   StatusIndicator: {fileID: 0}
   _breakerStateAnimator: {fileID: 0}
   _breakerHandleAnimator: {fileID: 0}
+  AnimationComponents:
+  - {fileID: 6063656763758489454}
+  - {fileID: 5390584385405459685}
+  - {fileID: 7694057951428810699}
 --- !u!1 &2757377218289449249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,7 +1589,7 @@ Transform:
   m_GameObject: {fileID: 5695150280247313883}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.215, y: -0.125, z: 0.765}
+  m_LocalPosition: {x: -0.965, y: -0.375, z: 0.005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1578,12 +1632,13 @@ MonoBehaviour:
   GameObject: {fileID: 8233716454919760765}
   Transform: {fileID: 8723430496093581767}
   parentThing: {fileID: 6661527474186255037}
-  time: 2
+  time: 0.2
   interactableCollider: {fileID: 7718606653569894974}
   states:
   - AnimData:
     - name: Locked
       gameObject: {fileID: 8233716454919760765}
+      tOffset: 0
       transform: {fileID: 8723430496093581767}
       position: {x: 0, y: 0, z: -0.04}
       rotation: {x: 0, y: 0, z: 0}
@@ -1591,9 +1646,10 @@ MonoBehaviour:
   - AnimData:
     - name: Unlocked
       gameObject: {fileID: 8233716454919760765}
+      tOffset: 0
       transform: {fileID: 8723430496093581767}
-      position: {x: 0, y: 0, z: 0.1}
-      rotation: {x: 0, y: 0, z: -1440}
+      position: {x: 0, y: 0, z: 0.01}
+      rotation: {x: 0, y: 0, z: 270}
       scale: {x: 1, y: 1, z: 1}
   interactableAction: 2
 --- !u!1 &7001775742010583781
@@ -2100,7 +2156,7 @@ Transform:
   m_GameObject: {fileID: 9100950704365821708}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.215, y: 0.62, z: 0.765}
+  m_LocalPosition: {x: -0.965, y: 0.37, z: 0.005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2143,12 +2199,13 @@ MonoBehaviour:
   GameObject: {fileID: 4183565973915879907}
   Transform: {fileID: 3550195205902340953}
   parentThing: {fileID: 6661527474186255037}
-  time: 2
+  time: 0.2
   interactableCollider: {fileID: 8450909821359473906}
   states:
   - AnimData:
     - name: Locked
       gameObject: {fileID: 4183565973915879907}
+      tOffset: 0
       transform: {fileID: 3550195205902340953}
       position: {x: 0, y: 0, z: -0.04}
       rotation: {x: 0, y: 0, z: 0}
@@ -2156,9 +2213,10 @@ MonoBehaviour:
   - AnimData:
     - name: Unlocked
       gameObject: {fileID: 4183565973915879907}
+      tOffset: 0
       transform: {fileID: 3550195205902340953}
-      position: {x: 0, y: 0, z: 0.1}
-      rotation: {x: 0, y: 0, z: -1440}
+      position: {x: 0, y: 0, z: 0.01}
+      rotation: {x: 0, y: 0, z: 270}
       scale: {x: 1, y: 1, z: 1}
   interactableAction: 1
 --- !u!1001 &1392005343982869460
@@ -2183,15 +2241,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.25
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.7501
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2199,15 +2257,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 6d72000bf177da64eb8f7d03e77259af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
