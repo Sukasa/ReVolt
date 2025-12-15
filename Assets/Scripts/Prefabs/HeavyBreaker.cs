@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.GridSystem;
+﻿using Assets.Scripts;
+using Assets.Scripts.GridSystem;
 using Assets.Scripts.Localization2;
 using Assets.Scripts.Networking;
 using Assets.Scripts.Objects;
@@ -6,6 +7,7 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
+using StationeersMods.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +34,17 @@ namespace ReVolt.Prefabs
         private static readonly float[] SettingOffsets = new float[4] { -10000.0f, -1000.0f, 1000.0f, 10000.0f };
         private static readonly string[] ConnectionNames = new string[3] { "Input", "Output", "Data" };
 
+        public InteractableAnimComponent[] AnimationComponents;
+
+        protected override void RefreshAnimState(bool skipAnimation = false)
+        {
+            base.RefreshAnimState(skipAnimation);
+            for (int i = 0; i < AnimationComponents.Length; i++)
+            {
+                AnimationComponents[i].RefreshState(skipAnimation);
+            }
+        }
+
         public IEnumerable<Connection> Connections // Literally just Tom's reference code because that's all I actually need right now
         {
             get
@@ -49,7 +62,7 @@ namespace ReVolt.Prefabs
                 case InteractableType.Button6:
                 case InteractableType.Button7:
                 case InteractableType.Button8: // For connections, the contextual name is just the current value
-                    return $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6])}";
+                    return $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6]) ?? "Not Connected"}";
 
                 case InteractableType.Button9:  // Setting buttons show the current setting
                 case InteractableType.Button10:
@@ -83,8 +96,10 @@ namespace ReVolt.Prefabs
                     if (!doAction)
                         return action.Succeed();
 
+
                     interactable.State = 1 - interactable.State;
 
+                    ConsoleWindow.PrintAction($"{interactable.Action} now {interactable.State}");
                     return action;
 
                 case InteractableType.Open:
@@ -125,7 +140,7 @@ namespace ReVolt.Prefabs
 
                     var newName = NameByRefId(conList[nextIdx]);
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newName);
-                    
+
                     if (!doAction)
                         return action.Succeed();
 
@@ -152,6 +167,8 @@ namespace ReVolt.Prefabs
                     if (!doAction)
                         return action.Succeed();
 
+                    ConsoleWindow.PrintAction($"Trip Point: {Setting} => {newSetting}, adjIdx: {adjIdx}");
+
                     Setting = newSetting;
                     return action;
 
@@ -162,7 +179,7 @@ namespace ReVolt.Prefabs
 
         private ISwitchgearComponent ThingByRefId(long ReferenceId) => SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == ReferenceId);
 
-        private string NameByRefId(long ReferenceId) => ThingByRefId(ReferenceId).DisplayName;
+        private string NameByRefId(long ReferenceId) => ThingByRefId(ReferenceId)?.DisplayName;
 
         private void UpdateEntryLists(bool Force = false)
         {
@@ -262,6 +279,13 @@ namespace ReVolt.Prefabs
                 UpdateEntryLists(true);
                 CheckConnections();
             }
+        }
+
+        public override void PatchPrefab()
+        {
+            BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
+            BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
+            BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
         }
 
         public override void OnRegistered(Cell cell)

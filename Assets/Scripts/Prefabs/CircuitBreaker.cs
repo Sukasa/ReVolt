@@ -95,7 +95,7 @@ namespace ReVolt
             }
         }
 
-        public void PatchPrefab()
+        public virtual void PatchPrefab()
         {
             BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
             BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
