@@ -7,7 +7,6 @@ using Assets.Scripts.Util;
 using Objects;
 using ReVolt.Interfaces;
 using ReVolt.Patches;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -96,8 +95,6 @@ namespace ReVolt
 
             RNG = new System.Random((int)from.ReferenceId);
 
-            //ConsoleWindow.PrintAction($"Cable network {from.ReferenceId} is dirty, reinitializing lists");
-
             // We're dirty.  Reinitialize data
             Devices.Clear();
             Fuses.Clear();
@@ -141,14 +138,9 @@ namespace ReVolt
                 _loadCenter.HasConflict = false;
                 _loadCenter.LoadControlData = PowerData;
             }
-            else if (Devs.Count > 1)
-            {
+            else
                 foreach (var item in Devs)
-                {
-                    var A = item as ILoadCenter;
-                    A.HasConflict = true;
-                }
-            }
+                    (item as ILoadCenter).HasConflict = true;
 
             if (_loadCenter == null)
             {
@@ -294,7 +286,7 @@ namespace ReVolt
                 }
             }
 
-            if (PowerProviders.Count > provIdx) 
+            if (PowerProviders.Count > provIdx)
                 PowerProviders.RemoveRange(provIdx, PowerProviders.Count - provIdx);
 
             if (dirtyProviderList) // Write some data for tablets/etc to use, if it's changed
