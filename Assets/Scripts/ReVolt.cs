@@ -8,7 +8,7 @@ using UnityEngine;
  
 namespace ReVolt
 {
-    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.3.3")]
+    [StationeersMod("Re-Volt", "Re-Volt [StationeersMods]", "1.3.4")]
     public class ReVolt : ModBehaviour
     {
         // Configuration vars
@@ -25,7 +25,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.3.3");
+        public static readonly Mod MOD = new("Re-Volt", "1.3.4");
 
         public override void OnLoaded(ContentHandler contentHandler)
         {
