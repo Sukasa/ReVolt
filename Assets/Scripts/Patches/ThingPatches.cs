@@ -22,13 +22,13 @@ namespace ReVolt.Patches
             if (num == Animator.StringToHash("Button4"))
             {
                 interactable = __instance.GetInteractable(InteractableType.Button4);
-                __result = true;
+                __result = interactable != null; // Bugfix per tom_is_unlucky: return true only if interactable not null
             }
 
             if (num == Animator.StringToHash("Button5"))
             {
                 interactable = __instance.GetInteractable(InteractableType.Button5);
-                __result = true;
+                __result = interactable != null; // Bugfix per tom_is_unlucky: return true only if interactable not null
             }
         }
     }
