@@ -35,7 +35,7 @@ namespace ReVolt.Patches
         }
 
         [HarmonyReversePatch]
-        [HarmonyPatch("Get_IsOperable")]
+        [HarmonyPatch("get_IsOperable")]
         public static bool GetIsOperable(Battery __instance)
         {
             throw new NotImplementedException("");
