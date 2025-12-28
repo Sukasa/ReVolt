@@ -100,6 +100,9 @@ namespace ReVolt
             Fuses.Clear();
             _allCables.Clear();
 
+            _providerSetter.SetValue(this, PowerProviders.ToArray());
+            _IODevSetter.SetValue(this, PowerProviders.ToArray());
+
             // For now, use the original lists for devices and fuses
             lock (CableNetwork.PowerDeviceList)
                 Devices.AddRange(CableNetwork.PowerDeviceList);
