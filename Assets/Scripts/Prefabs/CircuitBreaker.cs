@@ -629,20 +629,36 @@ namespace ReVolt
             {
                 case LogicType.Setting:
                     return Setting;
+
                 case LogicType.Maximum:
                     return MaxTripCurrent;
+
                 case LogicType.Ratio:
+                    if (MaxTripCurrent == 0.0)
+                        return 0.0;
                     return Setting / MaxTripCurrent;
+
                 case LogicType.PowerGeneration:
                     return _transferredLast;
+
                 case LogicType.PowerActual:
+                    if (OutputNetwork == null)
+                        return 0.0;
                     return OutputNetwork.CurrentLoad;
+
                 case LogicType.PowerRequired:
+                    if (OutputNetwork == null)
+                        return 0.0;
                     return OutputNetwork.RequiredLoad;
+
                 case LogicType.PowerPotential:
+                    if (OutputNetwork == null)
+                        return 0.0;
                     return OutputNetwork.PotentialLoad;
+
                 case LogicType.RequiredPower:
                     return UsedPower;
+
                 default:
                     return base.GetLogicValue(logicType);
             }
