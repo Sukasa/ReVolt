@@ -312,7 +312,7 @@ namespace ReVolt
             PowerTickPatches.CacheState(this);
 
             _powerRatio = Required == 0.0f ? 1.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
-            _isPowerMet = Potential >= Required;
+            _isPowerMet = _powerRatio >= 0.99f;
 
             var demandRatio = Potential == 0.0f ? 0.0f : Mathf.Clamp(Required / Potential, 0.0f, 1.0f);
             var powerFlow = Mathf.Min(Required, Potential);
