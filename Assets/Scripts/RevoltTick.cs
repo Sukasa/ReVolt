@@ -44,6 +44,7 @@ namespace ReVolt
         private bool _isPowerMet;
         private float _breakerLimit;
         private int _breakerIndex;
+        private float _powerUsageWindow;
         private List<PowerProvider> PowerProviders;
 
         private ILoadCenter _loadCenter;
@@ -74,6 +75,7 @@ namespace ReVolt
         public RevoltTick()
         {
             RNG = new System.Random();
+            _powerUsageWindow = 0.0f;
         }
 
         public void Initialize_New(CableNetwork from)
@@ -183,14 +185,14 @@ namespace ReVolt
             return PowerClass.Equipment;
         }
 
-        public Cable TestBurnCable(float powerUsed)
+        public Cable TestBurnCable(float powerUsed, float slidingWindow)
         {
             // Bugfix: Power Transmitters create a "cable network" with no cables.
             if (_allCables.Keys.Count < 1)
                 return null;
 
             // If we're within the power rating of the cable, no burn
-            if (powerUsed <= _allCables.Keys[0])
+            if (Mathf.Min(slidingWindow,  powerUsed) <= _allCables.Keys[0])
                 return null;
 
             // Do a cheap calculation to get the % chance to burn the cable
@@ -317,8 +319,14 @@ namespace ReVolt
             var demandRatio = Potential == 0.0f ? 0.0f : Mathf.Clamp(Required / Potential, 0.0f, 1.0f);
             var powerFlow = Mathf.Min(Required, Potential);
 
+            // Track sliding-window average power flow for the last 10-20 seconds.  Test burning the cable if CURRENT power flow is past the burn threshold *and* the
+            // sliding average has been high enough to warrant saying the cable's overheated.  We still use RNG on it, but this means that short surges should never
+            // cause a cable burn.  Instantaneous flows are still used for the circuit breaker and the fuse however
+            _powerUsageWindow = Mathf.Lerp(_powerUsageWindow, powerFlow, 0.1f);
+            
+            
             // Check if we're going to be pulling enough power to pop fuses/cables, and use that later.
-            var burnCable = TestBurnCable(powerFlow);
+            var burnCable = TestBurnCable(powerFlow, _powerUsageWindow);
             var burnFuse = TestBlowFuse(powerFlow);
 
             bool _power = false;
