@@ -2,7 +2,7 @@
 <ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.3.5</Version>
+  <Version>1.4.0</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -62,9 +62,11 @@
   </InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.3.5[/h3]
+    [h3]Version 1.4.0[/h3]
     [list]
-    [*] Fixed an issue with memory optimizations that left a needed array NULL instead of empty for some powernets
+    [*] APC charge fixes
+    [*] Tweaks to power simulation, including a very rudimentary cable-overheat simulation for improved realism
+    [*] Added additional logic values to transformers and to station batteries for power flow monitoring
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
