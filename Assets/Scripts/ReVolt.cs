@@ -23,6 +23,7 @@ namespace ReVolt
 
         internal static ConfigEntry<bool> enableTransformerExploitMitigation;
         internal static ConfigEntry<bool> enableTransformerLogicAddition;
+        internal static ConfigEntry<bool> enableBatteryLogicAddition;
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
@@ -43,6 +44,7 @@ namespace ReVolt
             // Patches config
             enableTransformerExploitMitigation = Config.Bind("Patches", "Enable Transformer Exploit Mitigation", true, "Patch transformers to mitigate the free-power exploit, and restore quiescent current draw");
             enableTransformerLogicAddition = Config.Bind("Patches", "Enable Transformer Logic Additions", true, "Patch transformers to add mid-tier power monitoring");
+            enableBatteryLogicAddition = Config.Bind("Patches", "Enable Battery Logic Additions", true, "Patch station batteries to add charge/discharge-limit logic values");
             enableAreaPowerControlFix = Config.Bind("Patches", "Enable APC Power Fix", true, "Patch APCs to mitigate a 10W free-power discrepancy, and restore quiescent current draw");
             enableBatteryLimitsPatch = Config.Bind("Patches", "Enable Battery Limits", true, "Patch station batteries to limit charge/discharge rate");
 
