@@ -12,7 +12,7 @@ namespace ReVolt.Patches
         [HarmonyPatch("HasState")]
         public static void FixStateIssues(string stateName, ref Interactable interactable, Thing __instance, ref bool __result)
         {
-            int num = Animator.StringToHash(stateName);
+            var num = Animator.StringToHash(stateName);
 
             // Bugfix: original code returned InteractButton1 instead of InteractButton3
             if (num == Interactable.Button3State && __instance.HasButton3State)
@@ -29,6 +29,18 @@ namespace ReVolt.Patches
             {
                 interactable = __instance.GetInteractable(InteractableType.Button5);
                 __result = interactable != null; // Bugfix per tom_is_unlucky: return true only if interactable not null
+            }
+
+            if (num == Animator.StringToHash("Slot1"))
+            {
+                interactable = __instance.GetInteractable(InteractableType.Slot1);
+                __result = interactable != null;
+            }
+
+            if (num == Animator.StringToHash("Slot2"))
+            {
+                interactable = __instance.GetInteractable(InteractableType.Slot2);
+                __result = interactable != null;
             }
         }
     }
