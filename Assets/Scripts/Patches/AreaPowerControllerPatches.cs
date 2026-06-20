@@ -42,7 +42,7 @@ namespace ReVolt.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(AreaPowerControl.GetUsedPower))]
+        [HarmonyPatch(nameof(AreaPowerControl.UsePower))]
         public static bool UsePowerPatch(CableNetwork cableNetwork, float powerUsed, AreaPowerControl __instance, ref float ____powerProvided)
         {
             if (!ReVolt.enableAreaPowerControlFix.Value)

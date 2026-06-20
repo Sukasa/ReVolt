@@ -26,7 +26,7 @@ namespace ReVolt.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(Battery.GetLogicValue))]
-        public static bool GetLogicValuePatch(LogicType logicType, Battery __instance, ref double __result, float ____powerProvided)
+        public static bool GetLogicValuePatch(LogicType logicType, Battery __instance, ref double __result)
         {
             if (!ReVolt.enableBatteryLogicAddition.Value)
                 return true;
