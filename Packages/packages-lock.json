@@ -30,7 +30,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.36",
+      "version": "3.0.40",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -103,9 +103,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -129,26 +129,21 @@
       },
       "url": "https://packages.unity.com"
     },
-    "ilodev.stationeers.stationeersmodsexporter": {
-      "version": "https://github.com/ilodev/StationeersModsExport.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "9e651e2904edb21b76286c2bcf641cefa5814a98"
-    },
-    "ilodev.stationeersmods.tools": {
-      "version": "https://github.com/ilodev/StationeersModdingTools.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "497b7f6a5458a383aa7e41759b7c9e5af4291f2a"
-    },
     "stationeers.modding.exporter": {
       "version": "https://github.com/ilodev/stationeers.modding.exporter.git",
       "depth": 0,
       "source": "git",
+      "dependencies": {
+        "com.unity.modules.assetbundle": "1.0.0"
+      },
+      "hash": "645efedf4618db6125ddd90f91706770777529bc"
+    },
+    "stationeers.modding.tools": {
+      "version": "https://github.com/StationeersModding/StationeersModdingTools.git",
+      "depth": 0,
+      "source": "git",
       "dependencies": {},
-      "hash": "ce4581d70845effd48dc15021a40f5144555c646"
+      "hash": "3928221997a18cee2b613b0c189b7606391f5a54"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
