@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ReVolt
 {
-    internal class ReVoltStrings
+    internal static class ReVoltStrings
     {
         internal static readonly int HoldForPreviousTripHash = Animator.StringToHash("HoldForPreviousTrip");
         internal static readonly int ResetBreakerToClearHash = Animator.StringToHash("ResetBreakerToClear");
@@ -18,6 +18,7 @@ namespace ReVolt
         internal static readonly int RevoltBreakerAlreadyOpenHash = Animator.StringToHash("RevoltBreakerAlreadyOpen");
 
         internal static readonly int RevoltDoorMustBeClosedHash = Animator.StringToHash("RevoltDoorMustBeClosed");
+        internal static readonly int RevoltDoorMustBeUnlockedHash = Animator.StringToHash("RevoltDoorMustBeUnlocked");
 
         internal static readonly int HeavyBreakerNoConnectionAvailableHash = Animator.StringToHash("HeavyBreakerNoConnectionAvailable");
 
@@ -34,6 +35,7 @@ namespace ReVolt
         public static string RevoltBreakerNotOpen => Localization.GetInterface(RevoltBreakerNotOpenHash);
         public static string RevoltBreakerAlreadyOpen => Localization.GetInterface(RevoltBreakerAlreadyOpenHash);
         public static string RevoltDoorMustBeClosed => Localization.GetInterface(RevoltDoorMustBeClosedHash);
+        public static string RevoltDoorMustBeUnlocked => Localization.GetInterface(RevoltDoorMustBeUnlockedHash);
 
         public static string HeavyBreakerNoConnectionAvailable => Localization.GetInterface(HeavyBreakerNoConnectionAvailableHash);
     }
