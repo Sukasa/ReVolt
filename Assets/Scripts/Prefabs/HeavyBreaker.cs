@@ -7,10 +7,11 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
-using StationeersMods.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Objects.Motherboards;
+using LaunchPadBooster.Utils;
 using UnityEngine;
 using static ReVolt.Interfaces.ISwitchgearComponent;
 
@@ -18,11 +19,16 @@ namespace ReVolt.Prefabs
 {
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
-        public static PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
-
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
+        
+        
+        public void OnBusConnectionChanged(Device BusTie)
+        {
+            // TOOD check that the bus tie being updated is one we're linked to, so we don't waste CPU cycles (more than we already are...)
+            CheckConnections();
+        }
 
-        PseudoNetwork<ISwitchgearComponent> IPseudoNetworkMember<ISwitchgearComponent>.Network { get; } = SwitchgearNetwork.Join();
+        PseudoNetwork<ISwitchgearComponent> IPseudoNetworkMember<ISwitchgearComponent>.Network { get; } = ReVolt.SwitchgearNetwork.Join();
 
         private List<long> PowerEntries;
         private List<long> DataEntries;
@@ -33,8 +39,27 @@ namespace ReVolt.Prefabs
 
         private static readonly float[] SettingOffsets = new float[4] { -10000.0f, -1000.0f, 1000.0f, 10000.0f };
         private static readonly string[] ConnectionNames = new string[3] { "Input", "Output", "Data" };
+        public GameObject Buttons;
 
         public InteractableAnimComponent[] AnimationComponents;
+
+        public override void PatchPrefab()
+        {
+            ReVolt.SwitchgearNetwork.PatchConnections(this);
+            ReVolt.MOD.SetupPrefabs(PrefabName)
+                .SetBlueprintMaterials()
+                .SetPaintableColor(ColorType.Red)
+                .SetExitTool(PrefabNames.Drill)
+                .SetEntryTool(PrefabNames.Screwdriver, 1)
+                .SetEntry2Tool(PrefabNames.ElectronicParts, 1)
+                .SetExitTool(PrefabNames.Drill, 1);
+        }
+
+        protected override void OnBuildStateUpdated(int newState, int previousState)
+        {
+            base.OnBuildStateUpdated(newState, previousState);
+            Buttons.SetActive(newState > 0);
+        }
 
         protected override void RefreshAnimState(bool skipAnimation = false)
         {
@@ -50,7 +75,7 @@ namespace ReVolt.Prefabs
             get
             {
                 foreach (var openEnd in OpenEnds)
-                    if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == SwitchgearNetwork.ConnectionType)
+                    if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == ReVolt.SwitchgearNetwork.ConnectionType)
                         yield return openEnd;
             }
         }
@@ -62,9 +87,10 @@ namespace ReVolt.Prefabs
                 case InteractableType.Button6:
                 case InteractableType.Button7:
                 case InteractableType.Button8: // For connections, the contextual name is just the current value
-                    return $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6]) ?? "Not Connected"}";
+                    return
+                        $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6]) ?? "Not Connected"}";
 
-                case InteractableType.Button9:  // Setting buttons show the current setting
+                case InteractableType.Button9: // Setting buttons show the current setting
                 case InteractableType.Button10:
                 case InteractableType.Button11:
                 case InteractableType.Button12:
@@ -105,7 +131,7 @@ namespace ReVolt.Prefabs
                 case InteractableType.Open:
 
                     if (GetInteractable(InteractableType.Slot1).State != 1 || GetInteractable(InteractableType.Slot2).State != 1)
-                        return action.Fail(ReVoltStrings.RevoltDoorMustBeClosed);
+                        return action.Fail(ReVoltStrings.RevoltDoorMustBeUnlocked);
 
                     if (!doAction)
                         return action.Succeed();
@@ -154,7 +180,7 @@ namespace ReVolt.Prefabs
 
                     return action;
 
-                case InteractableType.Button9:  // Setting buttons
+                case InteractableType.Button9: // Setting buttons
                 case InteractableType.Button10:
                 case InteractableType.Button11:
                 case InteractableType.Button12:
@@ -173,22 +199,28 @@ namespace ReVolt.Prefabs
                     return action;
 
                 default:
-                    return base.InteractWith(interactable, interaction, doAction);
+                    var t = base.InteractWith(interactable, interaction, doAction);
+
+                    if (doAction)
+                        ConsoleWindow.PrintAction($"{interactable.DisplayName} fired in base");
+
+                    return t;
             }
         }
 
-        private ISwitchgearComponent ThingByRefId(long ReferenceId) => SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == ReferenceId);
+        private ISwitchgearComponent ThingByRefId(long ReferenceId) => ReVolt.SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == ReferenceId);
 
         private string NameByRefId(long ReferenceId) => ThingByRefId(ReferenceId)?.DisplayName;
 
         private void UpdateEntryLists(bool Force = false)
         {
-            if (Force || !DirtyLists)
+            if (!Force && !DirtyLists)
                 return;
+
             DirtyLists = false;
 
-            PowerEntries = SwitchgearNetwork.MemberNetwork(this).Members.Where(x => x.ComponentType == SwitchgearComponentType.Power).Select(x => x.ReferenceId).ToList();
-            DataEntries = SwitchgearNetwork.MemberNetwork(this).Members.Where(x => x.ComponentType == SwitchgearComponentType.Data).Select(x => x.ReferenceId).ToList();
+            PowerEntries = ReVolt.SwitchgearNetwork.MemberNetwork(this).Members.Where(x => x.ComponentType == SwitchgearComponentType.Power).Select(x => x.ReferenceId).ToList();
+            DataEntries = ReVolt.SwitchgearNetwork.MemberNetwork(this).Members.Where(x => x.ComponentType == SwitchgearComponentType.Data).Select(x => x.ReferenceId).ToList();
             ConnectionIndices[0] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[0]), 0);
             ConnectionIndices[1] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[1]), 0);
             ConnectionIndices[2] = Math.Max(DataEntries.IndexOf(ConnectionRefIds[2]), 0);
@@ -197,6 +229,9 @@ namespace ReVolt.Prefabs
         // This is almost certainly buggy somewhere, since it's not tested yet.
         // This function is expanded in order to "patch" all the cable networks it's indirectly connected to.
         // It's probably going to break somehow, but I'll deal with it.
+        // This works i the breaker is set up afterwards.  I don't know how it's going to work
+        // if/when cables are adjusted on the bus tie.
+        // I may want to rework this to just grab the cable(s) from the bus tie(s) every tick?
         protected override void CheckConnections()
         {
             // The "as" checks should always pass, but be robust anyways
@@ -244,11 +279,14 @@ namespace ReVolt.Prefabs
             if (dataDevice != null)
             {
                 DataCable = dataDevice.DataCable;
-                AttachedCables.Add(dataDevice.PowerCable);
-                ConnectedCableNetworks.Add(DataCable.CableNetwork);
+                if (DataCable != null)
+                {
+                    AttachedCables.Add(DataCable);
+                    ConnectedCableNetworks.Add(DataCable.CableNetwork);
 
-                if (!previousNetworks.Contains(DataCable.CableNetwork))
-                    DataCable.CableNetwork.AddDevice(DataCable, this);
+                    if (!previousNetworks.Contains(DataCable.CableNetwork))
+                        DataCable.CableNetwork.AddDevice(DataCable, this);
+                }
             }
             else
                 DataCable = null;
@@ -281,23 +319,16 @@ namespace ReVolt.Prefabs
             }
         }
 
-        public override void PatchPrefab()
-        {
-            BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
-            BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
-            BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
-        }
-
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
-            SwitchgearNetwork.RebuildNetworkCreate(this);
+            ReVolt.SwitchgearNetwork.RebuildNetworkCreate(this);
         }
 
         public override void OnDeregistered()
         {
             base.OnDeregistered();
-            SwitchgearNetwork.RebuildNetworkDestroy(this);
+            ReVolt.SwitchgearNetwork.RebuildNetworkDestroy(this);
         }
     }
 }

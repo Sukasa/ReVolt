@@ -12,7 +12,6 @@ using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
 using ReVolt.Components;
 using ReVolt.Interfaces;
-using StationeersMods.Interface;
 using System.Text;
 using LaunchPadBooster;
 using LaunchPadBooster.Utils;
@@ -81,20 +80,19 @@ namespace ReVolt
             if (Setting == 0.0)
                 Setting = MinTripCurrent;
 
-            if (_breakerModeStrings.Length == 0)
-            {
-                _breakerModeStrings = new string[3] {
-                    ReVoltStrings.RevoltBreakerOpen,
-                    ReVoltStrings.RevoltBreakerTrippedNetwork,
-                    ReVoltStrings.RevoltBreakerClosed,
-                };
+            if (_breakerModeStrings.Length != 0) return;
+            
+            _breakerModeStrings = new string[3] {
+                ReVoltStrings.RevoltBreakerOpen,
+                ReVoltStrings.RevoltBreakerTrippedNetwork,
+                ReVoltStrings.RevoltBreakerClosed,
+            };
 
-                _ColouredModeStrings = new string[3] {
-                    ReVoltStrings.RevoltBreakerOpen,
-                    ReVoltStrings.RevoltBreakerTripped,
-                    ReVoltStrings.RevoltBreakerClosed,
-                };
-            }
+            _ColouredModeStrings = new string[3] {
+                ReVoltStrings.RevoltBreakerOpen,
+                ReVoltStrings.RevoltBreakerTripped,
+                ReVoltStrings.RevoltBreakerClosed,
+            };
         }
 
         public virtual void PatchPrefab()
@@ -301,6 +299,8 @@ namespace ReVolt
 
                     if (!doAction)
                         return action.Succeed();
+                    
+                    ConsoleWindow.PrintAction("Tried to turn on");
 
                     OnOff = true;
 
@@ -317,6 +317,8 @@ namespace ReVolt
                     if (!doAction)
                         return action.Succeed();
 
+                    ConsoleWindow.PrintAction("Tried to turn off");
+                    
                     if (Mode != MODE_OFF)
                     {
                         OnOff = false;

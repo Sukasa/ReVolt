@@ -1,4 +1,5 @@
-﻿using LibConstruct;
+﻿using Assets.Scripts.Objects.Pipes;
+using LibConstruct;
 
 namespace ReVolt.Interfaces
 {
@@ -13,5 +14,7 @@ namespace ReVolt.Interfaces
         }
 
         public SwitchgearComponentType ComponentType { get; }
+
+        public void OnBusConnectionChanged(Device BusTie);
     }
 }
