@@ -27,7 +27,10 @@ namespace ReVolt
 
         public void PatchPrefab()
         {
-            PrefabUtils.SetExitTool(this, PrefabNames.Wrench);
+            ReVolt.MOD.SetupPrefabs(PrefabName)
+                .SetBlueprintMaterials()
+                .SetPaintableColor(ColorType.White)
+                .SetExitTool(PrefabNames.Wrench);
         }
 
         #region Powernet Integration

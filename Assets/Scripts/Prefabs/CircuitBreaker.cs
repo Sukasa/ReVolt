@@ -14,6 +14,8 @@ using ReVolt.Components;
 using ReVolt.Interfaces;
 using StationeersMods.Interface;
 using System.Text;
+using LaunchPadBooster;
+using LaunchPadBooster.Utils;
 using UnityEngine;
 
 namespace ReVolt
@@ -97,9 +99,12 @@ namespace ReVolt
 
         public virtual void PatchPrefab()
         {
-            BuildStates[0].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.WRENCH);
-            BuildStates[1].Tool.ToolEntry = StationeersModsUtility.FindTool(StationeersTool.DRILL);
-            BuildStates[1].Tool.ToolExit = StationeersModsUtility.FindTool(StationeersTool.DRILL);
+            ReVolt.MOD.SetupPrefabs(PrefabName)
+                .SetBlueprintMaterials()
+                .SetPaintableColor(ColorType.Black)
+                .SetExitTool(PrefabNames.Drill)
+                .SetEntryTool(PrefabNames.Drill, 1)
+                .SetExitTool(PrefabNames.Wrench, 1);
         }
 
         public override string GetStationpediaCategory()
