@@ -1,15 +1,20 @@
+using System.Collections.Generic;
+using Assets.Scripts.Objects;
+using Assets.Scripts.Objects.Motherboards;
 using BepInEx.Configuration;
 using HarmonyLib;
 using LaunchPadBooster;
+using LibConstruct;
 using ReVolt.Assets.Scripts;
-using ReVolt.Patches;
-using StationeersMods.Interface;
+using ReVolt.Interfaces;
 using UnityEngine;
- 
+
 namespace ReVolt
 {
     public class ReVolt : MonoBehaviour
     {
+        public static PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
+        
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
