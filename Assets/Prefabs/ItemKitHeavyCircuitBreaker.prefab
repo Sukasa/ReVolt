@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5391078764496099816}
   - component: {fileID: 1226263783309720035}
-  - component: {fileID: 2070077420089895156}
+  - component: {fileID: 4153046367315060428}
   - component: {fileID: 5027684419917067664}
   - component: {fileID: 2902498115353575711}
   - component: {fileID: 8331746734555415829}
@@ -63,7 +63,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2070077420089895156
+--- !u!114 &4153046367315060428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -72,7 +72,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2349808237634800741}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a855d5b50993474a8cd289a3cb184db, type: 3}
+  m_Script: {fileID: 11500000, guid: 9bfc0bf699084644d89ed803cd113126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _referenceId: 0
@@ -90,9 +90,9 @@ MonoBehaviour:
   ThingTransform: {fileID: 5391078764496099816}
   Slots: []
   Bounds:
-    m_Center: {x: 0, y: -0.005, z: 0.02}
-    m_Extent: {x: 0.35, y: 0.36, z: 0.21}
-  SurfaceArea: 0
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.2, y: 0.2, z: 0.075}
+  SurfaceArea: 1
   SurfaceAreaScale: 1
   BoundsOffset: {x: 0, y: 0, z: 0}
   IgnoreSave: 0
@@ -132,19 +132,7 @@ MonoBehaviour:
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
   Thumbnail: {fileID: 21300000, guid: 8caf930112ae40543868a4a1563c6e1f, type: 3}
-  Thumbnails:
-  - {fileID: 21300000, guid: 520d56f13cff4df418f614aaf3ede76d, type: 3}
-  - {fileID: 21300000, guid: 3bf3fc6dc4224e4458e79d14b84415e5, type: 3}
-  - {fileID: 21300000, guid: 6907fce4695ceb945a37c7f3afcd672a, type: 3}
-  - {fileID: 21300000, guid: 38e7b0ef312821147be5dac4fc2237fa, type: 3}
-  - {fileID: 21300000, guid: d6b5ae9634db6844fbdaa374c4d84d7c, type: 3}
-  - {fileID: 21300000, guid: a5045be2d466fa242a32618af0eba0ca, type: 3}
-  - {fileID: 21300000, guid: 8caf930112ae40543868a4a1563c6e1f, type: 3}
-  - {fileID: 21300000, guid: c07fce1cf52425b4aa96b8f9d4739e92, type: 3}
-  - {fileID: 21300000, guid: b192c966743226142865a8713843b469, type: 3}
-  - {fileID: 21300000, guid: f1bf900168fb53c48b53940c074d77dc, type: 3}
-  - {fileID: 21300000, guid: 650c2bb72f701614f95fc1625119d2fe, type: 3}
-  - {fileID: 21300000, guid: d5ef9630763c7f7488f27d958f1a1972, type: 3}
+  Thumbnails: []
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0
@@ -479,8 +467,10 @@ MonoBehaviour:
   StackedGeneCollections: []
   quantity: 1
   MaxQuantity: 5
-  BuildStructure: {fileID: 6661527474186255037, guid: 86665440367348144b5bd91e952ad22a, type: 3}
-  QuantityUsed: 1
+  Constructables:
+  - {fileID: 6661527474186255037, guid: 86665440367348144b5bd91e952ad22a, type: 3}
+  - {fileID: 8161146816693736995, guid: 6268072f2a94c40618ad0f56d95a5849, type: 3}
+  - {fileID: 2692776300960302675, guid: 66fdad6e51b513755aeae13f64d0ca01, type: 3}
 --- !u!33 &5027684419917067664
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -550,5 +540,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.36, y: 0.37, z: 0.22}
-  m_Center: {x: 0, y: -0.005, z: 0.02}
+  m_Size: {x: 0.4, y: 0.4, z: 0.15}
+  m_Center: {x: 0, y: 0, z: 0}
