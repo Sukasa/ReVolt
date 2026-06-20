@@ -85,6 +85,10 @@
       <Value>Door must be closed</Value>
     </Record>
     <Record>
+      <Key>RevoltDoorMustBeUnlocked</Key>
+      <Value>Door must be unlocked</Value>
+    </Record>
+    <Record>
       <Key>SmartBreakerNoCableFound</Key>
       <Value>&lt;color=red&gt;No cable network connected&lt;/color&gt;</Value>
     </Record>
