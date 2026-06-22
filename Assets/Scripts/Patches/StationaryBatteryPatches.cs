@@ -36,7 +36,7 @@ namespace ReVolt.Patches
         [HarmonyPatch("get_IsOperable")]
         public static bool GetIsOperable(Battery __instance)
         {
-            throw new NotImplementedException("");
+            return false;
         }
 
         [HarmonyPostfix]
