@@ -64,6 +64,14 @@ PrefabInstance:
       propertyPath: PrefabName
       value: DataBusTie
       objectReference: {fileID: 0}
+    - target: {fileID: 8161146816693736995, guid: 6268072f2a94c40618ad0f56d95a5849, type: 3}
+      propertyPath: OpenEnds.Array.data[0].ConnectionType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161146816693736995, guid: 6268072f2a94c40618ad0f56d95a5849, type: 3}
+      propertyPath: BuildStates.Array.data[0].Tool.ExitTime
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

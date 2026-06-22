@@ -83,7 +83,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 0}
+  PaintableMaterial: {fileID: 2100000, guid: d694eea87117f4f4a9515578376669b4, type: 2}
   CustomColor:
     Name: 
     Bit: 0
@@ -98,13 +98,13 @@ MonoBehaviour:
   AudioSources: []
   BaseAnimator: {fileID: 0}
   IsCursor: 0
-  Blueprint: {fileID: 6656880025279819091, guid: bf477c14bbf14ab859653864e18f3961, type: 3}
+  Blueprint: {fileID: 5614368625181433693, guid: bf477c14bbf14ab859653864e18f3961, type: 3}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
-  Thumbnail: {fileID: 0}
+  Thumbnail: {fileID: 21300000, guid: 789d5311dbfe7eee4aad50a668d8e76d, type: 3}
   Thumbnails: []
   IsEntity: 0
   _isOccluded: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
   maxPressureDelta: -1
   BuildingTip: 
   BuildStates:
-  - Thumbnail: {fileID: 0}
+  - Thumbnail: {fileID: 21300000, guid: 789d5311dbfe7eee4aad50a668d8e76d, type: 3}
     DamagedBuildState: 0
     BlockAir: 0
     AlwaysBlockAir: 0
@@ -172,12 +172,12 @@ MonoBehaviour:
     Tool:
       ToolEntry: {fileID: 4153046367315060428, guid: 9c4e3ac61fcb1824d9c8eed068dbdad4, type: 3}
       ToolEntry2: {fileID: 0}
-      EntryTime: 0
+      EntryTime: 2
       EntryQuantity: 1
       EntryQuantity2: 0
       ToolUseType: 0
       ToolExit: {fileID: 0}
-      ExitTime: 0
+      ExitTime: 3
       ExitQuantity: 0
     ColliderMode: 0
     Colliders:
@@ -255,7 +255,7 @@ MonoBehaviour:
   - ConnectionType: 2
     Transform: {fileID: 2870904177129643149}
     Collider: {fileID: 1061047534623509293}
-    ConnectionRole: 0
+    ConnectionRole: 1
     HelperRenderer: {fileID: 0}
     Parent: {fileID: 8161146816693736995}
     LocalGrid:
@@ -474,13 +474,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8183774273823792013}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2103473325083280727}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 90}
 --- !u!33 &8625926595042716865
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -488,7 +488,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8183774273823792013}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2921946171570375064, guid: e3de111aac585a8bc9dd2b9cd42eca7c, type: 3}
 --- !u!23 &5653389652479178980
 MeshRenderer:
   m_ObjectHideFlags: 0

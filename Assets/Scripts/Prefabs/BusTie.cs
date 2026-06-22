@@ -45,22 +45,24 @@ namespace ReVolt
             }
         }
 
+        private void UpdateLinks()
+        {
+            foreach (var switchgearComponent in ReVolt.SwitchgearNetwork.MemberNetwork(this).Members)
+                switchgearComponent.OnBusConnectionChanged(this);
+            
+        }
+        
         public override void OnAddCableNetwork(CableNetwork newNetwork)
         {
             base.OnAddCableNetwork(newNetwork);
-            foreach (var switchgearComponent in ReVolt.SwitchgearNetwork.MemberNetwork(this).Members)
-            {
-                switchgearComponent.OnBusConnectionChanged(this);
-            }
+            InitializeDataConnection();
+            UpdateLinks();
         }
 
         public override void OnRemoveCableNetwork(CableNetwork oldNetwork)
         {
             base.OnRemoveCableNetwork(oldNetwork);
-            foreach (var switchgearComponent in ReVolt.SwitchgearNetwork.MemberNetwork(this).Members)
-            {
-                switchgearComponent.OnBusConnectionChanged(this);
-            }
+            UpdateLinks();
         }
 
         PseudoNetwork<ISwitchgearComponent> IPseudoNetworkMember<ISwitchgearComponent>.Network { get; } = ReVolt.SwitchgearNetwork.Join();
