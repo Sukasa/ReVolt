@@ -131,8 +131,20 @@ MonoBehaviour:
   IsCustomThing: 0
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
-  Thumbnail: {fileID: 21300000, guid: 8caf930112ae40543868a4a1563c6e1f, type: 3}
-  Thumbnails: []
+  Thumbnail: {fileID: 21300000, guid: 038dd791f62c13817bcba0b314da1d96, type: 3}
+  Thumbnails:
+  - {fileID: 21300000, guid: 91108ddbf9fea8c4faa77302514f6d5b, type: 3}
+  - {fileID: 21300000, guid: f7bfb78c8f30693d7a9ffe8437adb9a4, type: 3}
+  - {fileID: 21300000, guid: f8e08c27fa712be63b7f5dfefa60ca65, type: 3}
+  - {fileID: 21300000, guid: a32e27e6be968d09ab513ae236f0199d, type: 3}
+  - {fileID: 21300000, guid: 9554b002287efc3748623f54ec3d8441, type: 3}
+  - {fileID: 21300000, guid: 39d731e64247ce26bbdb3feb8cfd77ce, type: 3}
+  - {fileID: 21300000, guid: 038dd791f62c13817bcba0b314da1d96, type: 3}
+  - {fileID: 21300000, guid: 3144a9e951fce2803a329a6625136f28, type: 3}
+  - {fileID: 21300000, guid: 3c7400ec17f6820bca0f5bf992e3afca, type: 3}
+  - {fileID: 21300000, guid: a2a48006db2f8a394b44ca3ae5d2aded, type: 3}
+  - {fileID: 21300000, guid: 27fe64047bda01ac4a8dd3e4b8e9af3d, type: 3}
+  - {fileID: 21300000, guid: 9f6c0b4adcab28be1a3aedb475267dc4, type: 3}
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0
@@ -471,6 +483,8 @@ MonoBehaviour:
   - {fileID: 6661527474186255037, guid: 86665440367348144b5bd91e952ad22a, type: 3}
   - {fileID: 8161146816693736995, guid: 6268072f2a94c40618ad0f56d95a5849, type: 3}
   - {fileID: 2692776300960302675, guid: 66fdad6e51b513755aeae13f64d0ca01, type: 3}
+  - {fileID: 1833949538295278636, guid: 351fc9cca94784752bb415561b7c5943, type: 3}
+  - {fileID: 1833949538295278636, guid: 092ff2aa74b82b2b18194df57b216813, type: 3}
 --- !u!33 &5027684419917067664
 MeshFilter:
   m_ObjectHideFlags: 0
