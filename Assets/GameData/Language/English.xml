@@ -12,9 +12,28 @@
       </Description>
     </RecordThing>
     <RecordThing>
+      <Key>Wireway</Key>
+      <Value>Wireway</Value>
+      <Description>
+        If you need more room to connect components, or want a double-sided switchboard, the Wireway is your tool.  It's solely used for connecting extra breakers and bus ties together.  It also makes a good plinth for a Breaker.
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>WirewaySmall</Key>
+      <Value>Wireway (Small)</Value>
+      <Description>
+        If you need more room to connect components, or want a double-sided switchboard, the Wireway is your tool.  It's solely used for connecting extra breakers and bus ties together.  It also makes a good plinth for a Breaker.
+      </Description>
+    </RecordThing>
+    <RecordThing>
       <Key>ItemKitLoadCenter</Key>
       <Value>Kit (Load Center)</Value>
       <Description>A {THING:LoadCenter} construction kit</Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>ItemKitHeavyCircuitBreaker</Key>
+      <Value>Kit (Heavy Breaker Panel)</Value>
+      <Description>A {THING:CircuitBreakerHeavy} construction kit, that can also be used to place bus ties and wireways</Description>
     </RecordThing>
     <RecordThing>
       <Key>SmallCircuitBreaker</Key>
@@ -57,6 +76,29 @@
       <Key>ItemKitSmartBreaker</Key>
       <Value>Kit (Smart Breaker)</Value>
       <Description>A {THING:SmartCircuitBreaker} construction kit</Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CircuitBreakerHeavy</Key>
+      <Value>Heavy Circuit Breaker</Value>
+      <Description>
+        When a single circuit breaker isn't enough, you need something with more oomph.  That's what the Heavy Circuit Breaker does.
+        Connect a breaker to two {THING:BusTie} and optionally a {THING:DataBusTie}, using a {THING:Screwdriver}, and the Heavy Breaker can interrupt currents up to 500kW.
+        The Heavy Circuit Breaker can access any connected {THING:BusTie} including through other Heavy Circuit Breakers or a {THING:Wireway} 
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>BusTie</Key>
+      <Value>Bus Tie (Power)</Value>
+      <Description>
+        Connects a set of {THING:CircuitBreakerHeavy}s to a power network.  You need at least two of these.
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>DataBusTie</Key>
+      <Value>Bus Tie (Data)</Value>
+      <Description>
+        Connects a {THING:CircuitBreakerHeavy}s to a data network.
+      </Description>
     </RecordThing>
   </Things>
   <Interface>
@@ -111,6 +153,22 @@
   
 </Interface>
   <Interactables>
+    <Record>
+      <Key>Open Breaker</Key>
+      <Value>Open Breaker</Value>
+    </Record>
+    <Record>
+      <Key>Locking Bolt 1</Key>
+      <Value>Upper Locking Bolt</Value>
+    </Record>
+    <Record>
+      <Key>Locking Bolt 2</Key>
+      <Value>Lower Locking Bolt</Value>
+    </Record>
+    <Record>
+      <Key>Close Breaker</Key>
+      <Value>Close Breaker</Value>
+    </Record>
     <Record>
       <Key>LCToggleLights</Key>
       <Value>Toggle Light Power</Value>

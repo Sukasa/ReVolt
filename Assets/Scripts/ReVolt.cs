@@ -13,7 +13,7 @@ namespace ReVolt
 {
     public class ReVolt : MonoBehaviour
     {
-        public static PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
+        public static readonly PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
@@ -31,7 +31,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.4.0");
+        public static readonly Mod MOD = new("Re-Volt", "1.5.0");
 
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
         {
