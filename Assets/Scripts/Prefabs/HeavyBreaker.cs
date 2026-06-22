@@ -9,7 +9,9 @@ using LibConstruct;
 using ReVolt.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Motherboards;
 using LaunchPadBooster.Utils;
 using UnityEngine;
@@ -20,8 +22,10 @@ namespace ReVolt.Prefabs
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
-        
-        
+
+
+        [ReadOnly] public CableNetwork DataNetwork;
+
         public void OnBusConnectionChanged(Device BusTie)
         {
             // TOOD check that the bus tie being updated is one we're linked to, so we don't waste CPU cycles (more than we already are...)
@@ -34,14 +38,26 @@ namespace ReVolt.Prefabs
         private List<long> DataEntries;
 
         private bool DirtyLists = true;
+        private bool _hasRepatched = false;
 
         private readonly int[] ConnectionIndices = new int[3] { 0, 0, 0 };
 
         private static readonly float[] SettingOffsets = new float[4] { -10000.0f, -1000.0f, 1000.0f, 10000.0f };
         private static readonly string[] ConnectionNames = new string[3] { "Input", "Output", "Data" };
-        public GameObject Buttons;
 
         public InteractableAnimComponent[] AnimationComponents;
+
+        protected override void OnBuildStateUpdated(int newState, int previousState)
+        {
+            base.OnBuildStateUpdated(newState, previousState);
+            _breakerStateAnimator?.SetActive(newState > 0);
+        }
+
+        public override void OnFinishedLoad()
+        {
+            base.OnFinishedLoad();
+            _breakerStateAnimator?.SetActive(CurrentBuildStateIndex > 0);
+        }
 
         public override void PatchPrefab()
         {
@@ -55,16 +71,11 @@ namespace ReVolt.Prefabs
                 .SetExitTool(PrefabNames.Drill, 1);
         }
 
-        protected override void OnBuildStateUpdated(int newState, int previousState)
-        {
-            base.OnBuildStateUpdated(newState, previousState);
-            Buttons.SetActive(newState > 0);
-        }
-
         protected override void RefreshAnimState(bool skipAnimation = false)
         {
             base.RefreshAnimState(skipAnimation);
-            for (int i = 0; i < AnimationComponents.Length; i++)
+            _breakerStateAnimator?.SetActive(CurrentBuildStateIndex > 0);
+            for (var i = AnimationComponents.Length - 1; i >= 0; i--)
             {
                 AnimationComponents[i].RefreshState(skipAnimation);
             }
@@ -101,6 +112,17 @@ namespace ReVolt.Prefabs
             }
         }
 
+        public override void OnPowerTick()
+        {
+            if (!_hasRepatched)
+            {
+                CheckConnections();
+                _hasRepatched = true;
+            }
+
+            base.OnPowerTick();
+        }
+
         public override DelayedActionInstance InteractWith(Interactable interactable, Interaction interaction, bool doAction = true)
         {
             var action = new DelayedActionInstance
@@ -111,6 +133,13 @@ namespace ReVolt.Prefabs
 
             switch (interactable.Action)
             {
+                case InteractableType.Mode:
+                    if (!doAction)
+                        return action.Succeed();
+
+
+                    return action;
+
                 case InteractableType.Slot1:
                 case InteractableType.Slot2:
                     if (!interaction.SourceSlot.Contains<Screwdriver>())
@@ -124,6 +153,9 @@ namespace ReVolt.Prefabs
 
 
                     interactable.State = 1 - interactable.State;
+
+                    if (NetworkManager.IsServer)
+                        NetworkUpdateFlags |= FLAG_LOCKINGBOLTS;
 
                     ConsoleWindow.PrintAction($"{interactable.Action} now {interactable.State}");
                     return action;
@@ -184,9 +216,9 @@ namespace ReVolt.Prefabs
                 case InteractableType.Button10:
                 case InteractableType.Button11:
                 case InteractableType.Button12:
-                    int adjIdx = interactable.Action - InteractableType.Button9;
-                    float by = SettingOffsets[adjIdx];
-                    float newSetting = Mathf.Clamp((float)Setting + by, 1000.0f, ReVolt.heavyBreakerMaxTripSetting.Value);
+                    var adjIdx = interactable.Action - InteractableType.Button9;
+                    var by = SettingOffsets[adjIdx];
+                    var newSetting = Mathf.Clamp((float)Setting + by, 1000.0f, ReVolt.heavyBreakerMaxTripSetting.Value);
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -199,18 +231,13 @@ namespace ReVolt.Prefabs
                     return action;
 
                 default:
-                    var t = base.InteractWith(interactable, interaction, doAction);
-
-                    if (doAction)
-                        ConsoleWindow.PrintAction($"{interactable.DisplayName} fired in base");
-
-                    return t;
+                    return base.InteractWith(interactable, interaction, doAction);
             }
         }
 
-        private ISwitchgearComponent ThingByRefId(long ReferenceId) => ReVolt.SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == ReferenceId);
+        private ISwitchgearComponent ThingByRefId(long RefId) => ReVolt.SwitchgearNetwork.MemberNetwork(this).Members.FirstOrDefault(x => x.ReferenceId == RefId);
 
-        private string NameByRefId(long ReferenceId) => ThingByRefId(ReferenceId)?.DisplayName;
+        private string NameByRefId(long RefId) => ThingByRefId(RefId)?.DisplayName;
 
         private void UpdateEntryLists(bool Force = false)
         {
@@ -224,56 +251,80 @@ namespace ReVolt.Prefabs
             ConnectionIndices[0] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[0]), 0);
             ConnectionIndices[1] = Math.Max(PowerEntries.IndexOf(ConnectionRefIds[1]), 0);
             ConnectionIndices[2] = Math.Max(DataEntries.IndexOf(ConnectionRefIds[2]), 0);
+
+            CheckConnections();
         }
 
-        // This is almost certainly buggy somewhere, since it's not tested yet.
-        // This function is expanded in order to "patch" all the cable networks it's indirectly connected to.
-        // It's probably going to break somehow, but I'll deal with it.
-        // This works i the breaker is set up afterwards.  I don't know how it's going to work
-        // if/when cables are adjusted on the bus tie.
-        // I may want to rework this to just grab the cable(s) from the bus tie(s) every tick?
+        public override void OnAddCableNetwork(CableNetwork newNetwork)
+        {
+            // Stub out to avoid recursing into CheckConnections
+        }
+
+        public override void OnRemoveCableNetwork(CableNetwork newNetwork)
+        {
+            // Stub out to avoid recursing into CheckConnections
+        }
+
+
         protected override void CheckConnections()
         {
-            // The "as" checks should always pass, but be robust anyways
             Device inputDevice = ThingByRefId(ConnectionRefIds[0]) as Device;
             Device outputDevice = ThingByRefId(ConnectionRefIds[1]) as Device;
             Device dataDevice = ThingByRefId(ConnectionRefIds[2]) as Device;
 
-            var previousNetworks = ConnectedCableNetworks.ToList(); // Clone list for re-use after
+            var previousNetworks = ConnectedCableNetworks.ToList();
 
             AttachedCables.Clear();
             ConnectedCableNetworks.Clear();
+            PowerCables.Clear();
+            DataCables.Clear();
 
             if (inputDevice != null)
             {
-                InputConnection = inputDevice.OpenEnds[0];
-                InputNetwork = inputDevice.PowerCable != null ? inputDevice.PowerCable.CableNetwork : null;
-                AttachedCables.Add(inputDevice.PowerCable);
-                ConnectedCableNetworks.Add(InputNetwork);
+                var InPowerCable = inputDevice.PowerCable;
+                if (InPowerCable != null)
+                {
+                    InputNetwork = InPowerCable.CableNetwork;
 
-                if (InputNetwork != null && !previousNetworks.Contains(InputNetwork))
-                    InputNetwork.AddDevice(inputDevice.PowerCable, this);
+                    AttachedCables.Add(InPowerCable);
+                    ConnectedCableNetworks.Add(InputNetwork);
+                    PowerCables.Add(InPowerCable);
+
+                    if (InputNetwork != null && !previousNetworks.Contains(InputNetwork))
+                        InputNetwork.AddDevice(InPowerCable, this);
+                }
+                else
+                {
+                    InputNetwork = null;
+                }
             }
             else
             {
                 InputNetwork = null;
-                InputConnection = new(this);
             }
 
             if (outputDevice != null)
             {
-                OutputConnection = outputDevice.OpenEnds[0];
-                OutputNetwork = outputDevice.PowerCable != null ? outputDevice.PowerCable.CableNetwork : null;
-                AttachedCables.Add(outputDevice.PowerCable);
-                ConnectedCableNetworks.Add(OutputNetwork);
+                var OutpowerCable = outputDevice.PowerCable;
 
-                if (OutputNetwork != null && !previousNetworks.Contains(OutputNetwork))
-                    OutputNetwork.AddDevice(outputDevice.PowerCable, this);
+                if (OutpowerCable != null)
+                {
+                    OutputNetwork = OutpowerCable.CableNetwork;
+                    AttachedCables.Add(OutpowerCable);
+                    PowerCables.Add(OutpowerCable);
+                    ConnectedCableNetworks.Add(OutputNetwork);
+
+                    if (OutputNetwork != null && !previousNetworks.Contains(OutputNetwork))
+                        OutputNetwork.AddDevice(outputDevice.PowerCable, this);
+                }
+                else
+                {
+                    OutputNetwork = null;
+                }
             }
             else
             {
                 OutputNetwork = null;
-                OutputConnection = new(this);
             }
 
             if (dataDevice != null)
@@ -282,18 +333,27 @@ namespace ReVolt.Prefabs
                 if (DataCable != null)
                 {
                     AttachedCables.Add(DataCable);
-                    ConnectedCableNetworks.Add(DataCable.CableNetwork);
+                    DataCables.Add(DataCable);
+                    DataNetwork = DataCable.CableNetwork;
+                    ConnectedCableNetworks.Add(DataNetwork);
 
-                    if (!previousNetworks.Contains(DataCable.CableNetwork))
-                        DataCable.CableNetwork.AddDevice(DataCable, this);
+                    if (DataNetwork != null && !previousNetworks.Contains(DataNetwork))
+                        DataNetwork.AddDevice(DataCable, this);
+                }
+                else
+                {
+                    DataNetwork = null;
                 }
             }
             else
+            {
                 DataCable = null;
+                DataNetwork = null;
+            }
 
-            foreach (var Network in previousNetworks)
-                if (!ConnectedCableNetworks.Contains(Network))
-                    Network.RemoveDevice(this);
+            for (var i = previousNetworks.Count - 1; i >= 0; i--)
+                if (previousNetworks[i] != null && !ConnectedCableNetworks.Contains(previousNetworks[i]))
+                    previousNetworks[i].RemoveDevice(this);
         }
 
         public void OnMembersChanged()

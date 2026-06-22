@@ -32,7 +32,7 @@ namespace ReVolt
         public BreakerStatusScreen StatusIndicator;
 
         [SerializeField]
-        private ReVoltMultiStateAnimator _breakerStateAnimator;
+        protected ReVoltMultiStateAnimator _breakerStateAnimator;
         [SerializeField]
         private ReVoltMultiStateAnimator _breakerHandleAnimator;
 
@@ -41,6 +41,7 @@ namespace ReVolt
         protected const int FLAG_TRIPSP = 1024;
         protected const int FLAG_MODE = 2048;
         protected const int FLAG_CONNECTIONS = 4096;
+        protected const int FLAG_LOCKINGBOLTS = 8192;
 
         public const int MODE_ON = 2;
         public const int MODE_TRIPPED = 1;
@@ -295,12 +296,10 @@ namespace ReVolt
 
                 case InteractableType.Button2: // Close Breaker
                     if (Mode != MODE_OFF)
-                        action.Fail(ReVoltStrings.RevoltBreakerNotOpen);
+                        return action.Fail(ReVoltStrings.RevoltBreakerNotOpen);
 
                     if (!doAction)
                         return action.Succeed();
-                    
-                    ConsoleWindow.PrintAction("Tried to turn on");
 
                     OnOff = true;
 
@@ -309,15 +308,12 @@ namespace ReVolt
 
                     return action;
 
-
                 case InteractableType.Button3: // Open Breaker
                     if (Mode == MODE_OFF)
-                        action.Fail(ReVoltStrings.RevoltBreakerAlreadyOpen);
+                        return action.Fail(ReVoltStrings.RevoltBreakerAlreadyOpen);
 
                     if (!doAction)
                         return action.Succeed();
-
-                    ConsoleWindow.PrintAction("Tried to turn off");
                     
                     if (Mode != MODE_OFF)
                     {
@@ -500,6 +496,12 @@ namespace ReVolt
                 writer.WriteInt64(ConnectionRefIds[1]);
                 writer.WriteInt64(ConnectionRefIds[2]);
             }
+            
+            if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
+            {
+                writer.WriteBoolean(GetInteractable(InteractableType.Slot1).State > 0);
+                writer.WriteBoolean(GetInteractable(InteractableType.Slot2).State > 0);
+            }
         }
 
         public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
@@ -517,6 +519,12 @@ namespace ReVolt
                 ConnectionRefIds[0] = reader.ReadInt64();
                 ConnectionRefIds[1] = reader.ReadInt64();
                 ConnectionRefIds[2] = reader.ReadInt64();
+            }
+            
+            if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
+            {
+                GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
+                GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
             }
         }
 
@@ -675,8 +683,21 @@ namespace ReVolt
         {
             if (!isSmartBreaker)
                 return;
+            
+            if (logicType == LogicType.On)
+            {
+                logicType = LogicType.Mode;
+                OnOff = value > 0;
+                
+                value = MODE_ON;
+                Error = 0;
+                
+                if (Mode != MODE_OFF)
+                    value = MODE_OFF;
+            }
 
             base.SetLogicValue(logicType, value);
+            UpdateMode();
 
             if (logicType != LogicType.Setting)
                 return;
