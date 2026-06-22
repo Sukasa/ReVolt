@@ -2,7 +2,7 @@
 <ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.4.0</Version>
+  <Version>1.5.0</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -25,6 +25,8 @@
     [b]Circuit Breakers![/b]  Like fuses, with a greater degree of control over the specific trip point - and which, after tripping, can be reset without having to build a new fuse.  These can also protect your wires if you get sudden surges of power...
 
     [b]Smart Breakers![/b]  If you wanted more information about what your breakers are doing, or need the instant trip?  Smart Breakers are your solution.
+    
+    [b]Heavy Breakers![/b]  When 5kW isn't enough, the Heavy Breaker steps in.  Supporting up to a 500kW trip point, the Heavy Breaker can handle any load.  Plus, Heavy Breakers can form modular switchgear!
 
     [b]Fuses still work.[/b]  As long as there is a fuse rated low enough to protect the cable, that fuse will ALWAYS blow instead of a cable.  And fuses blow instantly, no time delay.
 
@@ -34,7 +36,6 @@
 
     There's still more content on the way:
     [list]
-    [*] Heavy Breakers, capable of interrupting much larger amounts of power
     [*] Bug fixes, maintenance, and possibly more components in future!
     [/list]
 
@@ -62,11 +63,11 @@
   </InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.4.0[/h3]
+    [h3]Version 1.5.0[/h3]
     [list]
-    [*] APC charge fixes
-    [*] Tweaks to power simulation, including a very rudimentary cable-overheat simulation for improved realism
-    [*] Added additional logic values to transformers and to station batteries for power flow monitoring
+    [*] Additional small logic fixes
+    [*] Updated to properly use StationeersLaunchPad and LaunchPadBooster instead of the obsolete StationeersMods interfaces
+    [*] Heavy Circuit Breakers and paraphernalia!
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
