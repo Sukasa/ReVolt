@@ -99,7 +99,7 @@ namespace ReVolt
             ReVolt.MOD.SetupPrefabs(PrefabName)
                 .SetBlueprintMaterials()
                 .SetPaintableColor(ColorType.Black)
-                .SetExitTool(PrefabNames.Drill)
+                .SetExitTool(PrefabNames.Wrench) // A drill would be better but that'd conflict with the entry tool for build state 1
                 .SetEntryTool(PrefabNames.Drill, 1)
                 .SetExitTool(PrefabNames.Wrench, 1);
         }
