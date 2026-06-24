@@ -2,7 +2,7 @@
 <ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.5.0</Version>
+  <Version>1.5.2</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -63,11 +63,9 @@
   </InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.5.0[/h3]
+    [h3]Version 1.5.2[/h3]
     [list]
-    [*] Additional small logic fixes
-    [*] Updated to properly use StationeersLaunchPad and LaunchPadBooster instead of the obsolete StationeersMods interfaces
-    [*] Heavy Circuit Breakers and paraphernalia!
+    [*] Fixed the APC.  Again.  I think.
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
