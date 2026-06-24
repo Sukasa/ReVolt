@@ -80,14 +80,16 @@ namespace ReVolt
                 Setting = MinTripCurrent;
 
             if (_breakerModeStrings.Length != 0) return;
-            
-            _breakerModeStrings = new string[3] {
+
+            _breakerModeStrings = new string[3]
+            {
                 ReVoltStrings.RevoltBreakerOpen,
                 ReVoltStrings.RevoltBreakerTrippedNetwork,
                 ReVoltStrings.RevoltBreakerClosed,
             };
 
-            _ColouredModeStrings = new string[3] {
+            _ColouredModeStrings = new string[3]
+            {
                 ReVoltStrings.RevoltBreakerOpen,
                 ReVoltStrings.RevoltBreakerTripped,
                 ReVoltStrings.RevoltBreakerClosed,
@@ -142,8 +144,8 @@ namespace ReVolt
                 // If we fail the chance then trip, *or* if we're a smart breaker then trip instantly.
                 if (isSmartBreaker || (float)RNG.NextDouble() <= tripChance * ReVolt.configCableBurnFactor.Value)
                     Trip();
-
             }
+
             _transferredLast = _transferred;
             _transferred = 0f;
         }
@@ -201,6 +203,7 @@ namespace ReVolt
                 RefreshAnimStateFromThread().Forget();
                 return;
             }
+
             base.RefreshAnimState(skipAnimation);
             _breakerStateAnimator?.RefreshState(skipAnimation);
             _breakerHandleAnimator?.RefreshState(skipAnimation);
@@ -312,7 +315,7 @@ namespace ReVolt
 
                     if (!doAction)
                         return action.Succeed();
-                    
+
                     if (Mode != MODE_OFF)
                     {
                         OnOff = false;
@@ -325,11 +328,10 @@ namespace ReVolt
                     return action;
 
                 case InteractableType.Button4: // Test (trip) Breaker
-                    return action.Fail("Not Implemented");                           
+                    return action.Fail("Not Implemented");
 
                 default:
                     return base.InteractWith(interactable, interaction, doAction);
-
             }
         }
 
@@ -392,7 +394,6 @@ namespace ReVolt
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
             return sb.ToString();
-
         }
 
         protected virtual string IndicatorTooltip()
@@ -407,7 +408,6 @@ namespace ReVolt
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
             return sb.ToString();
-
         }
 
         protected virtual string InfoScreenTooltip()
@@ -436,7 +436,6 @@ namespace ReVolt
                 sb.Append(GameStrings.CableAnalyserRequired.AsString(OutputNetwork.RequiredLoad.ToStringPrefix("W", "yellow")));
                 sb.AppendLine();
                 sb.Append(GameStrings.CableAnalyserPotential.AsString(OutputNetwork.PotentialLoad.ToStringPrefix("W", "yellow")));
-
             }
             else
             {
@@ -445,7 +444,6 @@ namespace ReVolt
 
 
             return sb.ToString();
-
         }
 
         public override PassiveTooltip GetPassiveTooltip(Collider hitCollider)
@@ -494,7 +492,7 @@ namespace ReVolt
                 writer.WriteInt64(ConnectionRefIds[1]);
                 writer.WriteInt64(ConnectionRefIds[2]);
             }
-            
+
             if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
             {
                 writer.WriteBoolean(GetInteractable(InteractableType.Slot1).State > 0);
@@ -518,7 +516,7 @@ namespace ReVolt
                 ConnectionRefIds[1] = reader.ReadInt64();
                 ConnectionRefIds[2] = reader.ReadInt64();
             }
-            
+
             if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
             {
                 GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
@@ -604,6 +602,7 @@ namespace ReVolt
 
             UpdateMode();
         }
+
         #endregion
 
         #region Data Networking
@@ -681,15 +680,15 @@ namespace ReVolt
         {
             if (!isSmartBreaker)
                 return;
-            
+
             if (logicType == LogicType.On)
             {
                 logicType = LogicType.Mode;
                 OnOff = value > 0;
-                
+
                 value = MODE_ON;
                 Error = 0;
-                
+
                 if (Mode != MODE_OFF)
                     value = MODE_OFF;
             }
@@ -704,6 +703,5 @@ namespace ReVolt
         }
 
         #endregion
-
     }
 }
