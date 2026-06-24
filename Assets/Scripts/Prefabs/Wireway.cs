@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Assets.Scripts;
 using Assets.Scripts.GridSystem;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Motherboards;
 using Assets.Scripts.Objects.Pipes;
+using Assets.Scripts.UI;
 using LaunchPadBooster.Utils;
 using LibConstruct;
 using ReVolt.Interfaces;
@@ -23,6 +25,11 @@ namespace ReVolt
         
         public void OnMembersChanged()
         {
+        }
+        
+        public override string GetStationpediaCategory()
+        {
+            return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
         }
 
         public IEnumerable<Connection> Connections // Literally just Tom's reference code because that's all I actually need right now
