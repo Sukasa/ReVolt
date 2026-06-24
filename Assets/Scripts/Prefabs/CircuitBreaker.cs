@@ -495,8 +495,8 @@ namespace ReVolt
 
             if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
             {
-                writer.WriteBoolean(GetInteractable(InteractableType.Slot1).State > 0);
-                writer.WriteBoolean(GetInteractable(InteractableType.Slot2).State > 0);
+                writer.WriteBoolean((GetInteractable(InteractableType.Slot1)?.State ?? 0) > 0);
+                writer.WriteBoolean((GetInteractable(InteractableType.Slot2)?.State ?? 0) > 0);
             }
         }
 
@@ -519,8 +519,15 @@ namespace ReVolt
 
             if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
             {
-                GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
-                GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
+                if (GetInteractable(InteractableType.Slot1) != null)
+                    GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
+                else
+                    reader.ReadBoolean();
+                
+                if (GetInteractable(InteractableType.Slot2) != null)
+                    GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
+                else
+                    reader.ReadBoolean();
             }
         }
 
