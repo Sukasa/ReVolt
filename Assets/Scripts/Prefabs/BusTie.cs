@@ -4,9 +4,12 @@ using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
 using System.Collections.Generic;
+using Assets.Scripts;
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Motherboards;
+using Assets.Scripts.UI;
 using LaunchPadBooster.Utils;
+using UnityEngine;
 using static ReVolt.Interfaces.ISwitchgearComponent;
 namespace ReVolt
 {
@@ -23,6 +26,24 @@ namespace ReVolt
         public void OnMembersChanged()
         {
             
+        }
+
+        public override PassiveTooltip GetPassiveTooltip(Collider hitCollider)
+        {
+            if (hitCollider == null)
+            {
+                return new PassiveTooltip(toDefault: true)
+                {
+                    Title = DisplayName,
+                    Extended = OpenEnds[0].ConnectionType == NetworkType.Power ? "Power Connection" : "Data Connection"
+                };
+            }
+            return base.GetPassiveTooltip(hitCollider);
+        }
+
+        public override string GetStationpediaCategory()
+        {
+            return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
         }
 
         public void OnMemberAdded(ISwitchgearComponent member)
