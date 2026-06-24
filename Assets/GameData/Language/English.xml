@@ -82,7 +82,7 @@
       <Value>Heavy Circuit Breaker</Value>
       <Description>
         When a single circuit breaker isn't enough, you need something with more oomph.  That's what the Heavy Circuit Breaker does.
-        Connect a breaker to two {THING:BusTie} and optionally a {THING:DataBusTie}, using a {THING:Screwdriver}, and the Heavy Breaker can interrupt currents up to 500kW.
+        Connect a breaker to two {THING:BusTie} and optionally a {THING:DataBusTie}, using a {THING:ItemScrewdriver}, and the Heavy Breaker can interrupt currents up to 500kW.
         The Heavy Circuit Breaker can access any connected {THING:BusTie} including through other Heavy Circuit Breakers or a {THING:Wireway} 
       </Description>
     </RecordThing>

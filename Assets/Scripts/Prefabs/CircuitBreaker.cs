@@ -31,10 +31,8 @@ namespace ReVolt
         public InfoScreenComponent InfoScreen;
         public BreakerStatusScreen StatusIndicator;
 
-        [SerializeField]
-        protected ReVoltMultiStateAnimator _breakerStateAnimator;
-        [SerializeField]
-        private ReVoltMultiStateAnimator _breakerHandleAnimator;
+        [SerializeField] protected ReVoltMultiStateAnimator _breakerStateAnimator;
+        [SerializeField] private ReVoltMultiStateAnimator _breakerHandleAnimator;
 
         private float _tripPoint;
 

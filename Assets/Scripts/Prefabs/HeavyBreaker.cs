@@ -23,6 +23,7 @@ namespace ReVolt.Prefabs
     {
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
+        public GameObject InteractablesContainer;
 
         [ReadOnly] public CableNetwork DataNetwork;
 
@@ -51,12 +52,14 @@ namespace ReVolt.Prefabs
         {
             base.OnBuildStateUpdated(newState, previousState);
             _breakerStateAnimator?.SetActive(newState > 0);
+            InteractablesContainer?.SetActive(CurrentBuildStateIndex > 0);
         }
 
         public override void OnFinishedLoad()
         {
             base.OnFinishedLoad();
             _breakerStateAnimator?.SetActive(CurrentBuildStateIndex > 0);
+            InteractablesContainer?.SetActive(CurrentBuildStateIndex > 0);
         }
 
         public override void PatchPrefab()
@@ -75,6 +78,7 @@ namespace ReVolt.Prefabs
         {
             base.RefreshAnimState(skipAnimation);
             _breakerStateAnimator?.SetActive(CurrentBuildStateIndex > 0);
+            InteractablesContainer?.SetActive(CurrentBuildStateIndex > 0);
             for (var i = AnimationComponents.Length - 1; i >= 0; i--)
             {
                 AnimationComponents[i].RefreshState(skipAnimation);

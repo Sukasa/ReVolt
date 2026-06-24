@@ -588,7 +588,7 @@ MonoBehaviour:
     KeyMap: 
     AssociatedAudioEvents: []
     ActionName: 
-    _state: 0
+    _state: 1
   - StringKey: Locking Bolt 2
     StringHash: 891612328
     Parent: {fileID: 6661527474186255037}
@@ -606,7 +606,7 @@ MonoBehaviour:
     KeyMap: 
     AssociatedAudioEvents: []
     ActionName: 
-    _state: 0
+    _state: 1
   - StringKey: Open
     StringHash: 71445658
     Parent: {fileID: 6661527474186255037}
@@ -1100,6 +1100,7 @@ MonoBehaviour:
   StatusIndicator: {fileID: 0}
   _breakerStateAnimator: {fileID: 6356319982945707540}
   _breakerHandleAnimator: {fileID: 0}
+  InteractablesContainer: {fileID: 4366934025585488879}
   AnimationComponents:
   - {fileID: 6063656763758489454}
   - {fileID: 5390584385405459685}
