@@ -161,7 +161,6 @@ namespace ReVolt.Prefabs
                     if (NetworkManager.IsServer)
                         NetworkUpdateFlags |= FLAG_LOCKINGBOLTS;
 
-                    ConsoleWindow.PrintAction($"{interactable.Action} now {interactable.State}");
                     return action;
 
                 case InteractableType.Open:
@@ -228,8 +227,6 @@ namespace ReVolt.Prefabs
 
                     if (!doAction)
                         return action.Succeed();
-
-                    ConsoleWindow.PrintAction($"Trip Point: {Setting} => {newSetting}, adjIdx: {adjIdx}");
 
                     Setting = newSetting;
                     return action;
