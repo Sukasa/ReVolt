@@ -97,7 +97,49 @@
       <Key>DataBusTie</Key>
       <Value>Bus Tie (Data)</Value>
       <Description>
-        Connects a {THING:CircuitBreakerHeavy}s to a data network.
+        Connects a {THING:CircuitBreakerHeavy} to a data network.
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>ItemKitCableTray</Key>
+      <Value>Kit (Cable Tray)</Value>
+      <Description>
+        A construction kit for various flavours of Cable Tray, which can be used to carry multiple cabling runs in parallel in a single grid without connecting them together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayStraight</Key>
+      <Value>Cable Tray (Straight)</Value>
+      <Description>
+        A straight piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayCurveHorizontal</Key>
+      <Value>Cable Tray (Curved Horizontal)</Value>
+      <Description>
+        A curved piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayCurveVertical</Key>
+      <Value>Cable Tray (Curved Vertical Down)</Value>
+      <Description>
+        A curved piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayCurveVertical2</Key>
+      <Value>Cable Tray (Curved Vertical Up)</Value>
+      <Description>
+        A curved piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayJunction</Key>
+      <Value>Cable Tray (Junction Box)</Value>
+      <Description>
+        A Cable Tray junction box, connecting up to 6 directions.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
       </Description>
     </RecordThing>
   </Things>

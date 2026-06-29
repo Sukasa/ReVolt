@@ -33,13 +33,22 @@
       </Recipe>
     </RecipeData>
     <RecipeData>
-      <PrefabName>ItemKitHeavyBreaker</PrefabName>
+      <PrefabName>ItemKitHeavyCircuitBreaker</PrefabName>
       <Recipe>
         <Time>35</Time>
-        <Energy>400</Energy>
+        <Energy>600</Energy>
         <Copper>20</Copper>
         <Iron>25</Iron>
         <Stellite>5</Stellite>
+      </Recipe>
+    </RecipeData>
+    <RecipeData>
+      <PrefabName>ItemKitCableTray</PrefabName>
+      <Recipe>
+        <Time>20</Time>
+        <Energy>100</Energy>
+        <Copper>5</Copper>
+        <Iron>10</Iron>
       </Recipe>
     </RecipeData>
   </ElectronicsPrinterRecipes>
