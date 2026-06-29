@@ -17,6 +17,13 @@ namespace ReVolt.Patches
             if (__instance.PowerTick is RevoltTick revoltTick)
                 revoltTick.IsDirty = true;
         }
+        
+        [HarmonyPostfix, HarmonyPatch(nameof(CableNetwork.DirtyDataDeviceList))]
+        public static void DirtyDataDeviceListPatch(CableNetwork __instance)
+        {
+            if (__instance.PowerTick is RevoltTick revoltTick)
+                revoltTick.IsDirty = true;
+        }
 
         [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, new Type[0])]
         public static void Constructor_None(CableNetwork __instance) => Inject(__instance);
