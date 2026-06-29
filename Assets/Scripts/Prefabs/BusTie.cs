@@ -41,10 +41,8 @@ namespace ReVolt
             return base.GetPassiveTooltip(hitCollider);
         }
 
-        public override string GetStationpediaCategory()
-        {
-            return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
-        }
+        public override string GetStationpediaCategoryKey() => StationpediaCategoryStrings.CableCategory;
+        public override string GetStationpediaCategory() => Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
 
         public void OnMemberAdded(ISwitchgearComponent member)
         {
