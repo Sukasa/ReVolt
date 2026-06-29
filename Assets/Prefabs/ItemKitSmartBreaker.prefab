@@ -154,7 +154,6 @@ MonoBehaviour:
   SuppressSound: 1
   Forward: {x: 0, y: 0, z: 0}
   HideInStationpedia: 0
-  CurrentPingMesh: {fileID: 0}
   IsEmergency: 0
   PrefabName: ItemKitSmartBreaker
   PrefabHash: -839878858
@@ -181,7 +180,7 @@ MonoBehaviour:
   ThingHealth: 100
   EnergyReleasedWhenBurned: 100000
   _customName: 
-  PaintableMaterial: {fileID: 0}
+  PaintableMaterial: {fileID: 2100000, guid: 6f16e8502ae2d5640b40872988cd4401, type: 2}
   CustomColor:
     Name: 
     Bit: 0
@@ -220,6 +219,7 @@ MonoBehaviour:
   HasModeState: 0
   HasOpenState: 0
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 0
@@ -249,6 +249,7 @@ MonoBehaviour:
   DeleteOnDestroyed: 1
   UsingSound: 
   UseCompleteSound: 
+  deleteSlotItemsOnDeconstruct: 0
   HasLight: 0
   RigidBody: {fileID: 6975181401244215202}
   WorldCenterOfMass: {x: 0, y: 0, z: 0}
@@ -283,7 +284,6 @@ MonoBehaviour:
   IsForceKinematic: 0
   AddExtraGravity: 1
   _isBuoyant: 1
-  IsKinematic: 0
   ChildSlotOffset: {x: 0, y: 0, z: 0}
   ChildSlotOffsetPosition: {x: 0, y: 0, z: 0}
   IsUnderLava: 0
@@ -428,6 +428,9 @@ MonoBehaviour:
       _quantity: 0
     Cocoa:
       ReagentId: 44
+      _quantity: 0
+    Cheese:
+      ReagentId: 45
       _quantity: 0
   AllowSelfUse: 0
   AllowForwardCursor: 0
