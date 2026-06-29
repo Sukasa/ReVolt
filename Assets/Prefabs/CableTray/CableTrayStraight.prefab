@@ -1,0 +1,494 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3137507950058793916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7164436535277975306}
+  - component: {fileID: 1418708655168960448}
+  m_Layer: 0
+  m_Name: Connection2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7164436535277975306
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3137507950058793916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1280637065426140607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1418708655168960448
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3137507950058793916}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5254405102331819440
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1992251235812022691}
+  - component: {fileID: 2178864992037917992}
+  m_Layer: 0
+  m_Name: Connection1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1992251235812022691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254405102331819440}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1280637065426140607}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!135 &2178864992037917992
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254405102331819440}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7036913994632834341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1280637065426140607}
+  - component: {fileID: 9111912751192066048}
+  - component: {fileID: 907802712097809271}
+  - component: {fileID: 6387572973939845110}
+  - component: {fileID: 5281992246398186718}
+  m_Layer: 0
+  m_Name: CableTrayStraight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1280637065426140607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036913994632834341}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1992251235812022691}
+  - {fileID: 7164436535277975306}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &9111912751192066048
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036913994632834341}
+  m_Mesh: {fileID: 8319025171698600039, guid: 8684ed02e1509525980e46f628ca6d49, type: 3}
+--- !u!23 &907802712097809271
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036913994632834341}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d694eea87117f4f4a9515578376669b4, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6387572973939845110
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036913994632834341}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 0.125, z: 0.5}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5281992246398186718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7036913994632834341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adeb6085e9f2c9b1c9e41fb88d36336f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _referenceId: 0
+  _dlcType: 0
+  switchOnOff: {fileID: 0}
+  activateButton: {fileID: 0}
+  leverAnimationComponent: {fileID: 0}
+  SuppressSound: 1
+  Forward: {x: 0, y: 0, z: 0}
+  HideInStationpedia: 0
+  IsEmergency: 0
+  PrefabName: CableTrayStraight
+  PrefabHash: 613155821
+  ThingTransform: {fileID: 1280637065426140607}
+  Slots: []
+  Bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0.25, y: 0.25, z: 0.25}
+  SurfaceArea: 0
+  SurfaceAreaScale: 1
+  BoundsOffset: {x: 0, y: 0, z: 0}
+  IgnoreSave: 0
+  generateTerrain: 1
+  WillSave: 1
+  Rotation: {x: 0, y: 0, z: 0, w: 0}
+  CanFrustumCull: 0
+  ThermodynamicsScale: 0.1
+  SolarHeatingScale: 0.1
+  WeatherDamageScale: 1
+  shatterTemperature: 1
+  flashpointTemperature: -1
+  autoignitionTemperature: -1
+  BurnTime: 5
+  ThingHealth: 100
+  EnergyReleasedWhenBurned: 100000
+  _customName: 
+  PaintableMaterial: {fileID: 2100000, guid: d694eea87117f4f4a9515578376669b4, type: 2}
+  CustomColor:
+    Name: 
+    Bit: 0
+    StringKey: 0
+    Normal: {fileID: 0}
+    Emissive: {fileID: 0}
+    Cutable: {fileID: 0}
+    Light: {r: 1, g: 1, b: 1, a: 1}
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  Interactables: []
+  AudioEvents: []
+  AudioSources: []
+  BaseAnimator: {fileID: 0}
+  IsCursor: 0
+  Blueprint: {fileID: 611239753853581347, guid: bc7f7c398f093a41c930290bf634f883, type: 3}
+  Wireframe: {fileID: 0}
+  lodFlares: []
+  IsCustomThing: 0
+  ThumbnailOffset: {x: 0, y: 0, z: 0}
+  ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
+  Thumbnail: {fileID: 21300000, guid: 98a9f46fcb79b02f2a189e83ac61b69d, type: 3}
+  Thumbnails: []
+  IsEntity: 0
+  _isOccluded: 0
+  HasRunOnAtmospherics: 0
+  MaterialChanger: {fileID: 0}
+  AnimComponents: []
+  Lights: []
+  Renderers: []
+  RocketRenderers: []
+  HasErrorState: 0
+  HasPowerState: 0
+  HasActivateState: 0
+  HasLockState: 0
+  HasOnOffState: 0
+  HasModeState: 0
+  HasOpenState: 0
+  HasImportState: 0
+  HasImport2State: 0
+  HasExportState: 0
+  HasExport2State: 0
+  HasButton1State: 0
+  HasButton2State: 0
+  HasButton3State: 0
+  HasColorState: 0
+  HasAccessState: 0
+  _staticColliders: []
+  _dynamicColliders: []
+  _selfColliders: []
+  IsUpdateEachFrame: 0
+  IsUpdateAudio: 0
+  IsUpdate100MS: 0
+  IsUpdate1000MS: 0
+  CanPickup: 1
+  DestroyChildrenOnDead: 1
+  EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+  DiffuseIndex: 0
+  SmoothnessIndex: 0
+  LocalGrid:
+    x: 0
+    y: 0
+    z: 0
+  alwaysCastShadows: 0
+  maxPressureDelta: -1
+  BuildingTip: 
+  BuildStates:
+  - Thumbnail: {fileID: 0}
+    DamagedBuildState: 0
+    BlockAir: 0
+    AlwaysBlockAir: 0
+    BlockLight: 0
+    BlockGravity: 0
+    RenderMode: 0
+    Visualizer: {fileID: 907802712097809271}
+    StateMeshes: []
+    RendererInstance:
+      Parent: {fileID: 0}
+      UnityRenderer: {fileID: 0}
+      _rocketRenderer: {fileID: 0}
+      DefaultMode: 0
+      MeshFilter: {fileID: 0}
+      BaseLayer: 0
+      _enabled: 0
+      _visible: 0
+    TemperatureRadiationFactor: 0
+    Tool:
+      ToolEntry: {fileID: 6917369816277724075, guid: 8c70b0a39e7259cebb68d1a51fce7fd2, type: 3}
+      ToolEntry2: {fileID: 0}
+      EntryTime: 0.7
+      EntryQuantity: 1
+      EntryQuantity2: 0
+      ToolUseType: 0
+      ToolExit: {fileID: 0}
+      ExitTime: 1
+      ExitQuantity: 0
+    ColliderMode: 0
+    Colliders: []
+    LinkedGameObjects: []
+    CanManufacture: 0
+    ManufactureDat:
+      MachinesTier: 0
+      BuildTimeMultiplier: 0
+      ItemSpawnMultiplier: 0
+      EnergyCostMultiplier: 0
+      MaterialCostMultiplier: 0
+    InteractableParent: {fileID: 0}
+    Interactables: []
+    initialDrawData:
+      mesh: {fileID: 0}
+      materials: []
+      shadowMode: 0
+  BrokenBuildStates: []
+  RepairTools:
+    ToolEntry: {fileID: 0}
+    ToolEntry2: {fileID: 0}
+    EntryTime: 2
+    EntryQuantity: 0
+    EntryQuantity2: 0
+  UpgradePrefab:
+    UpgradeTools:
+      ToolEntry: {fileID: 0}
+      ToolEntry2: {fileID: 0}
+      EntryTime: 2
+      EntryQuantity: 0
+      EntryQuantity2: 0
+    Prefab: {fileID: 0}
+  GridSize: 0.5
+  GridOffset: 0.25
+  _useAxisIndependentGridSnapping: 0
+  _gridSize3d: {x: 0, y: 0, z: 0}
+  _gridOffset3d: {x: 0, y: 0, z: 0}
+  PlacementType: 0
+  SelectionDisplay: 0
+  StructureCollisionType: 2
+  AllowMounting: 0
+  UseCellPosition: 0
+  BoundsGridRatio: 0.9
+  BoundsGridShiftForward: 0
+  BoundsGridShiftSide: 0
+  BoundsGridExtraHeight: 0
+  BoundsGridAddHeight: 0
+  BoundsGridAddBottom: 0
+  BoundsGridExtraWidth: 0
+  BoundsGridExtraForward: 0
+  BoundsForward: 0
+  DualRegisterGridScale: 1
+  RotationAxis: 7
+  AllowedRotations: 7
+  CustomNavMeshFilter: {fileID: 0}
+  blockingGrids: []
+  RegisteredLocalGrid:
+    x: 0
+    y: 0
+    z: 0
+  Up: {x: 0, y: 0, z: 0}
+  Temperature: 0
+  AttachedDevices: []
+  RenderUsingTerrainLod: 0
+  NeighborStructures: []
+  Direction: {x: 0, y: 0, z: 0, w: 0}
+  HasLight: 0
+  structureRenderMode: 0
+  MPBRenderers: []
+  IsUpdateOnServerTick: 0
+  ForceGridBounds: []
+  BoundsExpand: 0
+  OpenEnds:
+  - ConnectionType: 64
+    Transform: {fileID: 1992251235812022691}
+    Collider: {fileID: 2178864992037917992}
+    ConnectionRole: 0
+    HelperRenderer: {fileID: 0}
+    Parent: {fileID: 5281992246398186718}
+    LocalGrid:
+      x: 0
+      y: 0
+      z: 0
+    FacingGrid:
+      x: 0
+      y: 0
+      z: 0
+  - ConnectionType: 64
+    Transform: {fileID: 7164436535277975306}
+    Collider: {fileID: 1418708655168960448}
+    ConnectionRole: 0
+    HelperRenderer: {fileID: 0}
+    Parent: {fileID: 5281992246398186718}
+    LocalGrid:
+      x: 0
+      y: 0
+      z: 0
+    FacingGrid:
+      x: 0
+      y: 0
+      z: 0
+  - ConnectionType: 2
+    Transform: {fileID: 1992251235812022691}
+    Collider: {fileID: 2178864992037917992}
+    ConnectionRole: 0
+    HelperRenderer: {fileID: 0}
+    Parent: {fileID: 5281992246398186718}
+    LocalGrid:
+      x: 0
+      y: 0
+      z: 0
+    FacingGrid:
+      x: 0
+      y: 0
+      z: 0
+  - ConnectionType: 2
+    Transform: {fileID: 7164436535277975306}
+    Collider: {fileID: 1418708655168960448}
+    ConnectionRole: 0
+    HelperRenderer: {fileID: 0}
+    Parent: {fileID: 5281992246398186718}
+    LocalGrid:
+      x: 0
+      y: 0
+      z: 0
+    FacingGrid:
+      x: 0
+      y: 0
+      z: 0
+  SmallCollisionType: 29
+  DualRegister: 0
+  requiresFrame: 0
+  HasDataConnection: 0
+  RendererUp: {fileID: 0}
+  RendererDown: {fileID: 0}
+  OpenEndsPermutation: 000000000100000002000000030000000400000005000000
+  ConnectionType: 8

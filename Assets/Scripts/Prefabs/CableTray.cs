@@ -1,0 +1,211 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts;
+using Assets.Scripts.GridSystem;
+using Assets.Scripts.Networks;
+using Assets.Scripts.Objects;
+using Assets.Scripts.Objects.Electrical;
+using Assets.Scripts.Objects.Motherboards;
+using Assets.Scripts.UI;
+using Assets.Scripts.Util;
+using Cysharp.Threading.Tasks;
+using LaunchPadBooster.Utils;
+using LibConstruct;
+using ReVolt.Interfaces;
+using UnityEngine;
+
+namespace ReVolt
+{
+    public class CableTray : SmallSingleGrid, ICableTrayComponent, IPatchable, ISmartRotatable
+    {
+        public MeshRenderer RendererUp;
+        public MeshRenderer RendererDown;
+        
+        public override void OnRegistered(Cell cell)
+        {
+            base.OnRegistered(cell);
+            ReVolt.CableTrayNetwork.RebuildNetworkCreate(this);
+            UpdateJunctionConnections();
+        }
+
+        public override void OnDeregistered()
+        {
+            base.OnDeregistered();
+            ReVolt.CableTrayNetwork.RebuildNetworkDestroy(this);
+        }
+
+        public void OnMemberAdded(ICableTrayComponent member)
+        {
+        }
+
+        public void OnMemberRemoved(ICableTrayComponent member)
+        {
+        }
+
+        public void OnMembersChanged()
+        {
+            if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
+                return;
+            
+            foreach (var cable in ConnectedCables().ToList())
+                CableNetwork.RebuildCableNetworkServer(cable);
+        }
+
+        public void MatchCables(List<Cable> List, Cable Metric)
+        {
+            int wantColour = GameManager.GetColorIndex(Metric.CustomColor);
+
+            foreach (var Component in Network.Members)
+            {
+                var Tray = Component as CableTray;
+
+                if (Tray == null)
+                    continue;
+
+                for (var index = Tray.OpenEnds.Count - 1; index >= 0; index--)
+                {
+                    var openEnd = Tray.OpenEnds[index];
+                    SmallCell smallCell = GridController.GetSmallCell(GridController.WorldToLocalGrid(openEnd.Transform.position, SmallGridSize, SmallGridOffset));
+                    var Cable = smallCell?.Cable;
+
+                    if (Cable != null)
+                    {
+                        var cableCol = GameManager.GetColorIndex(Cable.CustomColor);
+                        if (Cable != Metric && Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
+                            cableCol == wantColour && smallCell.Cable.IsConnected(openEnd))
+                        {
+                            List.Add(smallCell.Cable);
+                        }
+                    }
+                }
+            }
+        }
+
+        public override void OnNeighborPlaced(SmallGrid neighbor)
+        {
+            base.OnNeighborPlaced(neighbor);
+            UpdateJunctionConnections();
+        }
+
+        public override void OnNeighborRemoved(SmallGrid neighbor)
+        {
+            base.OnNeighborRemoved(neighbor);
+            UpdateJunctionConnections();
+        }
+
+        public override void OnStartRender()
+        {
+            base.OnStartRender();
+            
+            if (!_reapplyAppearance)
+                return;
+            
+            if (RendererUp != null)
+                RendererUp.enabled = _showUpper;
+                
+            if (RendererDown != null)
+                RendererDown.enabled = _showLower;
+                
+            _reapplyAppearance = false;
+        }
+
+        public override string GetStationpediaCategoryKey() => StationpediaCategoryStrings.CableCategory;
+        public override string GetStationpediaCategory() => Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
+
+        private bool IsConnectedToTray(Connection OpenEnd)
+        {
+            var smallCell = GridController.GetSmallCell(GridController.WorldToLocalGrid(OpenEnd.Transform.position, SmallGridSize, SmallGridOffset));
+            return smallCell is { Other: CableTray } && smallCell.Other.IsConnected(OpenEnd);
+        }
+
+        protected bool _showUpper;
+        protected bool _showLower;
+        protected bool _reapplyAppearance;
+        
+        public void UpdateJunctionConnections()
+        {
+            if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
+            {
+                if (!_isDeferringUpdate && OpenEnds.Count > 8)
+                    DeferredUJC().Forget();
+                return;
+            }
+
+            
+            if (RendererUp != null)
+            {
+                RendererUp.enabled = _showUpper = OpenEnds.Count > 8 && IsConnectedToTray(OpenEnds[8]);
+                _reapplyAppearance = true;
+            }
+            
+            if (RendererDown != null)
+            {
+                RendererDown.enabled = _showLower = OpenEnds.Count > 10 && IsConnectedToTray(OpenEnds[10]);
+                _reapplyAppearance = true;
+            }
+        }
+
+        private bool _isDeferringUpdate = false;
+        private async UniTaskVoid DeferredUJC()
+        {
+            if (OpenEnds.Count < 8 || _isDeferringUpdate)
+                return;
+            
+            _isDeferringUpdate = true;
+            do
+            {
+                await UniTask.NextFrame();
+            } while (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation);
+            UpdateJunctionConnections();
+            _isDeferringUpdate = false;
+        }
+
+        public IEnumerable<Connection> Connections // Literally just Tom's reference code because that's all I actually need right now
+        {
+            get
+            {
+                foreach (var openEnd in OpenEnds)
+                    if (openEnd.ConnectionType == NetworkType.LandingPad || (openEnd.ConnectionType & ReVolt.CableTrayNetwork.ConnectionType) != NetworkType.None)
+                        yield return openEnd;
+            }
+        }
+
+        public PseudoNetwork<ICableTrayComponent> Network { get; } = ReVolt.CableTrayNetwork.Join();
+
+        public void PatchPrefab()
+        {
+            ReVolt.CableTrayNetwork.PatchConnections(this);
+
+            ReVolt.MOD.SetupPrefabs(PrefabName)
+                .SetBlueprintMaterials()
+                .SetPaintableColor(ColorType.Red)
+                .SetExitTool(PrefabNames.Wrench);
+        }
+
+        public int[] OpenEndsPermutation = {
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        };
+
+        public int[] GetOpenEndsPermutation() => (int[]) OpenEndsPermutation.Clone();
+
+        public SmartRotate.ConnectionType ConnectionType = SmartRotate.ConnectionType.Exhaustive;
+        
+        public SmartRotate.ConnectionType GetConnectionType() => ConnectionType;
+
+        public void SetOpenEndsPermutation(int[] permutation)
+        {
+            OpenEndsPermutation = (int[]) permutation.Clone();
+        }
+
+        public void SetConnectionType(SmartRotate.ConnectionType connectionType)
+        {
+            ConnectionType = connectionType;
+        }
+    }
+}
