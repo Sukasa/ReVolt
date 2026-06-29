@@ -160,6 +160,7 @@ MonoBehaviour:
   parentThing: {fileID: 6661527474186255037}
   time: 0.4
   interactableCollider: {fileID: 0}
+  DebugState: -1
   states:
   - AnimData:
     - name: Closed
@@ -261,6 +262,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8792754455816954158}
+  - component: {fileID: 4090386514812778844}
   m_Layer: 0
   m_Name: Build States
   m_TagString: Untagged
@@ -287,6 +289,27 @@ Transform:
   - {fileID: 7951741358065296211}
   m_Father: {fileID: 4854686585393293148}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4090386514812778844
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590268905141223210}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.08, z: 1}
+  m_Center: {x: 0.25, y: 0.72, z: 0.25}
 --- !u!1 &1593128324952262276
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +448,6 @@ MonoBehaviour:
   SuppressSound: 1
   Forward: {x: 0, y: 0, z: 0}
   HideInStationpedia: 0
-  CurrentPingMesh: {fileID: 0}
   IsEmergency: 0
   PrefabName: CircuitBreakerHeavy
   PrefabHash: -1888133277
@@ -1635,6 +1657,7 @@ MonoBehaviour:
   parentThing: {fileID: 0}
   time: 1
   interactableCollider: {fileID: 0}
+  DebugState: -1
   states:
   - AnimData:
     - name: Off
@@ -2061,6 +2084,7 @@ MonoBehaviour:
   parentThing: {fileID: 6661527474186255037}
   time: 0.2
   interactableCollider: {fileID: 7718606653569894974}
+  DebugState: -1
   states:
   - AnimData:
     - name: Locked
@@ -2628,6 +2652,7 @@ MonoBehaviour:
   parentThing: {fileID: 6661527474186255037}
   time: 0.2
   interactableCollider: {fileID: 8450909821359473906}
+  DebugState: -1
   states:
   - AnimData:
     - name: Locked
