@@ -13,7 +13,6 @@ using ReVolt.Assets.Scripts;
 using ReVolt.Components;
 using ReVolt.Interfaces;
 using System.Text;
-using LaunchPadBooster;
 using LaunchPadBooster.Utils;
 using UnityEngine;
 
@@ -104,6 +103,11 @@ namespace ReVolt
                 .SetExitTool(PrefabNames.Wrench) // A drill would be better but that'd conflict with the entry tool for build state 1
                 .SetEntryTool(PrefabNames.Drill, 1)
                 .SetExitTool(PrefabNames.Wrench, 1);
+        }
+
+        public override string GetStationpediaCategoryKey()
+        {
+            return base.GetStationpediaCategoryKey();
         }
 
         public override string GetStationpediaCategory()

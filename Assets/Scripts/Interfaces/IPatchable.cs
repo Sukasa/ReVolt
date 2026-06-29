@@ -1,7 +1,4 @@
-﻿using Assets.Scripts.Objects;
-using LaunchPadBooster;
-
-namespace ReVolt.Interfaces
+﻿namespace ReVolt.Interfaces
 {
     interface IPatchable
     {
