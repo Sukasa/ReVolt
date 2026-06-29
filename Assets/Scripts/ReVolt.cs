@@ -14,6 +14,7 @@ namespace ReVolt
     public class ReVolt : MonoBehaviour
     {
         public static readonly PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
+        public static readonly PseudoNetworkType<ICableTrayComponent> CableTrayNetwork = new();
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
@@ -31,7 +32,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.5.2");
+        public static readonly Mod MOD = new("Re-Volt", "1.6.1");
 
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
         {
@@ -72,17 +73,17 @@ namespace ReVolt
             {
                 MOD.AddPrefabs(prefabs);
 
-                foreach (var prefab in prefabs)
+                for (var index = prefabs.Count - 1; index >= 0; index--)
                 {
+                    var prefab = prefabs[index];
                     var prefabThing = prefab.GetComponent<Thing>();
                     if (prefabThing == null)
                         continue;
-                    
+
                     if (prefabThing is IPatchable y)
                         y.PatchPrefab();
                     else
                         MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(ColorType.White);
-                    
                 }
             }
 
