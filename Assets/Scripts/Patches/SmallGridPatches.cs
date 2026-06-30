@@ -33,8 +33,15 @@ namespace ReVolt.Patches
             
             foreach (var openEnd in cable.OpenEnds)
             {
-                var smallCell = cable.GridController.GetSmallCell(cable.GridController.WorldToLocalGrid(openEnd.Transform.position, SmallGrid.SmallGridSize, SmallGrid.SmallGridOffset));
-                if (smallCell is { Other: CableTray Tray } && smallCell.Other != cable && smallCell.Other.IsConnected(openEnd))
+                var smallCell = cable.GridController.GetSmallCell(cable.GridController.WorldToLocalGrid(openEnd.Transform.position, SmallGrid.SmallGridSize,
+                    SmallGrid.SmallGridOffset));
+                
+                if (smallCell is not { Other: CableTray Tray } || smallCell.Other == cable || !smallCell.Other.IsConnected(openEnd))
+                    continue;
+                
+                if (CablePatches.GateTriggerRepeatRegistration)
+                    CablePatches.RetriggerRegistration = true;
+                else
                     Tray.MatchCables(__result, cable);
             }
         }
