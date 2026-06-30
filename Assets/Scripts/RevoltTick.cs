@@ -85,6 +85,7 @@ namespace ReVolt
 
             if (!IsDirty) // Only rebuild if dirty
                 return;
+            
             IsDirty = false;
 
             PowerProviders = new();
@@ -127,6 +128,7 @@ namespace ReVolt
             if (PowerData is null || PowerData.Length != Devices.Count)
                 PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = ClassifyDevice(x) }).ToArray();
 
+            
             // Now look for a load centre and initialize it (and us)
             _loadCenter = null;
 
