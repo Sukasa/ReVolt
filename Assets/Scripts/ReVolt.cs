@@ -3,6 +3,7 @@ using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Motherboards;
 using BepInEx.Configuration;
 using HarmonyLib;
+using JetBrains.Annotations;
 using LaunchPadBooster;
 using LibConstruct;
 using ReVolt.Assets.Scripts;
@@ -20,6 +21,7 @@ namespace ReVolt
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
         internal static ConfigEntry<float> configMaxBatteryDischargeRate;
         internal static ConfigEntry<float> configBatteryChargeEfficiency;
+        internal static ConfigEntry<float> configBatteryCapacityFactor;
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
         internal static ConfigEntry<float> heavyBreakerMaxTripSetting;
@@ -32,14 +34,16 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.6.1");
+        public static readonly Mod MOD = new("Re-Volt", "1.6.4");
 
+        [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
         {
             Debug.Log("Re-Volt is loading");
 
             // Balancing config
             configMaxBatteryChargeRate = config.Bind("Balancing", "Max Battery charge rate", 0.002f, "Maximum Stationary battery charge rate, in % of max charge");
+            configBatteryCapacityFactor = config.Bind("Balancing", "Max Battery capacity factor", 1.0f, "Multiplier for Battery and Large Battery capacity");
             configMaxBatteryDischargeRate = config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
             configBatteryChargeEfficiency = config.Bind("Balancing", "Battery Charge Efficiency", 1.0f,
                 "Battery charging efficiency.  Reduce this to lose energy to charging inefficiencies.  If you really want to.");

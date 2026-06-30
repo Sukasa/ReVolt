@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.6.1</Version>
+  <Version>1.6.4</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -47,13 +46,11 @@
 
     [h2]🆘 Need Support?[/h2]
 
-    If you need support, you can reach out here or on the Stationeers Modding Discord, in the Re-Volt project post, or on the Github repository at https://github.com/sukasa/revolt
+    If you need support, you can reach out here or on the Stationeers Modding Discord, in the Re-Volt project post, or on the GitHub repository at https://github.com/sukasa/revolt
 
   </Description>
-  
-  <!-- Ingame Description using TMP tags for Workshop menu -->
-  <InGameDescription>
-    <![CDATA[<b>WARNING:</b> <color=#ff0000>This is an SLP Plugin Mod, ensure you have it installed!</color>
+  <!-- In-game Description using TMP tags for Workshop menu -->
+  <InGameDescription><![CDATA[<b>WARNING:</b> <color=#ff0000>This is an SLP Plugin Mod, ensure you have it installed!</color>
     <size="30"><color=#ffa500>Re-Volt</color></size>
     Re-Volt is an electrical overhaul mod for Stationeers, which reworks how power is distributed, what happens when things go wrong, and gives you more tools to control your power!
     <b>Electrical simulation rewrite:</b>  Electrical load is now proportionally shared among all sources and split fairly between all loads.
@@ -62,13 +59,12 @@
     <b>Fuses still work.</b>  They provide absolute protection.  Once.
     <b>Recursive networks:</b> Now allowed!  With a side of exploit fixes!
     <b>Breakers & Cable Tray:</b> Circuit Breakers, Switchgear, and Cable Tray!  Oh my!
-]]>
-  </InGameDescription>
+]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.6.1[/h3]
+    [h3]Version 1.6.4[/h3]
     [list]
-    [*] Version entry error in mod file fixed
+    [*] Battery capacity is now configurable
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
