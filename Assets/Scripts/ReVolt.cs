@@ -25,6 +25,8 @@ namespace ReVolt
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
         internal static ConfigEntry<float> heavyBreakerMaxTripSetting;
+        internal static ConfigEntry<float> mediumTransformerMaxSetting;
+        internal static ConfigEntry<float> largeTransformerMaxSetting;
 
         internal static ConfigEntry<bool> enablePrefabContent;
 
@@ -53,6 +55,13 @@ namespace ReVolt
                 "Re-enables the check that force-burns cables out if the power grid forms a loop through multiple transformers or batteries");
             heavyBreakerMaxTripSetting = config.Bind("Balancing", "Heavy Breaker Maximum Trip Setting", 500000.0f,
                 "Maximum configurable trip current for a Heavy Breaker.  Adjust if you have cable mods installed");
+            mediumTransformerMaxSetting = config.Bind(
+                new ConfigDefinition("Power Balancing", "Medium Transformer Maximum Setting"), 50000.0f,
+                new ConfigDescription("Re-scale medium transformer current limit to match new cables", new AcceptableValueRange<float>(25000f, 100000f)));
+            
+            largeTransformerMaxSetting = config.Bind(
+                new ConfigDefinition("Power Balancing", "Large Transformer Maximum Setting"), 125000.0f,
+                new ConfigDescription("Re-scale large transformer current limit to match new cables", new AcceptableValueRange<float>(50000f, 500000f)));
 
             // Patches config
             enableTransformerExploitMitigation = config.Bind("Patches", "Enable Transformer Exploit Mitigation", true,

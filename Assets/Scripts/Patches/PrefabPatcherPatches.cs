@@ -16,6 +16,16 @@ namespace ReVolt.Patches
                 {
                     BatteryPrefab.PowerMaximum *= ReVolt.configBatteryCapacityFactor.Value;
                 }
+                
+                if (sourcePrefab?.GetComponent<Thing>() is Transformer transformerPrefab)
+                {
+                    transformerPrefab.OutputMaximum = transformerPrefab.OutputMaximum switch
+                    {
+                        50000f => ReVolt.largeTransformerMaxSetting.Value,
+                        25000f => ReVolt.mediumTransformerMaxSetting.Value,
+                        _ => transformerPrefab.OutputMaximum
+                    };
+                }
             }
         }
     }
