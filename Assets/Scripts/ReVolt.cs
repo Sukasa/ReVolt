@@ -43,18 +43,32 @@ namespace ReVolt
         {
             Debug.Log("Re-Volt is loading");
 
-            // Balancing config
-            configMaxBatteryChargeRate = config.Bind("Balancing", "Max Battery charge rate", 0.002f, "Maximum Stationary battery charge rate, in % of max charge");
-            configBatteryCapacityFactor = config.Bind("Balancing", "Max Battery capacity factor", 1.0f, "Multiplier for Battery and Large Battery capacity");
-            configMaxBatteryDischargeRate = config.Bind("Balancing", "Max Battery discharge rate", 0.007f, "Maximum Stationary battery discharge rate, in % of max charge");
-            configBatteryChargeEfficiency = config.Bind("Balancing", "Battery Charge Efficiency", 1.0f,
-                "Battery charging efficiency.  Reduce this to lose energy to charging inefficiencies.  If you really want to.");
-            configCableBurnFactor = config.Bind("Balancing", "Cable burn factor", 1.0f,
-                "Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.");
-            enableRecursiveNetworkLimits = config.Bind("Balancing", "Enable Recursive Network Limits", false,
-                "Re-enables the check that force-burns cables out if the power grid forms a loop through multiple transformers or batteries");
-            heavyBreakerMaxTripSetting = config.Bind("Balancing", "Heavy Breaker Maximum Trip Setting", 500000.0f,
-                "Maximum configurable trip current for a Heavy Breaker.  Adjust if you have cable mods installed");
+            // Battery Balancing config
+            configMaxBatteryChargeRate = config.Bind(
+                new ConfigDefinition("Battery Balancing", "Max Charge Rate"), 0.002f,
+                new ConfigDescription("Maximum Stationary battery charge rate, as ratio of max charge capacity", new AcceptableValueRange<float>(0.001f, 1.0f)));
+            
+            configBatteryCapacityFactor = config.Bind(
+                new ConfigDefinition("Battery Balancing", "Max capacity factor"), 1.0f,
+                new ConfigDescription("Multiplier for Battery and Large Battery capacity", new AcceptableValueRange<float>(0.1f, 10.0f)));
+            
+            configMaxBatteryDischargeRate = config.Bind(
+                new ConfigDefinition("Battery Balancing", "Max discharge rate"), 0.007f,
+                new ConfigDescription("Maximum Stationary battery discharge rate, as ratio of max charge", new AcceptableValueRange<float>(0.001f, 1.0f)));
+            
+            configBatteryChargeEfficiency = config.Bind(
+                new ConfigDefinition("Battery Balancing", "Charge Efficiency"), 1.0f,
+                new ConfigDescription("Battery charging efficiency.  Reduce this to lose energy to charging inefficiencies, if you really want to.", new AcceptableValueRange<float>(0.001f, 1.0f)));
+            
+            // Power Balancing Config
+            configCableBurnFactor = config.Bind(
+                new ConfigDefinition("Power Balancing", "Cable burn Chance"), 1.0f,
+                new ConfigDescription("Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.", new AcceptableValueRange<float>(0.000f, 2.0f)));
+            
+            heavyBreakerMaxTripSetting = config.Bind(
+                new ConfigDefinition("Power Balancing", "Heavy Breaker Maximum Trip Setting"), 500000.0f,
+                new ConfigDescription("Maximum configurable trip current for a Heavy Breaker.", new AcceptableValueRange<float>(100000f, 500000f)));
+            
             mediumTransformerMaxSetting = config.Bind(
                 new ConfigDefinition("Power Balancing", "Medium Transformer Maximum Setting"), 50000.0f,
                 new ConfigDescription("Re-scale medium transformer current limit to match new cables", new AcceptableValueRange<float>(25000f, 100000f)));
@@ -64,16 +78,34 @@ namespace ReVolt
                 new ConfigDescription("Re-scale large transformer current limit to match new cables", new AcceptableValueRange<float>(50000f, 500000f)));
 
             // Patches config
-            enableTransformerExploitMitigation = config.Bind("Patches", "Enable Transformer Exploit Mitigation", true,
-                "Patch transformers to mitigate the free-power exploit, and restore quiescent current draw");
-            enableTransformerLogicAddition = config.Bind("Patches", "Enable Transformer Logic Additions", true, "Patch transformers to add mid-tier power monitoring");
-            enableBatteryLogicAddition = config.Bind("Patches", "Enable Battery Logic Additions", true, "Patch station batteries to add charge/discharge-limit logic values");
-            enableAreaPowerControlFix = config.Bind("Patches", "Enable APC Power Fix", true,
-                "Patch APCs to mitigate a 10W free-power discrepancy, and restore quiescent current draw");
-            enableBatteryLimitsPatch = config.Bind("Patches", "Enable Battery Limits", true, "Patch station batteries to limit charge/discharge rate");
+            enableTransformerExploitMitigation = config.Bind(
+                new ConfigDefinition("Patches", "Enable Transformer Exploit Mitigation"), true,
+                new ConfigDescription("Patch transformers to mitigate the free-power exploit, and restore quiescent current draw"));
+            
+            enableRecursiveNetworkLimits = config.Bind(
+                new ConfigDefinition("Patches", "Enable Recursive Network Check"), false,
+                new ConfigDescription("Re-enables the check that force-burns cables out if the power grid forms a loop through multiple enabled transformers or batteries"));
+            
+            enableTransformerLogicAddition = config.Bind(
+                new ConfigDefinition("Patches", "Enable Transformer Logic Additions"), true, 
+                new ConfigDescription("Patch transformers to add mid-tier power monitoring"));
+           
+            enableBatteryLogicAddition = config.Bind(
+                new ConfigDefinition("Patches", "Enable Battery Logic Additions"), true, 
+                new ConfigDescription("Patch station batteries to add charge/discharge-limit logic values"));
+         
+            enableAreaPowerControlFix = config.Bind(
+                new ConfigDefinition("Patches", "Enable APC Power Fix"), true,
+                new ConfigDescription("Patch APCs to mitigate a 10W free-power discrepancy, and restore quiescent current draw"));
+           
+            enableBatteryLimitsPatch = config.Bind(
+                new ConfigDefinition("Patches", "Enable Battery Limits"), true,
+                new ConfigDescription("Patch station batteries to limit charge/discharge rate"));
 
             // Content config
-            enablePrefabContent = config.Bind("Content", "Enable Custom Objects", true, "Enable Re-Volt circuit breakers");
+            enablePrefabContent = config.Bind(
+                new ConfigDefinition("Content", "Enable Custom Objects"), true,
+                new ConfigDescription("Enable Re-Volt Circuit Breakers, Heavy Breakers, Load Center, and Cable Tray"));
 
             // Now set up the patches and content loader (via patch)
             Debug.Log("Re-Volt config loaded; patching...");
