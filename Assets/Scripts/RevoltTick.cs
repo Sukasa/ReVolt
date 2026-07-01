@@ -287,25 +287,27 @@ namespace ReVolt
             PowerTickPatches.CacheState(this);
 
             _powerRatio = Required == 0.0f ? 1.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
-            _isPowerMet = Potential - Required >= -20f; // 20W buffer, so if a transformer or breaker is *just* tipping us over the available supply, we allow it
+            _isPowerMet = Potential - Required >= -20f; // 20W buffer, so if a transformer or breaker is *just* tipping us over the available supply, we allow it instead of flapping the network
 
             var demandRatio = Potential == 0.0f ? 0.0f : Mathf.Clamp(Required / Potential, 0.0f, 1.0f);
             var powerFlow = Mathf.Min(Required, Potential);
 
-            // Track sliding-window average power flow for the last 10-20 seconds, to approximate the cable having to heat up before bursting
+            // Track sliding-window average power flow for the last 5-10 seconds, to approximate the cable having to heat up before bursting
             _powerUsageWindow = Mathf.Lerp(_powerUsageWindow, powerFlow, 0.1f);
-            
             
             var burnCable = TestBurnCable(powerFlow, _powerUsageWindow);
             var burnFuse = TestBlowFuse(powerFlow);
-            var _power = false;
+            var powerOk = false;
 
             // Now that power has been passed, we need to blow any fusible elements.
-            // Note; Breakers CAN trip based on over-current during their Tick, but we still trip them here if a cable would blow despite being protected
+            // Note; Breakers CAN trip based on over-current during their Power Tick, but we still trip them here if a cable would blow despite being protected
             // This is a gameplay choice because setting up a proper breaker system shouldn't still punish the player just because of bad RNG
 
             if (burnFuse != null)
+            {
                 burnFuse.Break();
+                powerOk = true;
+            }
             else if (burnCable != null)
             {
                 if (_breakerLimit <= burnCable.MaxVoltage && _breakerIndex > 0)
@@ -316,21 +318,20 @@ namespace ReVolt
                     // Even though we tripped the breaker, we let power flow for a tick to simulate the current flow that tripped them
                     // Yes, this could be used to exploit things for free power if you were to place a ton of breakers in parallel, feed them into a battery, and deconstruct them afterwards.  
                     // If you're going to go that far, I'm not going to worry about you.
-                    _power = true;
+                    powerOk = true;
                 }
                 else
                     burnCable.Break();
             }
-            else // Otherwise, nothing will burn.  So let's give things power.
-                _power = true;
+            else
+                powerOk = true;
 
-            if (!_power) // If something went wrong with distribution, we don't dole out any power this tick (it dissipated into the burn)
+            if (!powerOk) // If something went wrong with distribution, flag no power to devices BUT we will still run the network and draw all the used power that the cable burn dissipated
             {
                 _powerRatio = 0;
                 _isPowerMet = false;
             }
-
-            // Now give everything power.  Or not.  But still, draw the power (since a burned cable needs to dissipate that energy!)
+            
             var idx = Devices.Count;
             while (idx-- > 0)
             {
@@ -338,16 +339,11 @@ namespace ReVolt
                 if (currentDevice == null)
                     continue;
 
-                // If this device is a power consumer then give power to it based on power ratio + turn it on/off if it has power
                 if (PowerData[idx].PowerUsed >= 0.0f)
                 {
-                    var powerAvailable = PowerStates[(int)PowerData[idx].Category] ? PowerData[idx].PowerUsed * _powerRatio : 0.0f; // Check and see how much of its demand was met
+                    var powerAvailable = PowerStates[(int)PowerData[idx].Category] ? PowerData[idx].PowerUsed * _powerRatio : 0.0f;
 
-                    // We know how much power this device is going to receive, so give it that much power (even if it can't make use of it effectively)
                     currentDevice.ReceivePower(CableNetwork, powerAvailable);
-
-                    // Depending on the power available, maybe or maybe don't power the device
-                    // TODO later on implement brownouts here
 
                     if (PowerStates[(int)PowerData[idx].Category] && powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
                     {
@@ -358,7 +354,6 @@ namespace ReVolt
                         currentDevice.SetPowerFromThread(CableNetwork, false).Forget();
                 }
 
-                // If this was a power provider, draw power from it based on demand ratio
                 if (PowerData[idx].PowerProvided >= 0.0f)
                     currentDevice.UsePower(CableNetwork, demandRatio * PowerData[idx].PowerProvided);
             }
