@@ -65,6 +65,8 @@
     [h3]Version 1.6.4[/h3]
     [list]
     [*] Battery capacity is now configurable
+    [*] Large and Medium transformers have had their outputs buffed to align them with Heavy and Super Heavy cable
+    [*] Adjusted the configuration to make some slider ranges more appropriate, and reorganized sections for readability
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
