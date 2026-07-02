@@ -3,7 +3,6 @@ using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
 using HarmonyLib;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace ReVolt.Patches
 {
@@ -43,8 +42,8 @@ namespace ReVolt.Patches
             if (powerAdded <= 0.0 || !(bool)__instance.Battery || __instance.Battery.IsCharged)
                 return false;
 
-            // Otherwise we charge the battery at max rate or as far as we can based on remaining power
-            float num = Mathf.Min(__instance.Battery.PowerDelta, __instance.BatteryChargeRate, powerAdded);
+            // Otherwise we charge the battery at max rate or as far as we can, based on remaining power
+            var num = Mathf.Min(__instance.Battery.PowerDelta, __instance.BatteryChargeRate, powerAdded);
             __instance.Battery.PowerStored += num; // Add to battery
 
             return false;

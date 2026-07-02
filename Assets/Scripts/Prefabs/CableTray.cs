@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
@@ -146,7 +145,7 @@ namespace ReVolt
             }
         }
 
-        private bool _isDeferringUpdate = false;
+        private bool _isDeferringUpdate;
         private async UniTaskVoid DeferredUJC()
         {
             if (OpenEnds.Count < 8 || _isDeferringUpdate)

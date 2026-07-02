@@ -15,13 +15,11 @@ namespace ReVolt.Patches
             if (!ReVolt.enableBatteryLogicAddition.Value)
                 return true;
 
-            if (logicType == LogicType.ExportQuantity || logicType == LogicType.ImportQuantity)
-            {
-                __result = true;
-                return false;
-            }
-
-            return true;
+            if (logicType is not (LogicType.ExportQuantity or LogicType.ImportQuantity))
+                return true;
+            
+            __result = true;
+            return false;
         }
 
         [HarmonyPrefix]

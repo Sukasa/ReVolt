@@ -15,13 +15,11 @@ namespace ReVolt.Patches
             if (!ReVolt.enableTransformerLogicAddition.Value)
                 return true;
 
-            if (logicType == LogicType.PowerActual)
-            {
-                __result = true;
-                return false;
-            }
-
-            return true;
+            if (logicType != LogicType.PowerActual)
+                return true;
+            
+            __result = true;
+            return false;
         }
 
         [HarmonyPrefix]
@@ -31,13 +29,11 @@ namespace ReVolt.Patches
             if (!ReVolt.enableTransformerLogicAddition.Value)
                 return true;
 
-            if (logicType == LogicType.PowerActual)
-            {
-                __result = ____powerProvided;
-                return false;
-            }
-
-            return true;
+            if (logicType != LogicType.PowerActual)
+                return true;
+            
+            __result = ____powerProvided;
+            return false;
         }
     }
 }

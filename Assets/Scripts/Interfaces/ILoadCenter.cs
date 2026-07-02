@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Networks;
-using static ReVolt.RevoltTick;
+﻿using static ReVolt.RevoltTick;
 
 namespace ReVolt.Interfaces
 {

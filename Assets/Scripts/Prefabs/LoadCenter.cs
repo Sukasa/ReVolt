@@ -37,14 +37,8 @@ namespace ReVolt
 
         public bool HasConflict
         {
-            get
-            {
-                return Error > 0;
-            }
-            set
-            {
-                Error = value ? 1 : 0;
-            }
+            get => Error > 0;
+            set => Error = value ? 1 : 0;
         }
 
         public PowerUsage[] LoadControlData { private get; set; }
@@ -78,10 +72,10 @@ namespace ReVolt
             }
             base.RefreshAnimState(skipAnimation);
 
-            for (int i = ToggleSwitches.Count - 1; i >= 0; i--)
+            for (var i = ToggleSwitches.Count - 1; i >= 0; i--)
                 ToggleSwitches[i].RefreshState(skipAnimation);
 
-            for (int i = IndicatorLights.Count - 1; i >= 0; i--)
+            for (var i = IndicatorLights.Count - 1; i >= 0; i--)
                 IndicatorLights[i].RefreshState(skipAnimation);
 
             Door.RefreshState(skipAnimation);
@@ -106,18 +100,12 @@ namespace ReVolt
 
         public override string GetContextualName(Interactable interactable)
         {
-            switch(interactable.Action)
+            return interactable.Action switch
             {
-                case InteractableType.Button1:
-                case InteractableType.Button2:
-                case InteractableType.Button3:
-                case InteractableType.Button4:
-                case InteractableType.Button5:
-                    return $"{base.GetContextualName(interactable)} {(interactable.State > 0 ? "Off" : "On")}";
-
-                default:
-                    return base.GetContextualName(interactable);
-            }
+                InteractableType.Button1 or InteractableType.Button2 or InteractableType.Button3 or InteractableType.Button4 or InteractableType.Button5 =>
+                    $"{base.GetContextualName(interactable)} {(interactable.State > 0 ? "Off" : "On")}",
+                _ => base.GetContextualName(interactable)
+            };
         }
 
         public override DelayedActionInstance InteractWith(Interactable interactable, Interaction interaction, bool doAction = true)
@@ -168,42 +156,25 @@ namespace ReVolt
 
         public override bool CanLogicWrite(LogicSlotType logicSlotType, int slotId)
         {
-            switch (logicSlotType)
+            return logicSlotType switch
             {
-                case LogicSlotType.On:
-                    return true;
-
-                default:
-                    return base.CanLogicWrite(logicSlotType, slotId);
-            }
+                LogicSlotType.On => true,
+                _ => base.CanLogicWrite(logicSlotType, slotId)
+            };
         }
 
         public override bool CanLogicRead(LogicSlotType logicSlotType, int slotId)
         {
-            switch (logicSlotType)
+            return logicSlotType switch
             {
-                case LogicSlotType.On:
-                case LogicSlotType.Quantity:
-                    return true;
-
-                default:
-                    return base.CanLogicWrite(logicSlotType, slotId);
-            }
+                LogicSlotType.On or LogicSlotType.Quantity => true,
+                _ => base.CanLogicWrite(logicSlotType, slotId)
+            };
         }
 
-        public override bool CanLogicWrite(LogicType logicType)
-        {
-            if (logicType == LogicType.On)
-                return false;
-            return base.CanLogicWrite(logicType);
-        }
+        public override bool CanLogicWrite(LogicType logicType) => logicType != LogicType.On && base.CanLogicWrite(logicType);
 
-        public override bool CanLogicRead(LogicType logicType)
-        {
-            if (logicType == LogicType.On)
-                return false;
-            return base.CanLogicRead(logicType);
-        }
+        public override bool CanLogicRead(LogicType logicType) => logicType != LogicType.On && base.CanLogicRead(logicType);
 
         public override void SetLogicValue(LogicSlotType logicSlotType, int slotId, double value)
         {
@@ -257,20 +228,18 @@ namespace ReVolt
                 }
             }
 
-            if (logicSlotType == LogicSlotType.Quantity || logicSlotType == (LogicSlotType)LogicType.PowerActual)
-            {
-                if (LoadControlData == null)
-                    return 0.0;
+            if (logicSlotType != LogicSlotType.Quantity && logicSlotType != (LogicSlotType)LogicType.PowerActual)
+                return base.GetLogicValue(logicSlotType, slotId);
+            
+            if (LoadControlData == null)
+                return 0.0;
 
+            double sum = 0;
+            for (var i = LoadControlData.Length - 1; i >= 0; i--)
+                if (LoadControlData[i].Category == (PowerClass)slotId)
+                    sum += LoadControlData[i].PowerUsed;
+            return sum;
 
-                double sum = 0;
-                for (int i = LoadControlData.Length - 1; i >= 0; i--)
-                    if (LoadControlData[i].Category == (PowerClass)slotId)
-                        sum += LoadControlData[i].PowerUsed;
-                return sum;
-            }
-
-            return base.GetLogicValue(logicSlotType, slotId);
         }
 
         #endregion

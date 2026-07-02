@@ -19,8 +19,6 @@ namespace ReVolt
     {
         public struct PowerUsage
         {
-            public Device Device;
-            public float Ratio;
             public float PowerUsed;
             public float PowerProvided;
             internal PowerClass Category;
@@ -57,9 +55,7 @@ namespace ReVolt
             Equipment,
             Logic,
             Power,
-            Misc,
-
-            Max
+            Misc
         }
 
         private readonly bool[] PowerStates = { true, true, true, true, true, true, true };
@@ -126,7 +122,7 @@ namespace ReVolt
 
             // Allocate our memoization arrays, if they've changed, including power classifications
             if (PowerData is null || PowerData.Length != Devices.Count)
-                PowerData = Devices.Select(x => new PowerUsage { Device = x, Category = ClassifyDevice(x) }).ToArray();
+                PowerData = Devices.Select(x => new PowerUsage { Category = ClassifyDevice(x) }).ToArray();
 
             
             // Now look for a load centre and initialize it (and us)

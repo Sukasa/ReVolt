@@ -1,5 +1,4 @@
-﻿using Assets.Scripts;
-using Assets.Scripts.Networks;
+﻿using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Pipes;
 using HarmonyLib;
 using UnityEngine;
@@ -26,11 +25,11 @@ namespace ReVolt.Patches
 
                 if (Ticker.GetPowerState(RevoltTick.ClassifyDevice(__instance)))
                 {
-                    float usedPower = __instance.GetUsedPower(cableNetwork);
-                    if ((double)usedPower <= 0.0)
+                    var usedPower = __instance.GetUsedPower(cableNetwork);
+                    if (usedPower <= 0.0)
                         return false;
 
-                    if ((double)usedPower > (double)cableNetwork.EstimatedRemainingLoad)
+                    if (usedPower > (double)cableNetwork.EstimatedRemainingLoad)
                     {
                         cableNetwork.DuringTickLoad += Mathf.Min(usedPower, cableNetwork.EstimatedRemainingLoad);
                         if (__instance.Powered)

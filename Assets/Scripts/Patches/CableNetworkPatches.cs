@@ -28,10 +28,10 @@ namespace ReVolt.Patches
         [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, new Type[0])]
         public static void Constructor_None(CableNetwork __instance) => Inject(__instance);
 
-        [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, new Type[] { typeof(Cable) })]
+        [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, typeof(Cable))]
         public static void Constructor_Cable(CableNetwork __instance) => Inject(__instance);
 
-        [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, new Type[] { typeof(long) })]
+        [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, typeof(long))]
         public static void Constructor_Long(CableNetwork __instance) => Inject(__instance);
 
         /// <summary>

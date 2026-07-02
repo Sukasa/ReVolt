@@ -45,8 +45,8 @@ namespace ReVolt
         public const int MODE_OFF = 0;
 
         public override string[] ModeStrings => _breakerModeStrings;
-        static string[] _breakerModeStrings = { };
-        static string[] _ColouredModeStrings = { };
+        private static string[] _breakerModeStrings = { };
+        private static string[] _ColouredModeStrings = { };
 
         // Moved here from Heavy Breaker.  This way I'm not having to have overrides on overrides in the serialization code (just keeps things cleaner)
         protected readonly long[] ConnectionRefIds = new long[3];
@@ -80,14 +80,14 @@ namespace ReVolt
 
             if (_breakerModeStrings.Length != 0) return;
 
-            _breakerModeStrings = new string[3]
+            _breakerModeStrings = new[]
             {
                 ReVoltStrings.RevoltBreakerOpen,
                 ReVoltStrings.RevoltBreakerTrippedNetwork,
                 ReVoltStrings.RevoltBreakerClosed,
             };
 
-            _ColouredModeStrings = new string[3]
+            _ColouredModeStrings = new[]
             {
                 ReVoltStrings.RevoltBreakerOpen,
                 ReVoltStrings.RevoltBreakerTripped,
@@ -105,11 +105,6 @@ namespace ReVolt
                 .SetExitTool(PrefabNames.Wrench, 1);
         }
 
-        public override string GetStationpediaCategoryKey()
-        {
-            return base.GetStationpediaCategoryKey();
-        }
-
         public override string GetStationpediaCategory()
         {
             return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
@@ -124,12 +119,11 @@ namespace ReVolt
 
         public void Trip()
         {
-            if (Mode == MODE_ON)
-            {
-                UpdateModeNextFrame(MODE_TRIPPED).Forget();
-
-                PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, new Vector3(0f, 0f, 0.125f));
-            }
+            if (Mode != MODE_ON)
+                return;
+            
+            UpdateModeNextFrame(MODE_TRIPPED).Forget();
+            PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, new Vector3(0f, 0f, 0.125f));
         }
 
         public bool CanSupplyPower(CableNetwork cableNetwork) => Mode == MODE_ON && (cableNetwork == OutputNetwork) && (InputNetwork.PotentialLoad - _deficit) > 0.0f;
@@ -346,11 +340,11 @@ namespace ReVolt
             if (NetworkManager.IsServer)
                 NetworkUpdateFlags |= FLAG_MODE;
 
-            if (NetworkManager.IsClient)
-            {
-                if (interactable != GetInteractable(interactable.Action))
-                    GetInteractable(interactable.Action).Interact(interactable.State);
-            }
+            if (!NetworkManager.IsClient)
+                return;
+            
+            if (interactable != GetInteractable(interactable.Action))
+                GetInteractable(interactable.Action).Interact(interactable.State);
         }
 
         protected async UniTaskVoid UpdateModeNextFrame(int NewMode, bool SkipAnimation = false)
@@ -400,7 +394,7 @@ namespace ReVolt
             return sb.ToString();
         }
 
-        protected virtual string IndicatorTooltip()
+        protected string IndicatorTooltip()
         {
             if (!Powered)
                 return "The screen is dark";
@@ -414,7 +408,7 @@ namespace ReVolt
             return sb.ToString();
         }
 
-        protected virtual string InfoScreenTooltip()
+        protected string InfoScreenTooltip()
         {
             if (!Powered)
                 return "The screen is dark";
@@ -426,7 +420,7 @@ namespace ReVolt
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
             sb.Append("Current Trip Point is <color=yellow>");
-            sb.Append(Setting.ToStringPrefix("W", "yellow", true));
+            sb.Append(Setting.ToStringPrefix("W", "yellow"));
             sb.AppendLine("</color>");
 
             if (OutputNetwork != null)
@@ -442,11 +436,8 @@ namespace ReVolt
                 sb.Append(GameStrings.CableAnalyserPotential.AsString(OutputNetwork.PotentialLoad.ToStringPrefix("W", "yellow")));
             }
             else
-            {
                 sb.Append(ReVoltStrings.SmartBreakerNoCableFound);
-            }
-
-
+            
             return sb.ToString();
         }
 
@@ -497,11 +488,11 @@ namespace ReVolt
                 writer.WriteInt64(ConnectionRefIds[2]);
             }
 
-            if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
-            {
-                writer.WriteBoolean((GetInteractable(InteractableType.Slot1)?.State ?? 0) > 0);
-                writer.WriteBoolean((GetInteractable(InteractableType.Slot2)?.State ?? 0) > 0);
-            }
+            if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
+                return;
+            
+            writer.WriteBoolean((GetInteractable(InteractableType.Slot1)?.State ?? 0) > 0);
+            writer.WriteBoolean((GetInteractable(InteractableType.Slot2)?.State ?? 0) > 0);
         }
 
         public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
@@ -521,18 +512,18 @@ namespace ReVolt
                 ConnectionRefIds[2] = reader.ReadInt64();
             }
 
-            if (IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
-            {
-                if (GetInteractable(InteractableType.Slot1) != null)
-                    GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
-                else
-                    reader.ReadBoolean();
+            if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
+                return;
+            
+            if (GetInteractable(InteractableType.Slot1) != null)
+                GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
+            else
+                reader.ReadBoolean();
                 
-                if (GetInteractable(InteractableType.Slot2) != null)
-                    GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
-                else
-                    reader.ReadBoolean();
-            }
+            if (GetInteractable(InteractableType.Slot2) != null)
+                GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
+            else
+                reader.ReadBoolean();
         }
 
         public override void SerializeOnJoin(RocketBinaryWriter writer)
@@ -565,7 +556,7 @@ namespace ReVolt
         public override ThingSaveData SerializeSave()
         {
             var saveData = new CircuitBreakerSaveData();
-            var baseData = saveData as ThingSaveData;
+            ThingSaveData baseData = saveData;
             InitialiseSaveData(ref baseData);
             return saveData;
         }
@@ -620,30 +611,17 @@ namespace ReVolt
 
         public override bool CanLogicRead(LogicType logicType)
         {
-            switch (logicType)
+            return logicType switch
             {
-                case LogicType.Setting:
-                case LogicType.Maximum:
-                case LogicType.Ratio:
-                case LogicType.PowerActual:
-                case LogicType.PowerGeneration:
-                case LogicType.PowerPotential:
-                case LogicType.PowerRequired:
-                case LogicType.RequiredPower:
-                case LogicType.On:
-                case LogicType.Mode:
-                case LogicType.Error:
-                case LogicType.Power:
-                    return isSmartBreaker;
-
-                default:
-                    return base.CanLogicRead(logicType);
-            }
+                LogicType.Setting or LogicType.Maximum or LogicType.Ratio or LogicType.PowerActual or LogicType.PowerGeneration or LogicType.PowerPotential
+                    or LogicType.PowerRequired or LogicType.RequiredPower or LogicType.On or LogicType.Mode or LogicType.Error or LogicType.Power => isSmartBreaker,
+                _ => base.CanLogicRead(logicType)
+            };
         }
 
         public override bool CanLogicWrite(LogicType logicType)
         {
-            return (logicType == LogicType.Setting || logicType == LogicType.Activate || logicType == LogicType.On) && canRemoteControl;
+            return logicType is LogicType.Setting or LogicType.Activate or LogicType.On && canRemoteControl;
         }
 
         public override double GetLogicValue(LogicType logicType)
@@ -665,19 +643,13 @@ namespace ReVolt
                     return _transferredLast;
 
                 case LogicType.PowerActual:
-                    if (OutputNetwork == null)
-                        return 0.0;
-                    return OutputNetwork.CurrentLoad;
+                    return OutputNetwork?.CurrentLoad ?? 0.0;
 
                 case LogicType.PowerRequired:
-                    if (OutputNetwork == null)
-                        return 0.0;
-                    return OutputNetwork.RequiredLoad;
+                    return OutputNetwork?.RequiredLoad ?? 0.0;
 
                 case LogicType.PowerPotential:
-                    if (OutputNetwork == null)
-                        return 0.0;
-                    return OutputNetwork.PotentialLoad;
+                    return OutputNetwork?.PotentialLoad ?? 0.0;
 
                 case LogicType.RequiredPower:
                     return UsedPower;

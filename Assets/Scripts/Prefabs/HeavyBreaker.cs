@@ -28,7 +28,7 @@ namespace ReVolt.Prefabs
 
         public void OnBusConnectionChanged(Device BusTie)
         {
-            for(var i = 2; i >= 0; i--)
+            for (var i = 2; i >= 0; i--)
                 if (ConnectionRefIds[i] == BusTie.ReferenceId)
                 {
                     CheckConnections();
@@ -88,35 +88,29 @@ namespace ReVolt.Prefabs
             }
         }
 
-        public IEnumerable<Connection> Connections // Literally just Tom's reference code because that's all I actually need right now
+        public IEnumerable<Connection> Connections
         {
             get
             {
-                foreach (var openEnd in OpenEnds)
+                for (var i = OpenEnds.Count - 1; i >= 0; i--)
+                {
+                    var openEnd = OpenEnds[i];
                     if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == ReVolt.SwitchgearNetwork.ConnectionType)
                         yield return openEnd;
+                }
             }
         }
 
         public override string GetContextualName(Interactable interactable)
         {
-            switch (interactable.Action)
+            return interactable.Action switch
             {
-                case InteractableType.Button6:
-                case InteractableType.Button7:
-                case InteractableType.Button8: // For connections, the contextual name is just the current value
-                    return
-                        $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6]) ?? "Not Connected"}";
-
-                case InteractableType.Button9: // Setting buttons show the current setting
-                case InteractableType.Button10:
-                case InteractableType.Button11:
-                case InteractableType.Button12:
-                    return $"Trip Point: {Setting}";
-
-                default:
-                    return base.GetContextualName(interactable);
-            }
+                InteractableType.Button6 or InteractableType.Button7 or InteractableType.Button8 => // For connections, the contextual name is just the current value
+                    $"{ConnectionNames[interactable.Action - InteractableType.Button6]} Connection: {NameByRefId(ConnectionRefIds[interactable.Action - InteractableType.Button6]) ?? "Not Connected"}",
+                InteractableType.Button9 or InteractableType.Button10 or InteractableType.Button11 or InteractableType.Button12 => // Setting buttons show the current setting
+                    $"Trip Point: {Setting}",
+                _ => base.GetContextualName(interactable)
+            };
         }
 
         public override void OnPowerTick()
@@ -141,10 +135,7 @@ namespace ReVolt.Prefabs
             switch (interactable.Action)
             {
                 case InteractableType.Mode:
-                    if (!doAction)
-                        return action.Succeed();
-
-                    return action;
+                    return !doAction ? action.Succeed() : action;
 
                 case InteractableType.Slot1:
                 case InteractableType.Slot2:
@@ -187,19 +178,19 @@ namespace ReVolt.Prefabs
 
                     // We get which connection from the interactable type (they're in linear contiguous order), then figure out the next in the list.
                     // Then display and/or apply it
-                    int conIdx = interactable.Action - InteractableType.Button6;
-                    int dir = 1;
+                    var conIdx = interactable.Action - InteractableType.Button6;
+                    var dir = 1;
                     if (KeyManager.GetButton(KeyMap.QuantityModifier))
                         dir = -1;
                     else
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
 
-                    List<long> conList = conIdx == 2 ? DataEntries : PowerEntries;
+                    var conList = conIdx == 2 ? DataEntries : PowerEntries;
 
                     if (conList.Count == 0)
                         return action.Fail(ReVoltStrings.HeavyBreakerNoConnectionAvailable);
 
-                    int nextIdx = (ConnectionIndices[conIdx] + dir + conList.Count) % conList.Count;
+                    var nextIdx = (ConnectionIndices[conIdx] + dir + conList.Count) % conList.Count;
 
                     var newName = NameByRefId(conList[nextIdx]);
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newName);
@@ -277,9 +268,9 @@ namespace ReVolt.Prefabs
 
         protected override void CheckConnections()
         {
-            Device inputDevice = ThingByRefId(ConnectionRefIds[0]) as Device;
-            Device outputDevice = ThingByRefId(ConnectionRefIds[1]) as Device;
-            Device dataDevice = ThingByRefId(ConnectionRefIds[2]) as Device;
+            var inputDevice = ThingByRefId(ConnectionRefIds[0]) as Device;
+            var outputDevice = ThingByRefId(ConnectionRefIds[1]) as Device;
+            var dataDevice = ThingByRefId(ConnectionRefIds[2]) as Device;
 
             var previousNetworks = ConnectedCableNetworks.ToList();
 
@@ -301,7 +292,6 @@ namespace ReVolt.Prefabs
                         InputNetwork.AddDevice(InPowerCable, this);
                     else
                         InputNetwork?.DirtyPowerAndDataDeviceLists();
-                    
                 }
                 else
                 {
@@ -380,15 +370,14 @@ namespace ReVolt.Prefabs
 
         public void OnMemberRemoved(ISwitchgearComponent member)
         {
-            int idx = Array.IndexOf(ConnectionRefIds, member.ReferenceId);
-            if (idx > -1)
-            {
-                ConnectionRefIds[idx] = 0;
-                ConnectionIndices[idx] = 0;
+            var idx = Array.IndexOf(ConnectionRefIds, member.ReferenceId);
+            if (idx <= -1)
+                return;
+            ConnectionRefIds[idx] = 0;
+            ConnectionIndices[idx] = 0;
 
-                UpdateEntryLists(true);
-                CheckConnections();
-            }
+            UpdateEntryLists(true);
+            CheckConnections();
         }
 
         public override void OnRegistered(Cell cell)
