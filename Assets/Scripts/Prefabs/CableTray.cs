@@ -215,7 +215,7 @@ namespace ReVolt
         {
             get
             {
-                for (var idx = OpenEnds.Count - 1; idx >= 0; ++idx)
+                for (var idx = OpenEnds.Count - 1; idx >= 0; --idx)
                 {
                     var openEnd = OpenEnds[idx];
                     if (openEnd.ConnectionType == NetworkType.LandingPad || (openEnd.ConnectionType & ReVolt.CableTrayNetwork.ConnectionType) != NetworkType.None)

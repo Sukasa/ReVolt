@@ -98,7 +98,7 @@ namespace ReVolt.Prefabs
         {
             get
             {
-                for (var i = OpenEnds.Count - 1; i >= 0; i--)
+                for (var i = OpenEnds.Count - 1; i >= 0; --i)
                 {
                     var openEnd = OpenEnds[i];
                     if (openEnd.ConnectionType == NetworkType.LandingPad || (openEnd.ConnectionType & ReVolt.SwitchgearNetwork.ConnectionType) != NetworkType.None)
