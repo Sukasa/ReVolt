@@ -7,8 +7,9 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Prefab))]
     public class PrefabPatcherPatches
     {
+        
         [HarmonyPrefix, HarmonyPatch(nameof(Prefab.LoadAll))]
-        public static void LoadPatchesPatch()
+        public static void LoadAllPatch()
         {
             foreach (var sourcePrefab in WorldManager.Instance.SourcePrefabs)
             {
@@ -19,10 +20,10 @@ namespace ReVolt.Patches
                 
                 if (sourcePrefab?.GetComponent<Thing>() is Transformer transformerPrefab)
                 {
-                    transformerPrefab.OutputMaximum = transformerPrefab.OutputMaximum switch
+                    transformerPrefab.OutputMaximum = transformerPrefab.PrefabName switch
                     {
-                        50000f => ReVolt.largeTransformerMaxSetting.Value,
-                        25000f => ReVolt.mediumTransformerMaxSetting.Value,
+                        "StructureTransformer" => ReVolt.largeTransformerMaxSetting.Value,
+                        "StructureTransformerMedium" or "StructureTransformerMedium(Reversed)" => ReVolt.mediumTransformerMaxSetting.Value,
                         _ => transformerPrefab.OutputMaximum
                     };
                 }
