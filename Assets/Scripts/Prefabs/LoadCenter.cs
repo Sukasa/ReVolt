@@ -158,7 +158,7 @@ namespace ReVolt
         {
             return logicSlotType switch
             {
-                LogicSlotType.On => true,
+                LogicSlotType.On => !HasConflict,
                 _ => base.CanLogicWrite(logicSlotType, slotId)
             };
         }
@@ -167,7 +167,7 @@ namespace ReVolt
         {
             return logicSlotType switch
             {
-                LogicSlotType.On or LogicSlotType.Quantity => true,
+                LogicSlotType.On or LogicSlotType.Quantity => !HasConflict,
                 _ => base.CanLogicRead(logicSlotType, slotId)
             };
         }
@@ -180,6 +180,9 @@ namespace ReVolt
         {
             if (logicSlotType == LogicSlotType.On)
             {
+                if (HasConflict)
+                    return;
+                
                 switch ((PowerClass)slotId)
                 {
                     case PowerClass.Lights:
@@ -210,22 +213,18 @@ namespace ReVolt
         {
             if (logicSlotType == LogicSlotType.On)
             {
-                switch ((PowerClass)slotId)
-                {
-                    case PowerClass.Lights:
-                        return GetInteractable(InteractableType.Button1).State;
-                    case PowerClass.Doors:
-                        return GetInteractable(InteractableType.Button2).State;
-                    case PowerClass.Atmospherics:
-                        return GetInteractable(InteractableType.Button3).State;
-                    case PowerClass.Equipment:
-                        return GetInteractable(InteractableType.Button4).State;
-                    case PowerClass.Logic:
-                        return GetInteractable(InteractableType.Button5).State;
+                if (HasConflict)
+                    return 0f;
 
-                    default:
-                        return 0.0;
-                }
+                return (PowerClass)slotId switch
+                {
+                    PowerClass.Lights => GetInteractable(InteractableType.Button1).State,
+                    PowerClass.Doors => GetInteractable(InteractableType.Button2).State,
+                    PowerClass.Atmospherics => GetInteractable(InteractableType.Button3).State,
+                    PowerClass.Equipment => GetInteractable(InteractableType.Button4).State,
+                    PowerClass.Logic => GetInteractable(InteractableType.Button5).State,
+                    _ => 0.0
+                };
             }
 
             // LogicSlotType contains no available "power actual". and since these slots CANNOT contain actual items, I don't worry about PowerActual being 'ReferenceId'.
