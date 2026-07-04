@@ -17,6 +17,7 @@ namespace ReVolt.Patches
                 case BusTie _:
                 case CableTray _:
                 case Wireway _:
+                case LoadCenter _:
                     Stationpedia.DataHandler.AddNewListItem(ElectronicsPage, dynamicThing.GetStationpediaCategory(), insert);
                     __result = true;
                     return false;

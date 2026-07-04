@@ -159,7 +159,7 @@ namespace ReVolt
             return logicSlotType switch
             {
                 LogicSlotType.On => true,
-                _ => base.CanLogicWrite(logicSlotType, slotId)
+                _ => false
             };
         }
 
@@ -168,7 +168,7 @@ namespace ReVolt
             return logicSlotType switch
             {
                 LogicSlotType.On or LogicSlotType.Quantity => true,
-                _ => base.CanLogicRead(logicSlotType, slotId)
+                _ => false
             };
         }
 
@@ -204,9 +204,6 @@ namespace ReVolt
 
                 return;
             }
-
-
-            base.SetLogicValue(logicSlotType, slotId, value);
         }
 
         public override double GetLogicValue(LogicSlotType logicSlotType, int slotId)
@@ -214,7 +211,7 @@ namespace ReVolt
             if (logicSlotType == LogicSlotType.On)
             {
                 if (HasConflict)
-                    return 0f;
+                    return 0.0;
 
                 return (PowerClass)slotId switch
                 {
@@ -231,7 +228,7 @@ namespace ReVolt
             // Instead, if we see an attempt to read Quantity or ReferenceId from a slot, we know the user is REALLY trying to read quantity / power actual of that category
             // so we do not call into the base GetLogicValue.  This way if a user tries to use LogicType.PowerActual, we don't just throw an error
             if (logicSlotType != LogicSlotType.Quantity && logicSlotType != (LogicSlotType)LogicType.PowerActual)
-                return base.GetLogicValue(logicSlotType, slotId);
+                return 0.0;
             
             if (LoadControlData == null)
                 return 0.0;
