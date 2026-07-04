@@ -24,6 +24,7 @@ namespace ReVolt
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
+            RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkCreate(this);
             UpdateJunctionConnections();
         }
@@ -31,6 +32,7 @@ namespace ReVolt
         public override void OnDeregistered()
         {
             base.OnDeregistered();
+            RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkDestroy(this);
         }
 
