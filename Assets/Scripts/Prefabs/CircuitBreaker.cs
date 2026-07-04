@@ -487,6 +487,8 @@ namespace ReVolt
                 writer.WriteInt64(ConnectionRefIds[1]);
                 writer.WriteInt64(ConnectionRefIds[2]);
             }
+            
+            writer.WriteSingle(_deficit);
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
                 return;
@@ -511,6 +513,8 @@ namespace ReVolt
                 ConnectionRefIds[1] = reader.ReadInt64();
                 ConnectionRefIds[2] = reader.ReadInt64();
             }
+            
+            _deficit = reader.ReadSingle();
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
                 return;
@@ -536,6 +540,7 @@ namespace ReVolt
             writer.WriteInt64(ConnectionRefIds[0]);
             writer.WriteInt64(ConnectionRefIds[1]);
             writer.WriteInt64(ConnectionRefIds[2]);
+            writer.WriteSingle(_deficit);
         }
 
         public override void DeserializeOnJoin(RocketBinaryReader reader)
@@ -550,6 +555,8 @@ namespace ReVolt
             ConnectionRefIds[1] = reader.ReadInt64();
             ConnectionRefIds[2] = reader.ReadInt64();
 
+            _deficit = reader.ReadSingle();
+            
             UpdateModeNextFrame(NewMode).Forget();
         }
 
