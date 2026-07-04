@@ -23,7 +23,7 @@ namespace ReVolt
         public float MaxTripCurrent;
         public float MinTripCurrent;
         public float DeltaTripCurrent;
-        public float MaxInterruptCurrent;
+        public float MaxInterruptCurrent; // For future use
         public bool isSmartBreaker;
         public bool canRemoteControl;
         public Collider TooltipCollider;
@@ -60,7 +60,7 @@ namespace ReVolt
             get => _tripPoint;
             set
             {
-                _tripPoint = Mathf.Clamp((float)value, 1000.0f, MaxTripCurrent);
+                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, MaxTripCurrent);
                 if (NetworkManager.IsServer)
                     NetworkUpdateFlags |= FLAG_TRIPSP;
             }
@@ -121,7 +121,7 @@ namespace ReVolt
         {
             if (Mode != MODE_ON)
                 return;
-            
+
             UpdateModeNextFrame(MODE_TRIPPED).Forget();
             PlayPooledAudioSound(Defines.Sounds.ShutterCloseStop, new Vector3(0f, 0f, 0.125f));
         }
@@ -342,7 +342,7 @@ namespace ReVolt
 
             if (!NetworkManager.IsClient)
                 return;
-            
+
             if (interactable != GetInteractable(interactable.Action))
                 GetInteractable(interactable.Action).Interact(interactable.State);
         }
@@ -437,7 +437,7 @@ namespace ReVolt
             }
             else
                 sb.Append(ReVoltStrings.SmartBreakerNoCableFound);
-            
+
             return sb.ToString();
         }
 
@@ -490,7 +490,7 @@ namespace ReVolt
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
                 return;
-            
+
             writer.WriteBoolean((GetInteractable(InteractableType.Slot1)?.State ?? 0) > 0);
             writer.WriteBoolean((GetInteractable(InteractableType.Slot2)?.State ?? 0) > 0);
         }
@@ -514,12 +514,12 @@ namespace ReVolt
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
                 return;
-            
+
             if (GetInteractable(InteractableType.Slot1) != null)
                 GetInteractable(InteractableType.Slot1).State = reader.ReadBoolean() ? 1 : 0;
             else
                 reader.ReadBoolean();
-                
+
             if (GetInteractable(InteractableType.Slot2) != null)
                 GetInteractable(InteractableType.Slot2).State = reader.ReadBoolean() ? 1 : 0;
             else
@@ -661,28 +661,23 @@ namespace ReVolt
 
         public override void SetLogicValue(LogicType logicType, double value)
         {
-            if (!isSmartBreaker)
+            if (!isSmartBreaker || !canRemoteControl)
                 return;
 
             if (logicType == LogicType.On)
             {
-                logicType = LogicType.Mode;
                 OnOff = value > 0;
-
-                value = MODE_ON;
                 Error = 0;
-
-                if (Mode != MODE_OFF)
-                    value = MODE_OFF;
             }
+            else
+                base.SetLogicValue(logicType, value);
 
-            base.SetLogicValue(logicType, value);
             UpdateMode();
 
             if (logicType != LogicType.Setting)
                 return;
 
-            Setting = value.Clamp(0.0, MaxTripCurrent);
+            Setting = value.Clamp(MinTripCurrent, MaxTripCurrent);
         }
 
         #endregion

@@ -5,6 +5,6 @@ namespace ReVolt
 {
     public class MultiConstructor : StationeersObjects.MultiConstructor
     {
-        // TODO?
+        // Forward the base game type so I can use it in my ItemKits
     }
 }

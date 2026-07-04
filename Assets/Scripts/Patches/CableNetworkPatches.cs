@@ -44,7 +44,7 @@ namespace ReVolt.Patches
         [HarmonyPrefix, HarmonyPatch("RebuildNetwork")]
         public static unsafe bool RebuildNetworkPatch(Cable cable, CableNetwork newNetwork, CableNetwork oldNetwork)
         {
-            Span<SmallCellRef> buf1 = new SmallCellRef[32];
+            Span<SmallCellRef> buf1 = stackalloc SmallCellRef[32];
             var count1 = 0;
             cable.FillConnected<Cable>(buf1, ref count1);
             var cableQueue = new Queue<Cable>(count1);
@@ -69,7 +69,7 @@ namespace ReVolt.Patches
                     cableQueue.Enqueue(c);
             }
 
-            Span<SmallCellRef> buf2 = new SmallCellRef[32];
+            Span<SmallCellRef> buf2 = stackalloc SmallCellRef[32];
 
             while (cableQueue.Count > 0)
             {
@@ -140,8 +140,6 @@ namespace ReVolt.Patches
                 CablePatches.RetriggerRegistration = true;
                 return false;
             }
-
-            var count_before = __result.Count;
 
             span = buf[..count];
             for (var index = 0; index < span.Length; ++index)

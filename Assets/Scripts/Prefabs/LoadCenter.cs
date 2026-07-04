@@ -168,7 +168,7 @@ namespace ReVolt
             return logicSlotType switch
             {
                 LogicSlotType.On or LogicSlotType.Quantity => true,
-                _ => base.CanLogicWrite(logicSlotType, slotId)
+                _ => base.CanLogicRead(logicSlotType, slotId)
             };
         }
 
@@ -228,6 +228,9 @@ namespace ReVolt
                 }
             }
 
+            // LogicSlotType contains no available "power actual". and since these slots CANNOT contain actual items, I don't worry about PowerActual being 'ReferenceId'.
+            // Instead, if we see an attempt to read Quantity or ReferenceId from a slot, we know the user is REALLY trying to read quantity / power actual of that category
+            // so we do not call into the base GetLogicValue.  This way if a user tries to use LogicType.PowerActual, we don't just throw an error
             if (logicSlotType != LogicSlotType.Quantity && logicSlotType != (LogicSlotType)LogicType.PowerActual)
                 return base.GetLogicValue(logicSlotType, slotId);
             

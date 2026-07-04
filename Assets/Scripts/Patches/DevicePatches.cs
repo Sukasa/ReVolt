@@ -21,7 +21,7 @@ namespace ReVolt.Patches
             else
             {
                 if (cableNetwork.PowerTick is not RevoltTick Ticker)
-                    return false;
+                    return true;
 
                 if (Ticker.GetPowerState(RevoltTick.ClassifyDevice(__instance)))
                 {

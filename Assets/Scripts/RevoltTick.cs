@@ -81,8 +81,6 @@ namespace ReVolt
 
             if (!IsDirty) // Only rebuild if dirty
                 return;
-            
-            IsDirty = false;
 
             PowerProviders = new();
 
@@ -92,6 +90,7 @@ namespace ReVolt
             Devices.Clear();
             Fuses.Clear();
             _allCables.Clear();
+            _allFuses.Clear();
 
             _providerSetter.SetValue(this, PowerProviders.ToArray());
             _IODevSetter.SetValue(this, PowerProviders.ToArray());
@@ -121,10 +120,10 @@ namespace ReVolt
                         allCable.Add(cable);
 
             // Allocate our memoization arrays, if they've changed, including power classifications
-            if (PowerData is null || PowerData.Length != Devices.Count)
+            if (PowerData is null || PowerData.Length != Devices.Count || IsDirty)
                 PowerData = Devices.Select(x => new PowerUsage { Category = ClassifyDevice(x) }).ToArray();
 
-            
+
             // Now look for a load centre and initialize it (and us)
             _loadCenter = null;
 
@@ -140,7 +139,7 @@ namespace ReVolt
                     item.HasConflict = true;
 
             if (_loadCenter != null) return;
-            
+
             PowerStates[(int)PowerClass.Lights] = true;
             PowerStates[(int)PowerClass.Doors] = true;
             PowerStates[(int)PowerClass.Atmospherics] = true;
@@ -148,6 +147,8 @@ namespace ReVolt
             PowerStates[(int)PowerClass.Logic] = true;
             PowerStates[(int)PowerClass.Power] = true;
             PowerStates[(int)PowerClass.Misc] = true;
+
+            IsDirty = false;
         }
 
         public static PowerClass ClassifyDevice(Device DevUnderTest)
@@ -172,7 +173,7 @@ namespace ReVolt
                 return null;
 
             // If we're within the power rating of the cable, no burn
-            if (Mathf.Min(slidingWindow,  powerUsed) <= _allCables.Keys[0])
+            if (Mathf.Min(slidingWindow, powerUsed) <= _allCables.Keys[0])
                 return null;
 
             // Do a cheap calculation to get the % chance to burn the cable
@@ -237,7 +238,7 @@ namespace ReVolt
                 // If this is a power provider, we need to do some clerical work to keep the Network Analyzer cartridge happy
                 if (PowerData[idx].PowerProvided == 0.0f)
                     continue;
-                
+
                 if (PowerProviders.Count > provIdx && PowerProviders[provIdx].Device != currentDevice)
                 {
                     dirtyProviderList = true;
@@ -262,7 +263,10 @@ namespace ReVolt
             }
 
             if (PowerProviders.Count > provIdx)
+            {
                 PowerProviders.RemoveRange(provIdx, PowerProviders.Count - provIdx);
+                dirtyProviderList = true;
+            }
 
             if (dirtyProviderList) // Write some data for tablets/etc to use, if it's changed
             {
@@ -271,7 +275,9 @@ namespace ReVolt
             }
 
             if (ReVolt.enableRecursiveNetworkLimits.Value)
+            {
                 PowerTickPatches.CheckForRecursiveProviders(this);
+            }
         }
 
         public void ApplyState_New()
@@ -283,14 +289,15 @@ namespace ReVolt
             PowerTickPatches.CacheState(this);
 
             _powerRatio = Required == 0.0f ? 1.0f : Mathf.Clamp(Potential / Required, 0.0f, 1.0f);
-            _isPowerMet = Potential - Required >= -20f; // 20W buffer, so if a transformer or breaker is *just* tipping us over the available supply, we allow it instead of flapping the network
+            _isPowerMet = Potential - Required >=
+                          -20f; // 20W buffer, so if a transformer or breaker is *just* tipping us over the available supply, we allow it instead of flapping the network
 
             var demandRatio = Potential == 0.0f ? 0.0f : Mathf.Clamp(Required / Potential, 0.0f, 1.0f);
             var powerFlow = Mathf.Min(Required, Potential);
 
             // Track sliding-window average power flow for the last 5-10 seconds, to approximate the cable having to heat up before bursting
             _powerUsageWindow = Mathf.Lerp(_powerUsageWindow, powerFlow, 0.1f);
-            
+
             var burnCable = TestBurnCable(powerFlow, _powerUsageWindow);
             var burnFuse = TestBlowFuse(powerFlow);
             var powerOk = false;
@@ -298,6 +305,22 @@ namespace ReVolt
             // Now that power has been passed, we need to blow any fusible elements.
             // Note; Breakers CAN trip based on over-current during their Power Tick, but we still trip them here if a cable would blow despite being protected
             // This is a gameplay choice because setting up a proper breaker system shouldn't still punish the player just because of bad RNG
+
+
+            if (ReVolt.enableRecursiveNetworkLimits.Value)
+            {
+                if (BreakableFuses.Count > 0 && burnFuse != null)
+                {
+                    burnFuse = BreakableFuses.Pick();
+                    BreakableFuses.Clear();
+                }
+
+                if (BreakableCables.Count > 0 && burnCable != null)
+                {
+                    burnCable = BreakableCables.Pick();
+                    BreakableCables.Clear();
+                }
+            }
 
             if (burnFuse != null)
             {
@@ -310,7 +333,7 @@ namespace ReVolt
                 {
                     while (_breakerIndex-- > 0)
                         _breakers[_breakerIndex].Trip();
-                    
+
                     // Even though we tripped the breaker, we let power flow for a tick to simulate the current flow that tripped them
                     // Yes, this could be used to exploit things for free power if you were to place a ton of breakers in parallel, feed them into a battery, and deconstruct them afterwards.  
                     // If you're going to go that far, I'm not going to worry about you.
@@ -327,7 +350,7 @@ namespace ReVolt
                 _powerRatio = 0;
                 _isPowerMet = false;
             }
-            
+
             var idx = Devices.Count;
             while (idx-- > 0)
             {
@@ -341,7 +364,8 @@ namespace ReVolt
 
                     currentDevice.ReceivePower(CableNetwork, powerAvailable);
 
-                    if (PowerStates[(int)PowerData[idx].Category] && powerAvailable > 0.0f && (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
+                    if (PowerStates[(int)PowerData[idx].Category] && powerAvailable > 0.0f &&
+                        (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
                     {
                         if (!currentDevice.Powered)
                             currentDevice.SetPowerFromThread(CableNetwork, true).Forget();
@@ -353,7 +377,6 @@ namespace ReVolt
                 if (PowerData[idx].PowerProvided >= 0.0f)
                     currentDevice.UsePower(CableNetwork, demandRatio * PowerData[idx].PowerProvided);
             }
-
         }
     }
 }

@@ -100,7 +100,7 @@ namespace ReVolt
            
             enableBatteryLimitsPatch = config.Bind(
                 new ConfigDefinition("Patches", "Enable Battery Limits"), true,
-                new ConfigDescription("Patch station batteries to limit charge/discharge rate"));
+                new ConfigDescription("Patch station batteries to limit charge/discharge rate, charge efficiency, and maximum charge"));
 
             // Content config
             enablePrefabContent = config.Bind(

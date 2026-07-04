@@ -59,6 +59,7 @@ namespace ReVolt
 
         public void OnMembersChanged()
         {
+            // If sim not running, cable networks will be rebuilt externally later
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
                 return;
 
@@ -101,24 +102,21 @@ namespace ReVolt
                     continue;
                 }
 
-                for (var index = Tray.OpenEnds.Count - 1; index >= 0; index--)
+                var count = 0;
+                Tray.FillConnected<Cable>(buf, ref count);
+
+                var span = buf[..count];
+                for (var cableIndex = 0; cableIndex < span.Length; ++cableIndex)
                 {
-                    var count = 0;
-                    Tray.FillConnected<Cable>(buf, ref count);
+                    var Cable = span[cableIndex].Get<Cable>();
+                    var cableCol = GameManager.GetColorIndex(Cable.CustomColor);
 
-                    var span = buf[..count];
-                    for (var cableIndex = 0; cableIndex < span.Length; ++cableIndex)
+                    if (Cable != Metric &&
+                        Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
+                        cableCol == wantColour &&
+                        !Result.Contains(Cable))
                     {
-                        var Cable = span[cableIndex].Get<Cable>();
-                        var cableCol = GameManager.GetColorIndex(Cable.CustomColor);
-
-                        if (Cable != Metric &&
-                            Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
-                            cableCol == wantColour &&
-                            !Result.Contains(Cable))
-                        {
-                            Result.Add(Cable);
-                        }
+                        Result.Add(Cable);
                     }
                 }
             }

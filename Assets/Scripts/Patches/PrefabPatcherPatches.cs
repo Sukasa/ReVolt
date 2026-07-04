@@ -12,7 +12,7 @@ namespace ReVolt.Patches
         {
             foreach (var sourcePrefab in WorldManager.Instance.SourcePrefabs)
             {
-                if (sourcePrefab?.GetComponent<Thing>() is Battery BatteryPrefab)
+                if (sourcePrefab?.GetComponent<Thing>() is Battery BatteryPrefab && ReVolt.enableBatteryLimitsPatch.Value)
                 {
                     BatteryPrefab.PowerMaximum *= ReVolt.configBatteryCapacityFactor.Value;
                 }

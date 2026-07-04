@@ -345,7 +345,7 @@ namespace ReVolt.Prefabs
                     DataNetwork = DataCable.CableNetwork;
                     ConnectedCableNetworks.Add(DataNetwork);
 
-                    if (DataNetwork != null && !previousNetworks.Contains(DataNetwork))
+                    if (DataNetwork != null && !previousNetworks.Contains(DataNetwork) || !DataNetwork.DataDeviceList.Contains(this))
                         DataNetwork.AddDevice(DataCable, this);
                     else
                         DataNetwork?.DirtyPowerAndDataDeviceLists();
@@ -388,7 +388,6 @@ namespace ReVolt.Prefabs
             ConnectionIndices[idx] = 0;
 
             UpdateEntryLists(true);
-            CheckConnections();
         }
 
         public override void OnRegistered(Cell cell)

@@ -28,7 +28,7 @@ namespace ReVolt.Patches
 
             return true;
         }
-
+         
         [HarmonyPostfix, HarmonyPatch(nameof(Cable.OnRegistered))]
         public static void AfterOnRegistered(Cell cell, Cable __instance)
         {
@@ -42,10 +42,20 @@ namespace ReVolt.Patches
                 GateTriggerRepeatRegistration = false;
         }
 
+        [HarmonyFinalizer, HarmonyPatch(nameof(Cable.OnRegistered))]
+        public static void ForceRegisterCleanup()
+        {
+            RetriggerRegistration = false;
+            GateTriggerRepeatRegistration = false;
+        }
+
         public static async UniTaskVoid DeferredCableRegistration(Cable cable)
         {
             await UniTask.Yield();
 
+            if (cable?.IsBeingDestroyed ?? true)
+                return;
+            
             var cableNetwork = CableNetwork.Merge(CableNetwork.ConnectedNetworks(cable));
             if (cableNetwork != null)
                 cableNetwork.Add(cable);

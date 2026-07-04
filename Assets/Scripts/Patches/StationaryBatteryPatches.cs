@@ -22,9 +22,12 @@ namespace ReVolt.Patches
         [HarmonyPatch(nameof(Battery.ReceivePower))]
         public static bool ChargeEfficiencyControl(Battery __instance, CableNetwork cableNetwork, float powerAdded)
         {
+            if (!ReVolt.enableBatteryLimitsPatch.Value)
+                return true;
+            
             if (__instance.Error == 1 || !__instance.OnOff || cableNetwork != __instance.InputNetwork || !GetIsOperable(__instance)) return false;
             var charged = ReVolt.configBatteryChargeEfficiency.Value * powerAdded;
-            if (charged < 500)
+            if (powerAdded < 50) // At below a 50 power differential, just fully charge the battery (just enough to keep up with maximum ambient discharge rate plus a tiny bit)
                 charged = powerAdded;
 
             __instance.PowerStored = Mathf.Clamp(charged + __instance.PowerStored, 0f, __instance.PowerMaximum);

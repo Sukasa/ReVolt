@@ -8,7 +8,7 @@ namespace ReVolt
     {
         public class CableInfo : FuseInfo // Inherit from 'FuseInfo' because cables also have a max power limit
         {
-            public List<int> Connections { get; set; } = new();
+            public List<int> Connections { get; set; } = new(); // ints are entries in ThingsById to get device / cable / fuse objects
         }
 
         public class ThingInfo
@@ -19,6 +19,7 @@ namespace ReVolt
         public class DeviceInfo : ThingInfo
         {
             public string StructureTypeName { get; set; }
+            
         }
 
         public class FuseInfo : ThingInfo
