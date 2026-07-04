@@ -18,6 +18,8 @@ namespace ReVolt.Patches
                 __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryChargeRate.Value);
         }
 
+        private const float MaxBatterySelfDischargeRate = 40f;
+        
         [HarmonyPrefix]
         [HarmonyPatch(nameof(Battery.ReceivePower))]
         public static bool ChargeEfficiencyControl(Battery __instance, CableNetwork cableNetwork, float powerAdded)
@@ -26,9 +28,7 @@ namespace ReVolt.Patches
                 return true;
             
             if (__instance.Error == 1 || !__instance.OnOff || cableNetwork != __instance.InputNetwork || !GetIsOperable(__instance)) return false;
-            var charged = ReVolt.configBatteryChargeEfficiency.Value * powerAdded;
-            if (powerAdded < 50) // At below a 50 power differential, just fully charge the battery (just enough to keep up with maximum ambient discharge rate plus a tiny bit)
-                charged = powerAdded;
+            var charged = powerAdded > MaxBatterySelfDischargeRate ? ReVolt.configBatteryChargeEfficiency.Value * (powerAdded - MaxBatterySelfDischargeRate) + MaxBatterySelfDischargeRate : powerAdded;
 
             __instance.PowerStored = Mathf.Clamp(charged + __instance.PowerStored, 0f, __instance.PowerMaximum);
 

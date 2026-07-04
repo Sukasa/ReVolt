@@ -571,7 +571,7 @@ namespace ReVolt
             Setting = saveData.TripPoint;
             _transferredLast = saveData.TransferredLast;
 
-            if (saveData.ConnectionRefs != null)
+            if (saveData.ConnectionRefs != null) // No save format ever existed where this was not a fixed 3-index array, null check if *very* old save, pre-heavy-breaker
             {
                 ConnectionRefIds[0] = saveData.ConnectionRefs[0];
                 ConnectionRefIds[1] = saveData.ConnectionRefs[1];

@@ -8,6 +8,7 @@ namespace ReVolt.Commands
     {
         public override string Execute(string[] args)
         {
+            // Incomplete, need to finalize DTO object structure and grab the spec from Baugn to implement properly
             List<NetworkExport> Exports = new();
             
             foreach (var network in CableNetwork.AllCableNetworks.ToList())

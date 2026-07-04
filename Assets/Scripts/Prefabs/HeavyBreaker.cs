@@ -381,12 +381,14 @@ namespace ReVolt.Prefabs
 
         public void OnMemberRemoved(ISwitchgearComponent member)
         {
-            var idx = Array.IndexOf(ConnectionRefIds, member.ReferenceId);
-            if (idx <= -1)
-                return;
-            ConnectionRefIds[idx] = 0;
-            ConnectionIndices[idx] = 0;
-
+            for (var idx = 0; idx < 3; idx++)
+            {
+                if (ConnectionRefIds[idx] != member.ReferenceId)
+                    continue;
+                
+                ConnectionRefIds[idx] = 0;
+                ConnectionIndices[idx] = 0;
+            }
             UpdateEntryLists(true);
         }
 

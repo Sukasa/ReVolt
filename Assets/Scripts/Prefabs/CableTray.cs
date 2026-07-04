@@ -12,7 +12,6 @@ using Cysharp.Threading.Tasks;
 using LaunchPadBooster.Utils;
 using LibConstruct;
 using ReVolt.Interfaces;
-using ReVolt.Patches;
 using UnityEngine;
 
 namespace ReVolt
@@ -78,8 +77,6 @@ namespace ReVolt
 
                 if (!RebuildExclusions.Add(col + volt * 64))
                     continue;
-
-                ConsoleWindow.PrintAction($"Starting deferred cable update for {cable.ReferenceId}");
 
                 CableNetwork.RebuildCableNetworkServer(span[index]);
             }
