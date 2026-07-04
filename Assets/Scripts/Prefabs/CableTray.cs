@@ -211,13 +211,16 @@ namespace ReVolt
             _isDeferringUpdate = false;
         }
 
-        public IEnumerable<Connection> Connections // Literally just Tom's reference code because that's all I actually need right now
+        public IEnumerable<Connection> Connections
         {
             get
             {
-                foreach (var openEnd in OpenEnds)
+                for (var idx = OpenEnds.Count - 1; idx >= 0; ++idx)
+                {
+                    var openEnd = OpenEnds[idx];
                     if (openEnd.ConnectionType == NetworkType.LandingPad || (openEnd.ConnectionType & ReVolt.CableTrayNetwork.ConnectionType) != NetworkType.None)
                         yield return openEnd;
+                }
             }
         }
 

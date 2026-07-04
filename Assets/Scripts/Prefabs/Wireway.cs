@@ -36,9 +36,12 @@ namespace ReVolt
         {
             get
             {
-                foreach (var openEnd in OpenEnds)
-                    if (openEnd.ConnectionType == NetworkType.LandingPad || openEnd.ConnectionType == ReVolt.SwitchgearNetwork.ConnectionType)
+                for (var i = OpenEnds.Count - 1; i >= 0; i--)
+                {
+                    var openEnd = OpenEnds[i];
+                    if (openEnd.ConnectionType == NetworkType.LandingPad || (openEnd.ConnectionType & ReVolt.SwitchgearNetwork.ConnectionType) != NetworkType.None)
                         yield return openEnd;
+                }
             }
         }
         
