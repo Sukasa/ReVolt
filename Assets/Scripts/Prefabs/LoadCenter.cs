@@ -158,7 +158,7 @@ namespace ReVolt
         {
             return logicSlotType switch
             {
-                LogicSlotType.On => !HasConflict,
+                LogicSlotType.On => true,
                 _ => base.CanLogicWrite(logicSlotType, slotId)
             };
         }
@@ -167,7 +167,7 @@ namespace ReVolt
         {
             return logicSlotType switch
             {
-                LogicSlotType.On or LogicSlotType.Quantity => !HasConflict,
+                LogicSlotType.On or LogicSlotType.Quantity => true,
                 _ => base.CanLogicRead(logicSlotType, slotId)
             };
         }
