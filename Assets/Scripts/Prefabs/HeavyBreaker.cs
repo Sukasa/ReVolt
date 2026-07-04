@@ -345,7 +345,7 @@ namespace ReVolt.Prefabs
                     DataNetwork = DataCable.CableNetwork;
                     ConnectedCableNetworks.Add(DataNetwork);
 
-                    if (DataNetwork != null && !previousNetworks.Contains(DataNetwork) || !DataNetwork.DataDeviceList.Contains(this))
+                    if (DataNetwork != null && (!previousNetworks.Contains(DataNetwork) || !DataNetwork.DataDeviceList.Contains(this)))
                         DataNetwork.AddDevice(DataCable, this);
                     else
                         DataNetwork?.DirtyPowerAndDataDeviceLists();
