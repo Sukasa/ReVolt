@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Assets.Scripts;
 using Assets.Scripts.GridSystem;
 using Assets.Scripts.Networks;
@@ -40,7 +42,7 @@ namespace ReVolt.Patches
                 GateTriggerRepeatRegistration = false;
         }
 
-        private static async UniTaskVoid DeferredCableRegistration(Cable cable)
+        public static async UniTaskVoid DeferredCableRegistration(Cable cable)
         {
             await UniTask.Yield();
 
@@ -49,7 +51,6 @@ namespace ReVolt.Patches
                 cableNetwork.Add(cable);
             else
                 _ = new CableNetwork(cable);
-            
         }
     }
 }

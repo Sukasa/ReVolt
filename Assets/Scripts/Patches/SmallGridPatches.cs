@@ -22,26 +22,5 @@ namespace ReVolt.Patches
             __result = false;
             return false;
         }
-
-        [HarmonyPostfix, HarmonyPatch(nameof(SmallGrid.ConnectedCables), new Type[] { })]
-        public static void ConnectedCablesPostfix(ref List<Cable> __result, SmallGrid __instance)
-        {
-            if (__instance is not Cable cable)
-                return;
-
-            foreach (var openEnd in cable.OpenEnds)
-            {
-                var smallCell = cable.GridController.GetSmallCell(cable.GridController.WorldToLocalGrid(openEnd.Transform.position, SmallGrid.SmallGridSize,
-                    SmallGrid.SmallGridOffset));
-                
-                if (smallCell is not { Other: CableTray Tray } || smallCell.Other == cable || !smallCell.Other.IsConnected(openEnd))
-                    continue;
-                
-                if (CablePatches.GateTriggerRepeatRegistration)
-                    CablePatches.RetriggerRegistration = true;
-                else
-                    Tray.MatchCables(__result, cable);
-            }
-        }
     }
 }

@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts;
 using Assets.Scripts.GridSystem;
 using Assets.Scripts.Networks;
@@ -12,6 +12,7 @@ using Cysharp.Threading.Tasks;
 using LaunchPadBooster.Utils;
 using LibConstruct;
 using ReVolt.Interfaces;
+using ReVolt.Patches;
 using UnityEngine;
 
 namespace ReVolt
@@ -20,7 +21,7 @@ namespace ReVolt
     {
         public MeshRenderer RendererUp;
         public MeshRenderer RendererDown;
-        
+
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
@@ -36,49 +37,100 @@ namespace ReVolt
 
         public void OnMemberAdded(ICableTrayComponent member)
         {
+            RebuildExclusions.Clear();
         }
 
         public void OnMemberRemoved(ICableTrayComponent member)
         {
+            RebuildExclusions.Clear();
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
+            var count = 0;
+            FillConnected<Cable>(buf, ref count);
+            var span = buf[..count];
+            for (var index = 0; index < span.Length; ++index)
+            {
+                var cable = span[index].Get<Cable>();
+                cable.CableNetwork?.Remove(cable);
+                cable.CableNetwork = null;
+            }
         }
+
+        private static readonly HashSet<int> RebuildExclusions = new();
 
         public void OnMembersChanged()
         {
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
                 return;
-            
-            foreach (var cable in ConnectedCables().ToList())
-                CableNetwork.RebuildCableNetworkServer(cable);
+
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
+            var count = 0;
+            FillConnected<Cable>(buf, ref count);
+            var span = buf[..count];
+
+
+            for (var index = 0; index < span.Length; ++index)
+            {
+                var cable = span[index].Get<Cable>();
+
+                var col = GameManager.GetColorIndex(cable.CustomColor);
+                var volt = (int)cable.MaxVoltage;
+
+                if (!RebuildExclusions.Add(col + volt * 64))
+                    continue;
+
+                ConsoleWindow.PrintAction($"Starting deferred cable update for {cable.ReferenceId}");
+
+                CableNetwork.RebuildCableNetworkServer(span[index]);
+            }
         }
 
-        public void MatchCables(List<Cable> List, Cable Metric)
+        public List<Cable> MatchCables(Cable Metric)
         {
-            int wantColour = GameManager.GetColorIndex(Metric.CustomColor);
+            var Result = new List<Cable>();
+
+            var wantColour = GameManager.GetColorIndex(Metric.CustomColor);
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
 
             foreach (var Component in Network.Members)
             {
                 var Tray = Component as CableTray;
 
                 if (Tray == null)
+                {
+                    ConsoleWindow.PrintError("Null tray member!");
                     continue;
+                }
 
                 for (var index = Tray.OpenEnds.Count - 1; index >= 0; index--)
                 {
-                    var openEnd = Tray.OpenEnds[index];
-                    SmallCell smallCell = GridController.GetSmallCell(GridController.WorldToLocalGrid(openEnd.Transform.position, SmallGridSize, SmallGridOffset));
-                    var Cable = smallCell?.Cable;
+                    var count = 0;
+                    Tray.FillConnected<Cable>(buf, ref count);
 
-                    if (Cable != null)
+                    var span = buf[..count];
+                    for (var cableIndex = 0; cableIndex < span.Length; ++cableIndex)
                     {
+                        var Cable = span[cableIndex].Get<Cable>();
                         var cableCol = GameManager.GetColorIndex(Cable.CustomColor);
-                        if (Cable != Metric && Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
-                            cableCol == wantColour && smallCell.Cable.IsConnected(openEnd))
+
+                        if (Cable != Metric &&
+                            Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
+                            cableCol == wantColour &&
+                            !Result.Contains(Cable))
                         {
-                            List.Add(smallCell.Cable);
+                            Result.Add(Cable);
                         }
                     }
                 }
             }
+
+            return Result;
+        }
+
+        public void MatchCableNetworks(List<CableNetwork> List, Cable Metric)
+        {
+            foreach (var Cable in MatchCables(Metric))
+                if (Cable?.CableNetwork != null && !List.Contains(Cable.CableNetwork))
+                    List.Add(Cable.CableNetwork);
         }
 
         public override void OnNeighborPlaced(SmallGrid neighbor)
@@ -96,16 +148,16 @@ namespace ReVolt
         public override void OnStartRender()
         {
             base.OnStartRender();
-            
+
             if (!_reapplyAppearance)
                 return;
-            
+
             if (RendererUp != null)
                 RendererUp.enabled = _showUpper;
-                
+
             if (RendererDown != null)
                 RendererDown.enabled = _showLower;
-                
+
             _reapplyAppearance = false;
         }
 
@@ -121,7 +173,7 @@ namespace ReVolt
         protected bool _showUpper;
         protected bool _showLower;
         protected bool _reapplyAppearance;
-        
+
         public void UpdateJunctionConnections()
         {
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
@@ -131,13 +183,13 @@ namespace ReVolt
                 return;
             }
 
-            
+
             if (RendererUp != null)
             {
                 RendererUp.enabled = _showUpper = OpenEnds.Count > 8 && IsConnectedToTray(OpenEnds[8]);
                 _reapplyAppearance = true;
             }
-            
+
             if (RendererDown != null)
             {
                 RendererDown.enabled = _showLower = OpenEnds.Count > 10 && IsConnectedToTray(OpenEnds[10]);
@@ -146,16 +198,18 @@ namespace ReVolt
         }
 
         private bool _isDeferringUpdate;
+
         private async UniTaskVoid DeferredUJC()
         {
             if (OpenEnds.Count < 8 || _isDeferringUpdate)
                 return;
-            
+
             _isDeferringUpdate = true;
             do
             {
                 await UniTask.NextFrame();
             } while (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation);
+
             UpdateJunctionConnections();
             _isDeferringUpdate = false;
         }
@@ -182,7 +236,8 @@ namespace ReVolt
                 .SetExitTool(PrefabNames.Wrench);
         }
 
-        public int[] OpenEndsPermutation = {
+        public int[] OpenEndsPermutation =
+        {
             0,
             1,
             2,
@@ -191,15 +246,15 @@ namespace ReVolt
             5
         };
 
-        public int[] GetOpenEndsPermutation() => (int[]) OpenEndsPermutation.Clone();
+        public int[] GetOpenEndsPermutation() => (int[])OpenEndsPermutation.Clone();
 
         public SmartRotate.ConnectionType ConnectionType = SmartRotate.ConnectionType.Exhaustive;
-        
+
         public SmartRotate.ConnectionType GetConnectionType() => ConnectionType;
 
         public void SetOpenEndsPermutation(int[] permutation)
         {
-            OpenEndsPermutation = (int[]) permutation.Clone();
+            OpenEndsPermutation = (int[])permutation.Clone();
         }
 
         public void SetConnectionType(SmartRotate.ConnectionType connectionType)

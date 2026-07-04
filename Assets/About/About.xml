@@ -1,12 +1,14 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.6.4</Version>
+  <Version>1.6.5</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
     See: https://github.com/StationeersLaunchPad/StationeersLaunchPad
 
+    
+    
     [h1]⚡ Re-Volt ⚡[/h1]
 
     Re-Volt is an electrical overhaul mod for Stationeers, which mildly overhauls how power is distributed, what happens when things go wrong, and gives you more tools to control your power!
@@ -62,11 +64,9 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.6.4[/h3]
+    [h3]Version 1.6.5[/h3]
     [list]
-    [*] Battery capacity is now configurable
-    [*] Large and Medium transformers have had their outputs buffed to align them with Heavy and Super Heavy cable
-    [*] Adjusted the configuration to make some slider ranges more appropriate, and reorganized sections for readability
+    [*] Sanitation Update Support
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
@@ -77,7 +77,7 @@
   <!-- Automatic downloads of dependencies -->
   <Dependencies>
     <Mod>
-      <Id>3505115682</Id>
+      <Id>3751750326</Id>
     </Mod>
   </Dependencies>
   <!-- Automatic reordering of the mods list -->

@@ -10,8 +10,11 @@ using ReVolt.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Assets.Scripts.Networks;
+using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Objects.Motherboards;
+using HarmonyLib;
 using LaunchPadBooster.Utils;
 using UnityEngine;
 using static ReVolt.Interfaces.ISwitchgearComponent;
@@ -21,6 +24,9 @@ namespace ReVolt.Prefabs
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
+
+        private static readonly MethodInfo DataSetter = AccessTools.Property(typeof(Device), nameof(DataCables)).GetSetMethod(nonPublic: true);
+        private static readonly MethodInfo PowerSetter = AccessTools.Property(typeof(Device), nameof(PowerCables)).GetSetMethod(nonPublic: true);
 
         public GameObject InteractablesContainer;
 
@@ -274,9 +280,11 @@ namespace ReVolt.Prefabs
 
             var previousNetworks = ConnectedCableNetworks.ToList();
 
+
+            List<Cable> _powerCables = new();
+            
             ConnectedCableNetworks.Clear();
-            PowerCables.Clear();
-            DataCables.Clear();
+
 
             if (inputDevice != null)
             {
@@ -286,7 +294,7 @@ namespace ReVolt.Prefabs
                     InputNetwork = InPowerCable.CableNetwork;
 
                     ConnectedCableNetworks.Add(InputNetwork);
-                    PowerCables.Add(InPowerCable);
+                    _powerCables.Add(InPowerCable);
 
                     if (InputNetwork != null && (!previousNetworks.Contains(InputNetwork) || !InputNetwork.PowerDeviceList.Contains(this)))
                         InputNetwork.AddDevice(InPowerCable, this);
@@ -310,7 +318,7 @@ namespace ReVolt.Prefabs
                 if (OutpowerCable != null)
                 {
                     OutputNetwork = OutpowerCable.CableNetwork;
-                    PowerCables.Add(OutpowerCable);
+                    _powerCables.Add(OutpowerCable);
                     ConnectedCableNetworks.Add(OutputNetwork);
 
                     if (OutputNetwork != null && (!previousNetworks.Contains(OutputNetwork) || !OutputNetwork.PowerDeviceList.Contains(this)))
@@ -333,7 +341,7 @@ namespace ReVolt.Prefabs
                 DataCable = dataDevice.DataCable;
                 if (DataCable != null)
                 {
-                    DataCables.Add(DataCable);
+                    DataSetter.Invoke(this, new object[] { new[] { DataCable } });
                     DataNetwork = DataCable.CableNetwork;
                     ConnectedCableNetworks.Add(DataNetwork);
 
@@ -344,6 +352,7 @@ namespace ReVolt.Prefabs
                 }
                 else
                 {
+                    DataSetter.Invoke(this, new object[] { Array.Empty<Cable>() });
                     DataNetwork = null;
                 }
             }
@@ -352,6 +361,8 @@ namespace ReVolt.Prefabs
                 DataCable = null;
                 DataNetwork = null;
             }
+            
+            PowerSetter.Invoke(this, new object[] { _powerCables.ToArray() });
 
             for (var i = previousNetworks.Count - 1; i >= 0; i--)
                 if (previousNetworks[i] != null && !ConnectedCableNetworks.Contains(previousNetworks[i]))

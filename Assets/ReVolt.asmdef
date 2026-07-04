@@ -12,11 +12,10 @@
 
                          ],
     "overrideReferences":  true,
-    "allowUnsafeCode":  false,
+    "allowUnsafeCode":  true,
     "precompiledReferences":  [
                                   "Assembly-CSharp.dll",
                                   "Assembly-CSharp-firstpass.dll",
-                                  "StationeersMods.Interface.dll",
                                   "0Harmony.dll",
                                   "BepInEx.dll",
                                   "UniTask.dll",

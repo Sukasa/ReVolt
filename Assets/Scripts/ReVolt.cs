@@ -36,7 +36,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.6.4");
+        public static readonly Mod MOD = new("Re-Volt", "1.6.5");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
@@ -135,7 +135,7 @@ namespace ReVolt
             Debug.Log("Re-Volt loaded prefabs");
 
             MOD.AddSaveDataType<CircuitBreakerSaveData>();
-            MOD.SetMultiplayerRequired();
+            MOD.Networking.Required = true;
         }
     }
 }
