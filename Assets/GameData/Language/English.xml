@@ -26,6 +26,22 @@
       </Description>
     </RecordThing>
     <RecordThing>
+      <Key>StructureDataBridge</Key>
+      <Value>Optoisolator</Value>
+      <Description>
+        Stationeers have many times tried ways to connect data networks without bridging power, avoiding short-circuits and cable burns.
+        The Optoisolator is the result of these efforts - Using a tiny parasitic draw to transfer data signals between up to four networks, bidirectionally.
+        Due to signalling-strength limitations, one optoisolator cannot proxy devices through a second optoisolator.
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>StructureDataDiode</Key>
+      <Value>Data Diode</Value>
+      <Description>
+        A variant of the {THING:StructureDataBridge}, the Data Diode allows the output network to see all data devices on the input network, but not vice-versa.
+      </Description>
+    </RecordThing>
+    <RecordThing>
       <Key>ItemKitLoadCenter</Key>
       <Value>Kit (Load Center)</Value>
       <Description>A {THING:LoadCenter} construction kit</Description>

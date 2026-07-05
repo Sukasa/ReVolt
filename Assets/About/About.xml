@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.6.6</Version>
+  <Version>1.7.2</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -15,6 +15,8 @@
 
     [h2]🔌 Features[/h2]
 
+    [b]NEW! Optoisolator and Data Diode:[/b] Connect data networks together while keeping power separate.  The Optoisolator is a 4-network bidirectional link, and the Data Diode is a two network one-way link
+    
     [b]Cable Tray:[/b] Why spend a ton of space keeping all those cables separate?  With a Cable Tray, you can run many different cables together through a tray, taking up less space and fewer objects.  Trays connect cables with matching colour and watt limits.
     
     [b]Load Centers![/b]  With the new Load Center structure, you can control entire sets of devices without needing a separate power network.  Turn your lights, atmospherics, doors, equipment, or logic devices on and off en masse - and also supports data networking, with a secondary data port.
@@ -52,21 +54,22 @@
 
   </Description>
   <!-- In-game Description using TMP tags for Workshop menu -->
-  <InGameDescription><![CDATA[<b>WARNING:</b> <color=#ff0000>This is an SLP Plugin Mod, ensure you have it installed!</color>
+  <InGameDescription><![CDATA[<color=#ff0000>This is an SLP Plugin Mod, ensure you have it installed!</color>
     <size="30"><color=#ffa500>Re-Volt</color></size>
-    Re-Volt is an electrical overhaul mod for Stationeers, which reworks how power is distributed, what happens when things go wrong, and gives you more tools to control your power!
-    <b>Electrical simulation rewrite:</b>  Electrical load is now proportionally shared among all sources and split fairly between all loads.
-    <b>Wires Burnout:</b>  Wires burn out after overload, but not instantly.
+    Re-Volt is THE electrical overhaul mod for Stationeers, reworking power and cable mechanics and adding useful tools.
+    <b>Electrical simulation:</b>  Electrical load is now proportionally shared among all sources and split fairly between all loads.
+    <b>Wire Burnout:</b>  Wires burn out after overload, but not instantly.
     <b>Stationary batteries are now charge- and discharge-rate limited.</b>
     <b>Fuses still work.</b>  They provide absolute protection.  Once.
     <b>Recursive networks:</b> Now allowed!  With a side of exploit fixes!
     <b>Breakers & Cable Tray:</b> Circuit Breakers, Switchgear, and Cable Tray!  Oh my!
+    <b>Data Networking:</b> Optoisolators and Data Diodes to connect data networks!
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.6.5[/h3]
+    [h3]Version 1.7.2[/h3]
     [list]
-    [*] Something like 20+ bugs and quality issues fixed after audit
+    [*] Fixed optoisolator would add itself to device list multiple times, breaking device selection cycling on screws
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
