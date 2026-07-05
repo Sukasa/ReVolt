@@ -8,12 +8,13 @@ using Assets.Scripts;
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Motherboards;
 using Assets.Scripts.UI;
+using Assets.Scripts.Util;
 using LaunchPadBooster.Utils;
 using UnityEngine;
 using static ReVolt.Interfaces.ISwitchgearComponent;
 namespace ReVolt
 {
-    public class BusTie : Device, ISwitchgearComponent, IPatchable
+    public class BusTie : Device, ISwitchgearComponent, IPatchable, ISmartRotatable
     {
         public void PatchPrefab()
         {
@@ -109,6 +110,32 @@ namespace ReVolt
         {
             base.OnDeregistered();
             ReVolt.SwitchgearNetwork.RebuildNetworkDestroy(this);
+        }
+
+        public int[] OpenEndsPermutation =
+        {
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+        };
+        
+        public SmartRotate.ConnectionType ConnectionType = SmartRotate.ConnectionType.Exhaustive;
+
+        public SmartRotate.ConnectionType GetConnectionType() => ConnectionType;
+
+        public int[] GetOpenEndsPermutation() => (int[])OpenEndsPermutation.Clone();
+
+        public void SetOpenEndsPermutation(int[] permutation)
+        {
+            OpenEndsPermutation = (int[])permutation.Clone();
+        }
+
+        public void SetConnectionType(SmartRotate.ConnectionType connectionType)
+        {
+            ConnectionType = connectionType;
         }
     }
 }
