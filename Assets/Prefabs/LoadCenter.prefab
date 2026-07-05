@@ -212,10 +212,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.25
   interactableCollider: {fileID: 7867930155573415727}
+  DebugState: -1
   states:
   - AnimData:
     - name: ToggleOff
       gameObject: {fileID: 1231653500175033298}
+      tOffset: 0
       transform: {fileID: 3777205402701146598}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -223,6 +225,7 @@ MonoBehaviour:
   - AnimData:
     - name: ToggleOn
       gameObject: {fileID: 1231653500175033298}
+      tOffset: 0
       transform: {fileID: 3777205402701146598}
       position: {x: -0.0475, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -332,10 +335,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.25
   interactableCollider: {fileID: 957317498616968476}
+  DebugState: -1
   states:
   - AnimData:
     - name: ToggleOff
       gameObject: {fileID: 2633061356280805541}
+      tOffset: 0
       transform: {fileID: 7752224445689280865}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -343,6 +348,7 @@ MonoBehaviour:
   - AnimData:
     - name: ToggleOn
       gameObject: {fileID: 2633061356280805541}
+      tOffset: 0
       transform: {fileID: 7752224445689280865}
       position: {x: -0.0475, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -557,10 +563,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.25
   interactableCollider: {fileID: 6919871800051364295}
+  DebugState: -1
   states:
   - AnimData:
     - name: ToggleOff
       gameObject: {fileID: 7734535971146252289}
+      tOffset: 0
       transform: {fileID: 7852253963192889824}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -568,6 +576,7 @@ MonoBehaviour:
   - AnimData:
     - name: ToggleOn
       gameObject: {fileID: 7734535971146252289}
+      tOffset: 0
       transform: {fileID: 7852253963192889824}
       position: {x: -0.0475, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -838,10 +847,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.25
   interactableCollider: {fileID: 5427194080595261346}
+  DebugState: -1
   states:
   - AnimData:
     - name: ToggleOff
       gameObject: {fileID: 7203900885205116763}
+      tOffset: 0
       transform: {fileID: 5800048860874418757}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -849,6 +860,7 @@ MonoBehaviour:
   - AnimData:
     - name: ToggleOn
       gameObject: {fileID: 7203900885205116763}
+      tOffset: 0
       transform: {fileID: 5800048860874418757}
       position: {x: -0.0475, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -1588,7 +1600,6 @@ MonoBehaviour:
   SuppressSound: 1
   Forward: {x: 0, y: 0, z: 0}
   HideInStationpedia: 0
-  CurrentPingMesh: {fileID: 0}
   IsEmergency: 0
   PrefabName: LoadCenter
   PrefabHash: 1911572047
@@ -1730,6 +1741,7 @@ MonoBehaviour:
     Name: 
     Bit: 0
     StringKey: 0
+    PaintOnly: 0
     Normal: {fileID: 0}
     Emissive: {fileID: 0}
     Cutable: {fileID: 0}
@@ -1740,6 +1752,7 @@ MonoBehaviour:
     StringHash: 71445658
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 7696407971770584069}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: -0.325, y: 0, z: 0}
@@ -1757,6 +1770,7 @@ MonoBehaviour:
     StringHash: -1648307620
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 5427194080595261346}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1774,6 +1788,7 @@ MonoBehaviour:
     StringHash: 680438029
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 7867930155573415727}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1791,6 +1806,7 @@ MonoBehaviour:
     StringHash: -1684124015
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 6429776059088900904}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1808,6 +1824,7 @@ MonoBehaviour:
     StringHash: 757192026
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 957317498616968476}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1825,6 +1842,7 @@ MonoBehaviour:
     StringHash: -1569953654
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 6919871800051364295}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1842,6 +1860,7 @@ MonoBehaviour:
     StringHash: 1783312036
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 0}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1859,6 +1878,7 @@ MonoBehaviour:
     StringHash: 734558724
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 0}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1876,6 +1896,7 @@ MonoBehaviour:
     StringHash: -1675848843
     Parent: {fileID: 272328987816302622}
     Collider: {fileID: 0}
+    ParentInteractableIndex: -1
     FakeCollider: {fileID: 0}
     Bounds:
       m_Center: {x: 0, y: 0, z: 0}
@@ -1894,25 +1915,14 @@ MonoBehaviour:
   BaseAnimator: {fileID: 0}
   IsCursor: 0
   Blueprint: {fileID: 18127316306560924, guid: b2718f0954c5403499745ad00051ecc0, type: 3}
+  BlueprintOrientVector: {x: 0, y: 0, z: 0}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
   Thumbnail: {fileID: 21300000, guid: d18e2bc9139fc254496e8ba356f8d247, type: 3}
-  Thumbnails:
-  - {fileID: 21300000, guid: b0bdae510460034469e81bee212967c4, type: 3}
-  - {fileID: 21300000, guid: 222dc9f5ec904854d83d8398663b0557, type: 3}
-  - {fileID: 21300000, guid: 10540ec7ebd9ee4478b16927587f10cc, type: 3}
-  - {fileID: 21300000, guid: d44f930be4b3f6443a3161fc34c0b313, type: 3}
-  - {fileID: 21300000, guid: 83fd250051d743e40842db1f5e670fed, type: 3}
-  - {fileID: 21300000, guid: b190cac6633e7d440adac92e31a1726c, type: 3}
-  - {fileID: 21300000, guid: d18e2bc9139fc254496e8ba356f8d247, type: 3}
-  - {fileID: 21300000, guid: 77a7508882ba036428c1de0fa549336f, type: 3}
-  - {fileID: 21300000, guid: d593b80c01309964cbc9072ad86038c0, type: 3}
-  - {fileID: 21300000, guid: 02e396e98007bb24d828bf46982bd301, type: 3}
-  - {fileID: 21300000, guid: 8e1a02d25f0775e4cb9d1b9992dc1827, type: 3}
-  - {fileID: 21300000, guid: b77694bd83557d8459cc4a05d8c3f24d, type: 3}
+  Thumbnails: []
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0
@@ -1929,6 +1939,7 @@ MonoBehaviour:
   HasModeState: 0
   HasOpenState: 0
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 1
@@ -2211,10 +2222,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.25
   interactableCollider: {fileID: 6429776059088900904}
+  DebugState: -1
   states:
   - AnimData:
     - name: ToggleOff
       gameObject: {fileID: 3457814027466067687}
+      tOffset: 0
       transform: {fileID: 5295524429121994011}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -2222,6 +2235,7 @@ MonoBehaviour:
   - AnimData:
     - name: ToggleOn
       gameObject: {fileID: 3457814027466067687}
+      tOffset: 0
       transform: {fileID: 5295524429121994011}
       position: {x: -0.0475, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -2543,10 +2557,12 @@ MonoBehaviour:
   parentThing: {fileID: 272328987816302622}
   time: 0.6
   interactableCollider: {fileID: 7696407971770584069}
+  DebugState: -1
   states:
   - AnimData:
     - name: DoorClosed
       gameObject: {fileID: 8612311987930625428}
+      tOffset: 0
       transform: {fileID: 8993341782838292270}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0}
@@ -2554,6 +2570,7 @@ MonoBehaviour:
   - AnimData:
     - name: DoorOpen
       gameObject: {fileID: 8612311987930625428}
+      tOffset: 0
       transform: {fileID: 8993341782838292270}
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 150, z: 0}

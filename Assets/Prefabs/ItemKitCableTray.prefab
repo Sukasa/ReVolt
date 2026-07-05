@@ -114,6 +114,7 @@ MonoBehaviour:
     Name: 
     Bit: 0
     StringKey: 0
+    PaintOnly: 0
     Normal: {fileID: 0}
     Emissive: {fileID: 0}
     Cutable: {fileID: 0}
@@ -125,6 +126,7 @@ MonoBehaviour:
   BaseAnimator: {fileID: 0}
   IsCursor: 0
   Blueprint: {fileID: 6176569179685898772, guid: 0bcb8b01953ccc30f97a96d1ab7a89b5, type: 3}
+  BlueprintOrientVector: {x: 0, y: 0, z: 0}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -144,6 +146,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3b9eaa3e32881f43c8c66477ab901b6d, type: 3}
   - {fileID: 21300000, guid: 8d659893c90893f2a8a382567b6bde37, type: 3}
   - {fileID: 21300000, guid: 48111a00c6c4f73e3a6c7a7cea881e9d, type: 3}
+  - {fileID: 21300000, guid: 77cbff03a96f2221182409cd0f52d1e3, type: 3}
+  - {fileID: 21300000, guid: 04a3cc3f5849f56f5804188a042c46f7, type: 3}
+  - {fileID: 21300000, guid: 6d9e8ede253b917ec964a3549faf51c1, type: 3}
+  - {fileID: 21300000, guid: 4f60916b640b0bc9aa90b2b0408fa58b, type: 3}
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0

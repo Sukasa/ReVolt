@@ -83,7 +83,6 @@ MonoBehaviour:
   SuppressSound: 1
   Forward: {x: 0, y: 0, z: 0}
   HideInStationpedia: 0
-  CurrentPingMesh: {fileID: 0}
   IsEmergency: 0
   PrefabName: ItemKitLoadCenter
   PrefabHash: -2014798647
@@ -115,6 +114,7 @@ MonoBehaviour:
     Name: 
     Bit: 0
     StringKey: 0
+    PaintOnly: 0
     Normal: {fileID: 0}
     Emissive: {fileID: 0}
     Cutable: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
   BaseAnimator: {fileID: 0}
   IsCursor: 0
   Blueprint: {fileID: 1993962903726851895, guid: db91450e526986b478fa566e49591757, type: 3}
+  BlueprintOrientVector: {x: 0, y: 0, z: 0}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -145,6 +146,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f1bf900168fb53c48b53940c074d77dc, type: 3}
   - {fileID: 21300000, guid: 650c2bb72f701614f95fc1625119d2fe, type: 3}
   - {fileID: 21300000, guid: d5ef9630763c7f7488f27d958f1a1972, type: 3}
+  - {fileID: 21300000, guid: aca1b90dfb4368b66b64946168989957, type: 3}
+  - {fileID: 21300000, guid: 5b08cdd7d7065a7298ce78b76cf8be2c, type: 3}
+  - {fileID: 21300000, guid: 6066bab568341075b8e06a316462dad8, type: 3}
+  - {fileID: 21300000, guid: 3aaf63d80f58670d3ad1183f3ca8af71, type: 3}
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0
@@ -161,6 +166,7 @@ MonoBehaviour:
   HasModeState: 0
   HasOpenState: 0
   HasImportState: 0
+  HasImport2State: 0
   HasExportState: 0
   HasExport2State: 0
   HasButton1State: 0
@@ -190,6 +196,7 @@ MonoBehaviour:
   DeleteOnDestroyed: 1
   UsingSound: 
   UseCompleteSound: 
+  deleteSlotItemsOnDeconstruct: 0
   HasLight: 0
   RigidBody: {fileID: 1226263783309720035}
   WorldCenterOfMass: {x: 0, y: 0, z: 0}
@@ -224,7 +231,6 @@ MonoBehaviour:
   IsForceKinematic: 0
   AddExtraGravity: 1
   _isBuoyant: 1
-  IsKinematic: 0
   ChildSlotOffset: {x: 0, y: 0, z: 0}
   ChildSlotOffsetPosition: {x: 0, y: 0, z: 0}
   IsUnderLava: 0
@@ -369,6 +375,9 @@ MonoBehaviour:
       _quantity: 0
     Cocoa:
       ReagentId: 44
+      _quantity: 0
+    Cheese:
+      ReagentId: 45
       _quantity: 0
   AllowSelfUse: 0
   AllowForwardCursor: 0

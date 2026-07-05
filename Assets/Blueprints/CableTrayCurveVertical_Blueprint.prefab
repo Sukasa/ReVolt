@@ -6592,4 +6592,4 @@ MonoBehaviour:
   BlueprintMeshFilter: {fileID: 5864675590164463566}
   BlueprintRenderer: {fileID: 2205902098253409508}
   LineMaterial: {fileID: 0}
-  ShowTransformArrow: 1
+  OrientationArrowOffset: {x: 0, y: 0, z: 0}

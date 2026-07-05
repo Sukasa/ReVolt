@@ -83,7 +83,6 @@ MonoBehaviour:
   SuppressSound: 1
   Forward: {x: 0, y: 0, z: 0}
   HideInStationpedia: 0
-  CurrentPingMesh: {fileID: 0}
   IsEmergency: 0
   PrefabName: ItemKitHeavyCircuitBreaker
   PrefabHash: 1477714383
@@ -115,6 +114,7 @@ MonoBehaviour:
     Name: 
     Bit: 0
     StringKey: 0
+    PaintOnly: 0
     Normal: {fileID: 0}
     Emissive: {fileID: 0}
     Cutable: {fileID: 0}
@@ -126,6 +126,7 @@ MonoBehaviour:
   BaseAnimator: {fileID: 0}
   IsCursor: 0
   Blueprint: {fileID: 7269250600997953697, guid: ca669becc89ae29478c9f55691a43b4d, type: 3}
+  BlueprintOrientVector: {x: 0, y: 0, z: 0}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -145,6 +146,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a2a48006db2f8a394b44ca3ae5d2aded, type: 3}
   - {fileID: 21300000, guid: 27fe64047bda01ac4a8dd3e4b8e9af3d, type: 3}
   - {fileID: 21300000, guid: 9f6c0b4adcab28be1a3aedb475267dc4, type: 3}
+  - {fileID: 21300000, guid: d576a06ca5dc12fdd89e41c831ab1e3e, type: 3}
+  - {fileID: 21300000, guid: db9144672314ed7a58a8bac81a884726, type: 3}
+  - {fileID: 21300000, guid: 3acfba435dcf9216799a201b65e05f77, type: 3}
+  - {fileID: 21300000, guid: feaa0dc14f2313234bd6dd697c645894, type: 3}
   IsEntity: 0
   _isOccluded: 0
   HasRunOnAtmospherics: 0
@@ -191,6 +196,7 @@ MonoBehaviour:
   DeleteOnDestroyed: 1
   UsingSound: 
   UseCompleteSound: 
+  deleteSlotItemsOnDeconstruct: 0
   HasLight: 0
   RigidBody: {fileID: 1226263783309720035}
   WorldCenterOfMass: {x: 0, y: 0, z: 0}
