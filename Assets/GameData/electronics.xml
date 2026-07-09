@@ -47,8 +47,8 @@
       <Recipe>
         <Time>20</Time>
         <Energy>100</Energy>
-        <Copper>5</Copper>
-        <Iron>10</Iron>
+        <Copper>2</Copper>
+        <Iron>5</Iron>
       </Recipe>
     </RecipeData>
   </ElectronicsPrinterRecipes>

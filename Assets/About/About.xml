@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.7.2</Version>
+  <Version>1.7.3</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
@@ -67,9 +67,9 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.7.2[/h3]
+    [h3]Version 1.7.3[/h3]
     [list]
-    [*] Fixed optoisolator would add itself to device list multiple times, breaking device selection cycling on screws
+    [*] Rebalanced Cable Tray Cost
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
