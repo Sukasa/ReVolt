@@ -10,6 +10,8 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Logicable))]
     public class LogicablePatches
     {
+        private static readonly HashSet<ILogicable> Deduplicator = new(128);
+        
         [HarmonyPostfix, HarmonyPatch(nameof(Logicable.RecalculateSortedDevicesList))]
         public static void RecalculateSortedDevicesListPatch(CableNetwork cableNetwork, ref List<ILogicable> __result)
         {
@@ -22,6 +24,7 @@ namespace ReVolt.Patches
                 if (__result[index] is not StructureDataBridge DB)
                     continue;
 
+                // AddRange here as GetBridgedDevices memoizes its result between cable rebuilds
                 __result.AddRange(DB.GetBridgedDevices(cableNetwork));
                 hits++;
             }
@@ -32,14 +35,9 @@ namespace ReVolt.Patches
                     return; // No data bridges, so we don't need to re-sort or de-duplicate
                 
                 case > 1: // If we added more than one data bridge, de-dup just in case they bridged the same network by accident
-                    for (var index = __result.Count - 2; index >= 0; --index)
-                    {
-                        for (var index2 = __result.Count - 1; index2 > index; --index2)
-                        {
-                            if (ReferenceEquals(__result[index2], __result[index]))
-                                __result.RemoveAt(index2);
-                        }
-                    }
+                    
+                    __result.RemoveAll(x => !Deduplicator.Add(x));
+                    Deduplicator.Clear();
                     break;
             }
 
