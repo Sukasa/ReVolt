@@ -77,8 +77,16 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5164694748061140286, guid: cc8718d64633e654a86e74de1f5b834e, type: 3}
+      propertyPath: OpenEnds.Array.data[0].ConnectionType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164694748061140286, guid: cc8718d64633e654a86e74de1f5b834e, type: 3}
       propertyPath: OpenEnds.Array.data[1].ConnectionRole
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164694748061140286, guid: cc8718d64633e654a86e74de1f5b834e, type: 3}
+      propertyPath: OpenEnds.Array.data[1].ConnectionType
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9000557392417023382, guid: cc8718d64633e654a86e74de1f5b834e, type: 3}
       propertyPath: m_Name

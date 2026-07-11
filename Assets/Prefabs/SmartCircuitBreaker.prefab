@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: OutputConnection.ConnectionType
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: Interactables.Array.data[4].Action
@@ -460,7 +460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: OpenEnds.Array.data[1].ConnectionType
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
       propertyPath: Interactables.Array.data[4].StringHash
