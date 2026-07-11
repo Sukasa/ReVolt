@@ -131,6 +131,30 @@
       </Description>
     </RecordThing>
     <RecordThing>
+      <Key>CableTrayStraight3</Key>
+      <Value>Cable Tray (Straight 3)</Value>
+      <Description>
+        A straight piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+        These longer pieces will ONLY merge cables on their ends, and not in the middle of the tray
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayStraight5</Key>
+      <Value>Cable Tray (Straight 5)</Value>
+      <Description>
+        A straight piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+        These longer pieces will ONLY merge cables on their ends, and not in the middle of the tray
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayStraight10</Key>
+      <Value>Cable Tray (Straight 10)</Value>
+      <Description>
+        A straight piece of Cable Tray.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+        These longer pieces will ONLY merge cables on their ends, and not in the middle of the tray
+      </Description>
+    </RecordThing>
+    <RecordThing>
       <Key>CableTrayCurveHorizontal</Key>
       <Value>Cable Tray (Curved Horizontal)</Value>
       <Description>

@@ -69,7 +69,9 @@
   <ChangeLog>
     [h3]Version 1.7.3[/h3]
     [list]
-    [*] Rebalanced Cable Tray Cost
+    [*] Rebalanced Cable Tray cost
+    [*] Added 3/5/10-long cable tray.  Note these ONLY merge in cables on their ends!
+    [*] Potentially fixed client graphical desync on cable junctions
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
