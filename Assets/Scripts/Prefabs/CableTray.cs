@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts;
 using Assets.Scripts.GridSystem;
+using Assets.Scripts.Networking;
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Electrical;
@@ -21,6 +22,11 @@ namespace ReVolt
         public MeshRenderer RendererUp;
         public MeshRenderer RendererDown;
 
+        protected int connFlags;
+        protected bool reapplyAppearance;
+
+        protected const int FLAG_CONNECTIONS = 1024;
+        
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
@@ -57,6 +63,27 @@ namespace ReVolt
         }
 
         private static readonly HashSet<int> RebuildExclusions = new();
+
+        public override void BuildUpdate(RocketBinaryWriter writer, ushort networkUpdateType)
+        {
+            base.BuildUpdate(writer, networkUpdateType);
+            
+            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
+                writer.WriteInt32(connFlags);
+
+            
+        }
+
+        public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
+        {
+            base.ProcessUpdate(reader, networkUpdateType);
+
+            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
+            {
+                connFlags = reader.ReadInt32();
+                reapplyAppearance = true;
+            }
+        }
 
         public void OnMembersChanged()
         {
@@ -142,20 +169,23 @@ namespace ReVolt
             UpdateJunctionConnections();
         }
 
-        public override void OnStartRender()
+        public override void OnServerTick(float deltaTime)
         {
-            base.OnStartRender();
+            UpdateEnds();
+        }
 
-            if (!_reapplyAppearance)
+        public void UpdateEnds()
+        {
+            if (!reapplyAppearance || OpenEnds.Count < 8)
                 return;
-
+            
             if (RendererUp != null)
-                RendererUp.enabled = _showUpper;
+                RendererUp.enabled = (connFlags & 1) == 1;
 
             if (RendererDown != null)
-                RendererDown.enabled = _showLower;
+                RendererDown.enabled = (connFlags & 2) == 2;
 
-            _reapplyAppearance = false;
+            reapplyAppearance = false;
         }
 
         public override string GetStationpediaCategoryKey() => StationpediaCategoryStrings.CableCategory;
@@ -167,31 +197,30 @@ namespace ReVolt
             return smallCell is { Other: CableTray } && smallCell.Other.IsConnected(OpenEnd);
         }
 
-        protected bool _showUpper;
-        protected bool _showLower;
-        protected bool _reapplyAppearance;
-
         public void UpdateJunctionConnections()
         {
-            if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
+            if (!GameManager.RunSimulation || OpenEnds.Count < 8)
+                return;
+            
+            if (GameManager.GameState == GameState.Loading)
             {
                 if (!_isDeferringUpdate && OpenEnds.Count > 8)
                     DeferredUJC().Forget();
                 return;
             }
 
+            connFlags = 0;
+            
+            if (RendererUp != null && IsConnectedToTray(OpenEnds[8]))
+                connFlags |= 1;
 
-            if (RendererUp != null)
-            {
-                RendererUp.enabled = _showUpper = OpenEnds.Count > 8 && IsConnectedToTray(OpenEnds[8]);
-                _reapplyAppearance = true;
-            }
+            if (RendererDown != null && OpenEnds.Count > 10 && IsConnectedToTray(OpenEnds[10]))
+                connFlags |= 2;
 
-            if (RendererDown != null)
-            {
-                RendererDown.enabled = _showLower = OpenEnds.Count > 10 && IsConnectedToTray(OpenEnds[10]);
-                _reapplyAppearance = true;
-            }
+            reapplyAppearance = true;
+            
+            if (NetworkManager.IsServer)
+                NetworkUpdateFlags |= FLAG_CONNECTIONS;
         }
 
         private bool _isDeferringUpdate;
@@ -205,8 +234,10 @@ namespace ReVolt
             do
             {
                 await UniTask.NextFrame();
-            } while (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation);
+            } while (GameManager.GameState == GameState.Loading);
 
+            await UniTask.SwitchToMainThread();
+            
             UpdateJunctionConnections();
             _isDeferringUpdate = false;
         }

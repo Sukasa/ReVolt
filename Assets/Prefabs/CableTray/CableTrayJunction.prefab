@@ -154,7 +154,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4746785865440134878}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -290,7 +290,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7135341854386162541}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -459,6 +459,10 @@ PrefabInstance:
       value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
       propertyPath: OpenEnds.Array.data[4].Parent
       value: 
       objectReference: {fileID: 3299121507105113919}
@@ -575,6 +579,18 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.data[0].Action
+      value: 37
+      objectReference: {fileID: 0}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.data[0].Parent
+      value: 
+      objectReference: {fileID: 3299121507105113919}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.data[0].StringKey
+      value: Mode
+      objectReference: {fileID: 0}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
       propertyPath: OpenEnds.Array.data[4].ConnectionType
       value: 64
       objectReference: {fileID: 0}
@@ -599,12 +615,20 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.data[0].StringHash
+      value: 939059349
+      objectReference: {fileID: 0}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
       propertyPath: OpenEnds.Array.data[10].ConnectionType
       value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
       propertyPath: OpenEnds.Array.data[11].ConnectionType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5281992246398186718, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
+      propertyPath: Interactables.Array.data[0].JoinInProgressSync
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6387572973939845110, guid: 1341fc1cf0813278088d5add92fd13b5, type: 3}
       propertyPath: m_Size.y
