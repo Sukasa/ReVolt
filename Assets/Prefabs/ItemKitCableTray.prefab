@@ -491,6 +491,9 @@ MonoBehaviour:
   - {fileID: 4102496898484456275, guid: bebfb6ecb56d6d64592c2dc04b9eff12, type: 3}
   - {fileID: 90804229395896785, guid: e3efa867e61967b7ca8cc89f326b0bfb, type: 3}
   - {fileID: 3299121507105113919, guid: 49411ec32533fa6aea2f00a864e012eb, type: 3}
+  - {fileID: 5419828329254514125, guid: 1d09b41cea321c2c4b0581f02ce2faa3, type: 3}
+  - {fileID: 8828120107508313855, guid: d13a5dcaa2a27a0ec8f93a9c974c449b, type: 3}
+  - {fileID: 5451090136789918485, guid: 59bece808ef95c1ebadadba4d805a3e6, type: 3}
 --- !u!33 &6034437103515620341
 MeshFilter:
   m_ObjectHideFlags: 0
