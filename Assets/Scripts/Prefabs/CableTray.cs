@@ -19,6 +19,8 @@ namespace ReVolt
 {
     public class CableTray : SmallSingleGrid, ICableTrayComponent, IPatchable, ISmartRotatable
     {
+        public static readonly List<CableTray> AllTrays = new(); // Master list used for the meson scanners as PseudoNetworks are not tracked globally
+        
         public MeshRenderer RendererUp;
         public MeshRenderer RendererDown;
 
@@ -30,6 +32,7 @@ namespace ReVolt
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
+            AllTrays.Add(this);
             RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkCreate(this);
             UpdateJunctionConnections();
@@ -37,6 +40,7 @@ namespace ReVolt
 
         public override void OnDeregistered()
         {
+            AllTrays.Remove(this);
             base.OnDeregistered();
             RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkDestroy(this);
