@@ -10,11 +10,13 @@ using ReVolt.Patches;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using UnityEngine;
 using Gyroscope = Assets.Scripts.Objects.Electrical.Gyroscope;
 
 namespace ReVolt
 {
+    [UsedImplicitly] // Virtual methods inherited in another project so let Rider know not to pester me
     public class RevoltTick : PowerTick
     {
         public struct PowerUsage
@@ -68,7 +70,7 @@ namespace ReVolt
             _IODevSetter = typeof(PowerTick).GetProperty(nameof(InputOutputDevices));
         }
 
-        public void Initialize_New(CableNetwork from)
+        public virtual void Initialize_New(CableNetwork from)
         {
             if (CableNetwork != from) // If our cable network changes somehow, mark dirty 
                 IsDirty = true;
@@ -193,7 +195,7 @@ namespace ReVolt
             return _allFuses.Values[0].Pick();
         }
 
-        public void CalculateState_New()
+        public virtual void CalculateState_New()
         {
             _breakerIndex = 0;
             _breakerLimit = 0.0f;
@@ -280,7 +282,7 @@ namespace ReVolt
             }
         }
 
-        public void ApplyState_New()
+        public virtual void ApplyState_New()
         {
             Potential = Mathf.Max(Potential, 0.0f);
             Required = Mathf.Max(Required, 0.0f);

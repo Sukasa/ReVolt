@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Motherboards;
@@ -16,6 +17,9 @@ namespace ReVolt
     {
         public static readonly PseudoNetworkType<ISwitchgearComponent> SwitchgearNetwork = new();
         public static readonly PseudoNetworkType<ICableTrayComponent> CableTrayNetwork = new();
+
+        [UsedImplicitly] // Used by Re-Volt: Amped!
+        public static Type PowerTickType = typeof(RevoltTick);
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;

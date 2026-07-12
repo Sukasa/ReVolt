@@ -157,6 +157,6 @@ namespace ReVolt.Patches
         /// <param name="networkInstance">
         ///     The <seealso cref="CableNetwork"/> to inject the <seealso cref="RevoltTick"/> into
         /// </param>
-        private static void Inject(CableNetwork networkInstance) => TickSetter.SetValue(networkInstance, new RevoltTick());
+        private static void Inject(CableNetwork networkInstance) => TickSetter.SetValue(networkInstance, (RevoltTick)Activator.CreateInstance(ReVolt.PowerTickType));
     }
 }
