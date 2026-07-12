@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Reflection;
 using Assets.Scripts.Objects;
+using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Motherboards;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -36,7 +38,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.7.3");
+        public static readonly Mod MOD = new("Re-Volt", "1.7.6");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
@@ -131,7 +133,7 @@ namespace ReVolt
                         MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(ColorType.White);
                 }
             }
-
+            
             Debug.Log("Re-Volt loaded prefabs");
 
             MOD.AddSaveDataType<CircuitBreakerSaveData>();

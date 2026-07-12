@@ -1,18 +1,15 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.7.3</Version>
+  <Version>1.7.6</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
-    [b]WARNING:[/b] This is a StationeersLaunchPad Plugin Mod. It requires Bepinex to be installed with the StationeersLaunchPad plugin.
-    See: https://github.com/StationeersLaunchPad/StationeersLaunchPad
-
-    
-    
     [h1]⚡ Re-Volt ⚡[/h1]
 
     Re-Volt is an electrical overhaul mod for Stationeers, which mildly overhauls how power is distributed, what happens when things go wrong, and gives you more tools to control your power!
 
+    [b]WARNING:[/b]This is an SLP Plugin Mod, ensure you have it installed!
+    
     [h2]🔌 Features[/h2]
 
     [b]NEW! Optoisolator and Data Diode:[/b] Connect data networks together while keeping power separate.  The Optoisolator is a 4-network bidirectional link, and the Data Diode is a two network one-way link
@@ -37,6 +34,8 @@
 
     [b]Complex/recursive electrical networks are allowed.[/b]  With the revised power simulation, the limit on transformers or batteries in recursive networks has been lifted.  Over-engineer your bases to your heart's delight!  Also, transformers are less exploitable now - but take note, they (and APCs) also properly apply their own power requirements to the upstream!
 
+    [b]T-Ray Scanners:[/b] The T-Ray scanner bug where some cables/etc would not display is fixed, and Cable Tray also appears on the scanner
+    
     [h2]📅 Future Plans[/h2]
 
     There's still more content on the way:
@@ -67,11 +66,9 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.7.3[/h3]
+    [h3]Version 1.7.6[/h3]
     [list]
-    [*] Rebalanced Cable Tray cost
-    [*] Added 3/5/10-long cable tray.  Note these ONLY merge in cables on their ends!
-    [*] Potentially fixed client graphical desync on cable junctions
+    [*] Cable Trays better handle cable colours changing during gameplay
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
