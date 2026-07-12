@@ -185,6 +185,7 @@ MonoBehaviour:
     Name: 
     Bit: 0
     StringKey: 0
+    PaintOnly: 0
     Normal: {fileID: 0}
     Emissive: {fileID: 0}
     Cutable: {fileID: 0}
@@ -196,6 +197,7 @@ MonoBehaviour:
   BaseAnimator: {fileID: 0}
   IsCursor: 0
   Blueprint: {fileID: 8311375169807572008, guid: 1e3b6e1ff9c6e2c4598f9843a4f38a10, type: 3}
+  BlueprintOrientVector: {x: 0, y: 0, z: 0}
   Wireframe: {fileID: 0}
   lodFlares: []
   IsCustomThing: 0
@@ -541,3 +543,4 @@ MonoBehaviour:
   Constructables:
   - {fileID: 9040551235344435843, guid: 9e37887412c38474bbd58e1f7520a048, type: 3}
   - {fileID: 6369823268974974226, guid: b4fa0706084b2a7428b99ad41369a3c4, type: 3}
+  DefaultColour: 7

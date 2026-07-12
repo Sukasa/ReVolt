@@ -487,6 +487,7 @@ MonoBehaviour:
   MaxQuantity: 5
   BuildStructure: {fileID: 272328987816302622, guid: bd4e40865cbeead489e0d3f2f936972d, type: 3}
   QuantityUsed: 1
+  DefaultColour: 6
 --- !u!33 &5027684419917067664
 MeshFilter:
   m_ObjectHideFlags: 0

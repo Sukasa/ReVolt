@@ -130,7 +130,7 @@ namespace ReVolt
                     if (prefabThing is IPatchable y)
                         y.PatchPrefab();
                     else
-                        MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(ColorType.White);
+                        MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(prefabThing is IDefaultColour IDC ? IDC.DefaultColor : ColorType.White);
                 }
             }
             

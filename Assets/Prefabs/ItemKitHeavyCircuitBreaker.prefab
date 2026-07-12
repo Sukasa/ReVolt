@@ -491,6 +491,7 @@ MonoBehaviour:
   - {fileID: 2692776300960302675, guid: 66fdad6e51b513755aeae13f64d0ca01, type: 3}
   - {fileID: 1833949538295278636, guid: 351fc9cca94784752bb415561b7c5943, type: 3}
   - {fileID: 1833949538295278636, guid: 092ff2aa74b82b2b18194df57b216813, type: 3}
+  DefaultColour: 1
 --- !u!33 &5027684419917067664
 MeshFilter:
   m_ObjectHideFlags: 0
