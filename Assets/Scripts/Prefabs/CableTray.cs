@@ -156,9 +156,13 @@ namespace ReVolt
 
         public void MatchCableNetworks(List<CableNetwork> List, Cable Metric)
         {
-            foreach (var Cable in MatchCables(Metric))
+            var list = MatchCables(Metric);
+            for (var index = list.Count - 1; index >= 0; index--)
+            {
+                var Cable = list[index];
                 if (Cable?.CableNetwork != null && !List.Contains(Cable.CableNetwork))
                     List.Add(Cable.CableNetwork);
+            }
         }
 
         public override void OnNeighborPlaced(SmallGrid neighbor)

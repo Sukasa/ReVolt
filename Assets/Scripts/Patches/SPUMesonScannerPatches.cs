@@ -1,11 +1,8 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Items;
-using Assets.Scripts.Objects.Pipes;
 using HarmonyLib;
-using Networks;
 
 namespace ReVolt.Patches
 {
@@ -29,7 +26,7 @@ namespace ReVolt.Patches
 
                     if (localIndex == 5)
                     {
-                        if (!found)
+                        if (!found) // Patch the second assignment to sourceIndex, not the first
                             found = true;
                         else
                         {
