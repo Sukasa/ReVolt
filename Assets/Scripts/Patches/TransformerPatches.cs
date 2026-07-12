@@ -2,12 +2,13 @@
 using Assets.Scripts.Objects.Electrical;
 using HarmonyLib;
 using System.Diagnostics.CodeAnalysis;
+using Assets.Scripts.Objects.Motherboards;
 using UnityEngine;
 
 namespace ReVolt.Patches
 {
     [HarmonyPatch(typeof(Transformer))]
-    internal class TransformerExploitPatch
+    internal class TransformerPatches
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(Transformer.GetGeneratedPower))]
@@ -59,6 +60,33 @@ namespace ReVolt.Patches
                 return false;
 
             ____powerProvided -= powerAdded;
+            return false;
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Transformer.CanLogicRead))]
+        public static bool CanLogicReadPatch(LogicType logicType, Transformer __instance, ref bool __result)
+        {
+            if (!ReVolt.enableTransformerLogicAddition.Value)
+                return true;
+
+            if (logicType != LogicType.PowerActual)
+                return true;
+            
+            __result = true;
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Transformer.GetLogicValue))]
+        public static bool GetLogicValuePatch(LogicType logicType, Transformer __instance, ref double __result, float ____powerProvided)
+        {
+            if (!ReVolt.enableTransformerLogicAddition.Value)
+                return true;
+
+            if (logicType != LogicType.PowerActual)
+                return true;
+            
+            __result = ____powerProvided;
             return false;
         }
     }

@@ -2,13 +2,14 @@
 using Assets.Scripts.Objects.Electrical;
 using HarmonyLib;
 using System;
+using Assets.Scripts.Objects.Motherboards;
 using UnityEngine;
 
 namespace ReVolt.Patches
 {
     
     [HarmonyPatch(typeof(Battery))]
-    internal class StationaryBatteryPatches
+    internal class BatteryPatches
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Battery.GetUsedPower))]
@@ -48,6 +49,40 @@ namespace ReVolt.Patches
         {
             if (ReVolt.enableBatteryLimitsPatch.Value)
                 __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryDischargeRate.Value);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Battery.CanLogicRead))]
+        public static bool CanLogicReadPatch(LogicType logicType, Battery __instance, ref bool __result)
+        {
+            if (!ReVolt.enableBatteryLogicAddition.Value)
+                return true;
+
+            if (logicType is not (LogicType.ExportQuantity or LogicType.ImportQuantity))
+                return true;
+            
+            __result = true;
+            return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(Battery.GetLogicValue))]
+        public static bool GetLogicValuePatch(LogicType logicType, Battery __instance, ref double __result)
+        {
+            if (!ReVolt.enableBatteryLogicAddition.Value)
+                return true;
+
+            switch (logicType)
+            {
+                case LogicType.ExportQuantity:
+                    __result = __instance.PowerMaximum * ReVolt.configMaxBatteryDischargeRate.Value;
+                    return false;
+                case LogicType.ImportQuantity:
+                    __result = __instance.PowerMaximum * ReVolt.configMaxBatteryChargeRate.Value;
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }
