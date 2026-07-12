@@ -76,6 +76,10 @@ PrefabInstance:
       propertyPath: BuildStates.Array.data[0].Tool.EntryQuantity
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6548032742270959333, guid: 1d09b41cea321c2c4b0581f02ce2faa3, type: 3}
+      propertyPath: m_Size.z
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6996148236644576793, guid: 1d09b41cea321c2c4b0581f02ce2faa3, type: 3}
       propertyPath: m_LocalPosition.z
       value: -1.35

@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CableTrayStraight10
       objectReference: {fileID: 0}
+    - target: {fileID: 7740447813313215959, guid: d13a5dcaa2a27a0ec8f93a9c974c449b, type: 3}
+      propertyPath: m_Size.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7740447813313215959, guid: d13a5dcaa2a27a0ec8f93a9c974c449b, type: 3}
+      propertyPath: m_Center.z
+      value: 1.25
+      objectReference: {fileID: 0}
     - target: {fileID: 8828120107508313855, guid: d13a5dcaa2a27a0ec8f93a9c974c449b, type: 3}
       propertyPath: Blueprint
       value: 
