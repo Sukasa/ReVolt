@@ -71,6 +71,7 @@
     [*] Cable Trays better handle cable colours changing during gameplay
     [*] Configured different default kit colours
     [*] Fixed collider issue on 5/10-long cable tray prefabs
+    [*] Cable Tray junction bug fixes.  Added additional junction box variants, all existing variants become fixed 6-way
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>

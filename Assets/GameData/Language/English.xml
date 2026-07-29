@@ -177,9 +177,30 @@
     </RecordThing>
     <RecordThing>
       <Key>CableTrayJunction</Key>
-      <Value>Cable Tray (Junction Box)</Value>
+      <Value>Cable Tray (Junction Box 6-Way)</Value>
       <Description>
         A Cable Tray junction box, connecting up to 6 directions.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayJunction4</Key>
+      <Value>Cable Tray (Junction Box 4-Way)</Value>
+      <Description>
+        A Cable Tray junction box, connecting up to 4 directions.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayJunction5Up</Key>
+      <Value>Cable Tray (Junction Box 5-Way Up)</Value>
+      <Description>
+        A Cable Tray junction box, connecting up to 4 directions and up.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
+      </Description>
+    </RecordThing>
+    <RecordThing>
+      <Key>CableTrayJunction5Down</Key>
+      <Value>Cable Tray (Junction Box 5-Way Down)</Value>
+      <Description>
+        A Cable Tray junction box, connecting up to 4 directions and down.  When placed as part of a larger cable tray run, connected cables with a matching capacity and colour will be tied together
       </Description>
     </RecordThing>
   </Things>

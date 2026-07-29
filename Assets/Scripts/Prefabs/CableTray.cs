@@ -21,21 +21,12 @@ namespace ReVolt
     {
         public static readonly List<CableTray> AllTrays = new(); // Master list used for the meson scanners as PseudoNetworks are not tracked globally
         
-        public MeshRenderer RendererUp;
-        public MeshRenderer RendererDown;
-
-        protected int connFlags;
-        protected bool reapplyAppearance;
-
-        protected const int FLAG_CONNECTIONS = 1024;
-        
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
             AllTrays.Add(this);
             RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkCreate(this);
-            UpdateJunctionConnections();
         }
 
         public override void OnDeregistered()
@@ -67,27 +58,7 @@ namespace ReVolt
         }
 
         private static readonly HashSet<int> RebuildExclusions = new();
-
-        public override void BuildUpdate(RocketBinaryWriter writer, ushort networkUpdateType)
-        {
-            base.BuildUpdate(writer, networkUpdateType);
-            
-            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
-                writer.WriteInt32(connFlags);
-
-            
-        }
-
-        public override void ProcessUpdate(RocketBinaryReader reader, ushort networkUpdateType)
-        {
-            base.ProcessUpdate(reader, networkUpdateType);
-
-            if (IsNetworkUpdateRequired(FLAG_CONNECTIONS, networkUpdateType))
-            {
-                connFlags = reader.ReadInt32();
-                reapplyAppearance = true;
-            }
-        }
+        
 
         public void OnMembersChanged()
         {
@@ -165,37 +136,6 @@ namespace ReVolt
             }
         }
 
-        public override void OnNeighborPlaced(SmallGrid neighbor)
-        {
-            base.OnNeighborPlaced(neighbor);
-            UpdateJunctionConnections();
-        }
-
-        public override void OnNeighborRemoved(SmallGrid neighbor)
-        {
-            base.OnNeighborRemoved(neighbor);
-            UpdateJunctionConnections();
-        }
-
-        public override void OnServerTick(float deltaTime)
-        {
-            UpdateEnds();
-        }
-
-        public void UpdateEnds()
-        {
-            if (!reapplyAppearance || OpenEnds.Count < 8)
-                return;
-            
-            if (RendererUp != null)
-                RendererUp.enabled = (connFlags & 1) == 1;
-
-            if (RendererDown != null)
-                RendererDown.enabled = (connFlags & 2) == 2;
-
-            reapplyAppearance = false;
-        }
-
         public override string GetStationpediaCategoryKey() => StationpediaCategoryStrings.CableCategory;
         public override string GetStationpediaCategory() => Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
 
@@ -203,51 +143,6 @@ namespace ReVolt
         {
             var smallCell = GridController.GetSmallCell(GridController.WorldToLocalGrid(OpenEnd.Transform.position, SmallGridSize, SmallGridOffset));
             return smallCell is { Other: CableTray } && smallCell.Other.IsConnected(OpenEnd);
-        }
-
-        public void UpdateJunctionConnections()
-        {
-            if (!GameManager.RunSimulation || OpenEnds.Count < 8)
-                return;
-            
-            if (GameManager.GameState == GameState.Loading)
-            {
-                if (!_isDeferringUpdate && OpenEnds.Count > 8)
-                    DeferredUJC().Forget();
-                return;
-            }
-
-            connFlags = 0;
-            
-            if (RendererUp != null && IsConnectedToTray(OpenEnds[8]))
-                connFlags |= 1;
-
-            if (RendererDown != null && OpenEnds.Count > 10 && IsConnectedToTray(OpenEnds[10]))
-                connFlags |= 2;
-
-            reapplyAppearance = true;
-            
-            if (NetworkManager.IsServer)
-                NetworkUpdateFlags |= FLAG_CONNECTIONS;
-        }
-
-        private bool _isDeferringUpdate;
-
-        private async UniTaskVoid DeferredUJC()
-        {
-            if (OpenEnds.Count < 8 || _isDeferringUpdate)
-                return;
-
-            _isDeferringUpdate = true;
-            do
-            {
-                await UniTask.NextFrame();
-            } while (GameManager.GameState == GameState.Loading);
-
-            await UniTask.SwitchToMainThread();
-            
-            UpdateJunctionConnections();
-            _isDeferringUpdate = false;
         }
 
         public IEnumerable<Connection> Connections
