@@ -52,6 +52,9 @@ namespace ReVolt
             for (var index = 0; index < span.Length; ++index)
             {
                 var cable = span[index].Get<Cable>();
+                if (cable == null) 
+                    continue; 
+                    
                 cable.CableNetwork?.Remove(cable);
                 cable.CableNetwork = null;
             }
@@ -60,21 +63,28 @@ namespace ReVolt
         private static readonly HashSet<int> RebuildExclusions = new();
         
 
-        public void OnMembersChanged()
+        public async void OnMembersChanged()
         {
-            // If sim not running, cable networks will be rebuilt externally later
+        
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
                 return;
+
+            await UniTask.Yield(PlayerLoopTiming.Update);
 
             Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
             var count = 0;
             FillConnected<Cable>(buf, ref count);
             var span = buf[..count];
 
-
             for (var index = 0; index < span.Length; ++index)
             {
                 var cable = span[index].Get<Cable>();
+
+                if (cable == null)
+                    continue;
+
+                if (cable.CableNetwork == null)
+                    continue;
 
                 var col = GameManager.GetColorIndex(cable.CustomColor);
                 var volt = (int)cable.MaxVoltage;
@@ -82,7 +92,7 @@ namespace ReVolt
                 if (!RebuildExclusions.Add(col + volt * 64))
                     continue;
 
-                CableNetwork.RebuildCableNetworkServer(span[index]);
+                CableNetwork.RebuildCableNetworkServer(cable);
             }
         }
 
