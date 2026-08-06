@@ -17,6 +17,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -5259835759396771884, guid: 8684ed02e1509525980e46f628ca6d49, type: 3}
     - target: {fileID: 3299121507105113919, guid: 49411ec32533fa6aea2f00a864e012eb, type: 3}
+      propertyPath: Blueprint
+      value: 
+      objectReference: {fileID: 6561700008337530102, guid: dfe4f2b75942614f0bcf52a0772e7155, type: 3}
+    - target: {fileID: 3299121507105113919, guid: 49411ec32533fa6aea2f00a864e012eb, type: 3}
       propertyPath: PrefabHash
       value: -1491195482
       objectReference: {fileID: 0}
