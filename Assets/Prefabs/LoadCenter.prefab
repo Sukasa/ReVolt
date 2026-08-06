@@ -1921,7 +1921,7 @@ MonoBehaviour:
   IsCustomThing: 0
   ThumbnailOffset: {x: 0, y: 0, z: 0}
   ThumbnailRotation: {x: 0, y: 0, z: 0, w: 0}
-  Thumbnail: {fileID: 21300000, guid: d18e2bc9139fc254496e8ba356f8d247, type: 3}
+  Thumbnail: {fileID: 21300000, guid: d7ed837f08f1611bb8f146a6fd9f1936, type: 3}
   Thumbnails: []
   IsEntity: 0
   _isOccluded: 0
