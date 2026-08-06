@@ -20,57 +20,88 @@ namespace ReVolt
     public class CableTray : SmallSingleGrid, ICableTrayComponent, IPatchable, ISmartRotatable
     {
         public static readonly List<CableTray> AllTrays = new(); // Master list used for the meson scanners as PseudoNetworks are not tracked globally
-        
+
+        private static readonly HashSet<int> RebuildExclusions = new();
+        private static readonly HashSet<long> SeenTrays = new();
+
         public override void OnRegistered(Cell cell)
         {
             base.OnRegistered(cell);
             AllTrays.Add(this);
-            RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkCreate(this);
+            SeenTrays.Clear();
+            PropagateNetworkUpdate(Network.Members);
         }
 
         public override void OnDeregistered()
         {
             AllTrays.Remove(this);
+
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
+            var count = 0;
+            FillConnected<CableTray>(buf, ref count);
+
             base.OnDeregistered();
-            RebuildExclusions.Clear();
             ReVolt.CableTrayNetwork.RebuildNetworkDestroy(this);
+            SeenTrays.Clear();
+
+            var span = buf[..count];
+            for (var index = 0; index < span.Length; ++index)
+                PropagateNetworkUpdate(span[index].Get<CableTray>().Network.Members);
+        }
+
+        private static void PropagateNetworkUpdate(IEnumerable<ICableTrayComponent> TraySet)
+        {
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
+
+            foreach (var Tray in TraySet)
+            {
+                if (!SeenTrays.Add(Tray.ReferenceId))
+                    continue;
+
+                var count = 0;
+                Tray.FillConnected<Cable>(buf, ref count);
+                var span = buf[..count];
+
+                for (var index = 0; index < span.Length; ++index)
+                {
+                    var cable = span[index].Get<Cable>();
+
+                    if (cable == null)
+                        continue;
+
+                    if (cable.CableNetwork == null)
+                        continue;
+
+                    var col = GameManager.GetColorIndex(cable.CustomColor);
+                    var volt = (int)cable.MaxVoltage;
+
+                    if (!RebuildExclusions.Add(col + volt * 64))
+                        continue;
+
+                    cable.CableNetwork ??= new CableNetwork(cable);
+
+                    CableNetwork.RebuildCableNetworkServer(cable);
+                }
+            }
+            RebuildExclusions.Clear();
         }
 
         public void OnMemberAdded(ICableTrayComponent member)
         {
-            RebuildExclusions.Clear();
         }
 
         public void OnMemberRemoved(ICableTrayComponent member)
         {
-            RebuildExclusions.Clear();
-            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
-            var count = 0;
-            FillConnected<Cable>(buf, ref count);
-            var span = buf[..count];
-            for (var index = 0; index < span.Length; ++index)
-            {
-                var cable = span[index].Get<Cable>();
-                if (cable == null) 
-                    continue; 
-                    
-                cable.CableNetwork?.Remove(cable);
-                cable.CableNetwork = null;
-            }
         }
 
-        private static readonly HashSet<int> RebuildExclusions = new();
-        
 
-        public async void OnMembersChanged()
+        public void OnMembersChanged()
         {
-        
-            if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
-                return;
+        }
 
-            await UniTask.Yield(PlayerLoopTiming.Update);
-
+        private unsafe void OnMembersChangedDeferred()
+        {
             Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
             var count = 0;
             FillConnected<Cable>(buf, ref count);
@@ -91,6 +122,8 @@ namespace ReVolt
 
                 if (!RebuildExclusions.Add(col + volt * 64))
                     continue;
+
+                cable.CableNetwork ??= new CableNetwork(cable);
 
                 CableNetwork.RebuildCableNetworkServer(cable);
             }
