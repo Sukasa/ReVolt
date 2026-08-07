@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.7.7</Version>
+  <Version>1.7.8</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -66,9 +66,9 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.7.7[/h3]
+    [h3]Version 1.7.8[/h3]
     [list]
-    [*] More cable tray fixes!
+    [*] Hotfix for multiplayer and game-load bug in 1.7.7
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>

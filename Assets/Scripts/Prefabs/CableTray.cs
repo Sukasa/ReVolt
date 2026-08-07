@@ -52,6 +52,9 @@ namespace ReVolt
 
         private static void PropagateNetworkUpdate(IEnumerable<ICableTrayComponent> TraySet)
         {
+            if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
+                return;
+            
             Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
 
             foreach (var Tray in TraySet)
