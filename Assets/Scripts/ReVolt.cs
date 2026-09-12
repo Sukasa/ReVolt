@@ -6,6 +6,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using JetBrains.Annotations;
 using LaunchPadBooster;
+using LaunchPadBooster.Patching;
 using LibConstruct;
 using ReVolt.Assets.Scripts;
 using ReVolt.Interfaces;
@@ -20,6 +21,8 @@ namespace ReVolt
 
         [UsedImplicitly] // Used by Re-Volt: Amped!
         public static Type PowerTickType = typeof(RevoltTick);
+
+        internal static ReVolt Instance;
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
@@ -45,6 +48,8 @@ namespace ReVolt
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
         {
+            Instance = this;
+            
             Debug.Log("Re-Volt is loading");
 
             // Battery Balancing config
@@ -115,7 +120,7 @@ namespace ReVolt
             Debug.Log("Re-Volt config loaded; patching...");
             
             Harmony harmony = new("ReVolt");
-            harmony.PatchAll();
+            harmony.ConditionalPatchAll();
             Debug.Log("Re-Volt patches implemented, loading prefabs...");
             
             if (enablePrefabContent.Value)
