@@ -25,8 +25,8 @@ namespace ReVolt.Prefabs
     {
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
-        private static readonly MethodInfo DataSetter = AccessTools.Property(typeof(Device), nameof(DataCables)).GetSetMethod(nonPublic: true);
-        private static readonly MethodInfo PowerSetter = AccessTools.Property(typeof(Device), nameof(PowerCables)).GetSetMethod(nonPublic: true);
+        private static readonly MethodInfo DataSetter = AccessTools.Property(typeof(Device), nameof(DataCables))?.GetSetMethod(nonPublic: true);
+        private static readonly MethodInfo PowerSetter = AccessTools.Property(typeof(Device), nameof(PowerCables))?.GetSetMethod(nonPublic: true);
 
         public GameObject InteractablesContainer;
 
