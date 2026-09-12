@@ -9,8 +9,7 @@ namespace ReVolt.Patches
     public class DevicePatches
     {
 
-        [HarmonyPrefix]
-        [HarmonyPatch("AssessPower")]
+        [HarmonyPrefix, HarmonyPatch("AssessPower")]
         public static bool AssessPower(CableNetwork cableNetwork, bool isOn, Device __instance)
         {
             if (cableNetwork == null || !isOn)

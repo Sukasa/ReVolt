@@ -10,13 +10,9 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Transformer))]
     internal class TransformerPatches
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(Transformer.GetGeneratedPower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Transformer.GetGeneratedPower)), OptionPatch("enableTransformerExploitMitigation")]
         public static bool GetGeneratedPowerPatch(CableNetwork cableNetwork, Transformer __instance, ref float __result, float ____powerProvided, CableNetwork ___InputNetwork)
         {
-            if (!ReVolt.enableTransformerExploitMitigation.Value)
-                return true;
-
             if (__instance.OutputNetwork == null || __instance.Error == 1 || cableNetwork != __instance.OutputNetwork || !__instance.OnOff || __instance.InputNetwork == null)
             {
                 __result = 0f;
@@ -27,13 +23,9 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(Transformer.GetUsedPower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Transformer.GetUsedPower)), OptionPatch("enableTransformerExploitMitigation")]
         public static bool GetUsedPowerPatch([NotNull] CableNetwork cableNetwork, Transformer __instance, ref float __result, float ____powerProvided)
         {
-            if (!ReVolt.enableTransformerExploitMitigation.Value)
-                return true;
-
             if (__instance.InputNetwork == null || __instance.OutputNetwork == null || cableNetwork != __instance.InputNetwork)
             {
                 __result = 0f;
@@ -44,13 +36,9 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(Transformer.ReceivePower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Transformer.ReceivePower)), OptionPatch("enableTransformerExploitMitigation")]
         public static bool ReceivePowerPatch([NotNull] CableNetwork cableNetwork, float powerAdded, Transformer __instance, ref float ____powerProvided)
         {
-            if (!ReVolt.enableTransformerExploitMitigation.Value)
-                return true;
-
             if (__instance.InputNetwork != null && cableNetwork != __instance.InputNetwork || !__instance.OnOff || __instance.InputNetwork == null)
                 return false;
 
@@ -62,13 +50,9 @@ namespace ReVolt.Patches
             ____powerProvided -= powerAdded;
             return false;
         }
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(Transformer.CanLogicRead))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Transformer.CanLogicRead)), OptionPatch("enableTransformerLogicAddition")]
         public static bool CanLogicReadPatch(LogicType logicType, Transformer __instance, ref bool __result)
         {
-            if (!ReVolt.enableTransformerLogicAddition.Value)
-                return true;
-
             if (logicType != LogicType.PowerActual)
                 return true;
             
@@ -77,12 +61,9 @@ namespace ReVolt.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(Transformer.GetLogicValue))]
+        [HarmonyPatch(nameof(Transformer.GetLogicValue)), OptionPatch("enableTransformerLogicAddition")]
         public static bool GetLogicValuePatch(LogicType logicType, Transformer __instance, ref double __result, float ____powerProvided)
         {
-            if (!ReVolt.enableTransformerLogicAddition.Value)
-                return true;
-
             if (logicType != LogicType.PowerActual)
                 return true;
             

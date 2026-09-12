@@ -63,7 +63,7 @@ namespace ReVolt.Patches
             }
         }
         
-        [HarmonyTranspiler, HarmonyPatch("RebuildNetwork")]
+        [HarmonyTranspiler, HarmonyPatch("RebuildNetwork"), OptionPatch("enablePrefabContent")]
         public static IEnumerable<CodeInstruction> RebuildNetworkInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var inject2PatternStep = 0;
@@ -97,7 +97,7 @@ namespace ReVolt.Patches
             }
         }
 
-        [HarmonyTranspiler, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks))]
+        [HarmonyTranspiler, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks)), OptionPatch("enablePrefabContent")]
         public static IEnumerable<CodeInstruction> ConnectedNetworksInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var InjectTrayConnections = SymbolExtensions.GetMethodInfo(() => ConnectedNetworksExtra(null, null));

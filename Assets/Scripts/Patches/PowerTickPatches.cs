@@ -6,8 +6,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(PowerTick))]
     public class PowerTickPatches
     {
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(PowerTick.Initialise))]
+        [HarmonyPrefix, HarmonyPatch(nameof(PowerTick.Initialise))]
         public static bool InitialisePatch(PowerTick __instance, CableNetwork cableNetwork)
         {
             // If the injection failed, run the original code
@@ -18,8 +17,7 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(PowerTick.CalculateState))]
+        [HarmonyPrefix, HarmonyPatch(nameof(PowerTick.CalculateState))]
         public static bool CalculateStatePatch(PowerTick __instance)
         {
             // If the injection failed, run the original code
@@ -30,8 +28,7 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(PowerTick.ApplyState))]
+        [HarmonyPrefix, HarmonyPatch(nameof(PowerTick.ApplyState))]
         public static bool ApplyStatePatch(PowerTick __instance)
         {
             // If the injection failed, run the original code
@@ -42,15 +39,13 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyReversePatch]
-        [HarmonyPatch("CacheState")]
+        [HarmonyReversePatch, HarmonyPatch("CacheState")]
         public static void CacheState(PowerTick _)
         {
             // Stub
         }
 
-        [HarmonyReversePatch]
-        [HarmonyPatch("CheckForRecursiveProviders")]
+        [HarmonyReversePatch, HarmonyPatch("CheckForRecursiveProviders")]
         public static void CheckForRecursiveProviders(PowerTick _)
         {
             // Stub

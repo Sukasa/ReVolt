@@ -8,7 +8,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Computer))]
     public class ComputerPatches
     {
-        [HarmonyPrefix, HarmonyPatch(nameof(Computer.DeviceList))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Computer.DeviceList)), OptionPatch("enablePrefabContent")]
         public static bool DeviceListPatch(Computer __instance, ref List<ILogicable> __result)
         {
             if (__instance.DataCable == null)

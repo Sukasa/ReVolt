@@ -10,12 +10,9 @@ namespace ReVolt.Patches
     public class SmallGridPatches
     {
         // Patch to allow cable trays and cables to intersect with their open ends
-        [HarmonyPrefix, HarmonyPatch(nameof(SmallGrid.IsPipeEndCollision))]
+        [HarmonyPrefix, HarmonyPatch(nameof(SmallGrid.IsPipeEndCollision)), OptionPatch("enablePrefabContent")]
         public static bool IsPipeEndCollisionPatch(SmallGrid smallGrid, SmallGrid __instance, ref bool __result)
         {
-            if (!ReVolt.enablePrefabContent.Value)
-                return true;
-
             if (!((__instance is Cable && smallGrid is CableTray) | (__instance is CableTray && smallGrid is Cable)))
                 return true;
 

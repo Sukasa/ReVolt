@@ -9,7 +9,7 @@ namespace ReVolt.Patches
     {
         private const string ElectronicsPage = "Electronics"; // Stationpedia._electronicsPage
 
-        [HarmonyPrefix, HarmonyPatch(nameof(Stationpedia.AddElectronicsStationpedia))]
+        [HarmonyPrefix, HarmonyPatch(nameof(Stationpedia.AddElectronicsStationpedia)), OptionPatch("enablePrefabContent")]
         public static bool AddElectronicsStationpediaPatch(Thing dynamicThing, StationCategoryInsert insert, ref bool __result)
         {
             switch (dynamicThing)

@@ -6,7 +6,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(DeviceInputOutputCircuit))]
     public class DeviceInputOutputCircuitPatches
     {
-        [HarmonyPrefix, HarmonyPatch(nameof(DeviceInputOutputCircuit.GetLogicableFromIndex))]
+        [HarmonyPrefix, HarmonyPatch(nameof(DeviceInputOutputCircuit.GetLogicableFromIndex)), OptionPatch("enablePrefabContent")]
         public static bool GetLogicableFromIndexPatch(int deviceIndex, int networkIndex, DeviceInputOutputCircuit __instance, ref ILogicable __result)
         {
             if (deviceIndex == int.MaxValue)
@@ -32,7 +32,7 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(DeviceInputOutputCircuit.GetLogicableFromId))]
+        [HarmonyPrefix, HarmonyPatch(nameof(DeviceInputOutputCircuit.GetLogicableFromId)), OptionPatch("enablePrefabContent")]
         public static bool GetLogicableFromIdPatch(int deviceId, int networkIndex, DeviceInputOutputCircuit __instance, ref ILogicable __result)
         {
             if (deviceId == 0)

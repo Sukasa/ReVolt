@@ -15,8 +15,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Thing))]
     public class ThingPatches
     {
-        [HarmonyPostfix]
-        [HarmonyPatch("HasState")]
+        [HarmonyPostfix, HarmonyPatch("HasState"), OptionPatch("enablePrefabContent")]
         public static void FixStateIssues(string stateName, ref Interactable interactable, Thing __instance, ref bool __result)
         {
             var num = Animator.StringToHash(stateName);
@@ -53,7 +52,7 @@ namespace ReVolt.Patches
 
         // Sprayer fix - patches where Thing calls ISprayer.DoSpray() because I cannot directly patch an interface static method in harmony
 
-        [HarmonyTranspiler, HarmonyPatch(nameof(Thing.AttackWith))]
+        [HarmonyTranspiler, HarmonyPatch(nameof(Thing.AttackWith)), OptionPatch("enablePrefabContent")]
         public static IEnumerable<CodeInstruction> RenderPatch(IEnumerable<CodeInstruction> instructions)
         {
             var BaseFunc = AccessTools.Method(typeof(ISprayer), nameof(ISprayer.DoSpray));

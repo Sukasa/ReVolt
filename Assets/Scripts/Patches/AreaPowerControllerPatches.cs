@@ -9,12 +9,9 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(AreaPowerControl))]
     internal class AreaPowerControllerPatches
     {
-        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.ReceivePower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.ReceivePower)), OptionPatch("enableAreaPowerControlFix")]
         public static bool ReceivePowerPatch(CableNetwork cableNetwork, float powerAdded, AreaPowerControl __instance, ref float ____powerProvided)
         {
-            if (!ReVolt.enableAreaPowerControlFix.Value)
-                return true;
-
             // Check that the network we're receiving power from is also the network we SHOULD be receiving power from
             if (__instance.InputNetwork == null || cableNetwork != __instance.InputNetwork)
                 return false;
@@ -49,13 +46,9 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(AreaPowerControl.UsePower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.UsePower)), OptionPatch("enableAreaPowerControlFix")]
         public static bool UsePowerPatch(CableNetwork cableNetwork, float powerUsed, AreaPowerControl __instance, ref float ____powerProvided)
         {
-            if (!ReVolt.enableAreaPowerControlFix.Value)
-                return true;
-
             if (cableNetwork != __instance.OutputNetwork)
                 return false;
 
@@ -75,20 +68,14 @@ namespace ReVolt.Patches
                 }
             }
             
-            
-
             ____powerProvided += powerUsed;
 
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(AreaPowerControl.AvailablePower), MethodType.Getter)]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.AvailablePower), MethodType.Getter), OptionPatch("enableAreaPowerControlFix")]
         public static bool AvailablePowerGetterPatch(AreaPowerControl __instance, ref float __result, float ____powerProvided)
         {
-            if (!ReVolt.enableAreaPowerControlFix.Value)
-                return true;
-            
             var availablePower = __instance.InputNetwork?.PotentialLoad ?? 0.0f;
             __result = Math.Max(0.0f, availablePower - ____powerProvided - __instance.UsedPower);
             
@@ -98,14 +85,9 @@ namespace ReVolt.Patches
             return false;
         }
         
-
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(AreaPowerControl.GetUsedPower))]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.GetUsedPower)), OptionPatch("enableAreaPowerControlFix")]
         public static bool GetUsedPowerPatch(CableNetwork cableNetwork, AreaPowerControl __instance, ref float __result, float ____powerProvided, CableNetwork ___InputNetwork)
         {
-            if (!ReVolt.enableAreaPowerControlFix.Value)
-                return true;
-
             __result = 0.0f;
 
             if (__instance.InputNetwork == null || cableNetwork != __instance.InputNetwork)
