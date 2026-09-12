@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.7.9</Version>
+  <Version>1.8.0</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -66,11 +66,10 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.7.9[/h3]
+    [h3]Version 1.8.0[/h3]
     [list]
-    [*] Computers can now see through optoisolators properly
-    [*] Cable Tray now fits in the cable tool belt, and in tool slots in the normal belt (like cable coil)
-    [*] Cable Tray stacks are now splittable like cable coils
+    [*] Rewrote some patches to fix compatibility with other mods
+    [*] Set up conditional harmony patch attributes; disabling options disables the patch instead of wasteful run-time checks
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
