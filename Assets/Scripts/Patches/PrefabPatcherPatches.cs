@@ -17,6 +17,21 @@ namespace ReVolt.Patches
                 {
                     BatteryPrefab.PowerMaximum *= ReVolt.configBatteryCapacityFactor.Value;
                 }
+
+                if (sourcePrefab?.GetComponent<Thing>() is CableToolBelt beltPrefab)
+                {
+                    if (!ReVolt.enablePrefabContent.Value)
+                        continue;
+
+                    int len;
+                    for (var i = 0; i < beltPrefab.SlotCount; i++)
+                        if (beltPrefab.Slots[i].SpecificTypePrefabHashes is not null && (len = beltPrefab.Slots[i].SpecificTypePrefabHashes.Length) > 0)
+                        {
+                            Array.Resize(ref beltPrefab.Slots[i].SpecificTypePrefabHashes, len + 1);
+                            beltPrefab.Slots[i].SpecificTypePrefabHashes[len] = -935097351; // Hardcoded hash for ItemKitCableTray
+                        }
+                
+                }
                 
                 if (sourcePrefab?.GetComponent<Thing>() is Transformer transformerPrefab)
                 {
