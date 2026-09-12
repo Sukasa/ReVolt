@@ -71,7 +71,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-#custom entries
+# Blender backups
+*.blend1*
+# Assemblies
 /Assets/Assemblies/*
 /Assets/StationeersMods/Resources/*
 !/Assets/Assemblies/assemblies.txt
