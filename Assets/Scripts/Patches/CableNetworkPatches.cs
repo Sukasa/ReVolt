@@ -4,11 +4,8 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Transactions;
-using Assets.Scripts;
+using System.Reflection.Emit;
 using Assets.Scripts.GridSystem;
-using Assets.Scripts.Objects.Pipes;
-using Console = System.Console;
 
 namespace ReVolt.Patches
 {
@@ -40,115 +37,102 @@ namespace ReVolt.Patches
         [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, typeof(long))]
         public static void Constructor_Long(CableNetwork __instance) => Inject(__instance);
 
-
-        [HarmonyPrefix, HarmonyPatch("RebuildNetwork")]
-        public static unsafe bool RebuildNetworkPatch(Cable cable, CableNetwork newNetwork, CableNetwork oldNetwork)
+        private static int LocIdx(object s)
         {
-            Span<SmallCellRef> buf1 = stackalloc SmallCellRef[32];
-            var count1 = 0;
-            cable.FillConnected<Cable>(buf1, ref count1);
-            var cableQueue = new Queue<Cable>(count1);
-            var cableSet = new HashSet<Cable>(oldNetwork != null ? oldNetwork.CableList.Count : 16 /*0x10*/)
+            return s switch
             {
-                cable
+                LocalBuilder lb => lb.LocalIndex,
+                int i => i,
+                sbyte sb => sb,
+                _ => -1
             };
-            var span = buf1[..count1];
-            for (var index = 0; index < span.Length; ++index)
-            {
-                var cable1 = span[index].Get<Cable>();
-                if (cable1 != null)
-                    cableQueue.Enqueue(cable1);
-            }
-            count1 = 0;
-            cable.FillConnected<CableTray>(buf1, ref count1);
-            span = buf1[..count1];
+        }
+
+
+        public static void RebuildNetwork_CableTray(Cable cable, Queue<Cable> cableQueue)
+        {
+            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
+            var count = 0;
+            cable.FillConnected<CableTray>(buf, ref count);
+            var span = buf[..count];
             for (var index = 0; index < span.Length; ++index)
             {
                 var conn = span[index].Get<CableTray>().MatchCables(cable);
                 foreach (var c in conn)
                     cableQueue.Enqueue(c);
             }
+        }
+        
+        [HarmonyTranspiler, HarmonyPatch("RebuildNetwork")]
+        public static IEnumerable<CodeInstruction> RebuildNetworkInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
+        {
+            var inject2PatternStep = 0;
+            var InjectTrayConnections = SymbolExtensions.GetMethodInfo(() => RebuildNetwork_CableTray(null, null));
 
-            Span<SmallCellRef> buf2 = stackalloc SmallCellRef[32];
-
-            while (cableQueue.Count > 0)
+            foreach (var instruction in instructions)
             {
-                var cable2 = cableQueue.Dequeue();
-                if (cable2 != null && !cableSet.Contains(cable2) && !cable2.IsBeingDestroyed)
+                inject2PatternStep = inject2PatternStep switch
                 {
-                    cableSet.Add(cable2);
-                    var count2 = 0;
-                    cable2.FillConnected<Cable>(buf1, ref count2);
-                    span = buf1[..count2];
-                    for (var index = 0; index < span.Length; ++index)
-                    {
-                        var cable3 = span[index].Get<Cable>();
-                        if (cable3 != null && !cableSet.Contains(cable3))
-                            cableQueue.Enqueue(cable3);
-                    }
+                    0 when instruction.opcode == OpCodes.Ldarg_1 => 1,
+                    1 when instruction.opcode == OpCodes.Ldloc_S && LocIdx(instruction.operand) == 10 => 2,
+                    2 when instruction.opcode == OpCodes.Callvirt => 3,
+                    3 => 4,
+                    4 => 4,
+                    _ => 0
+                };
+                
+                yield return instruction;
 
-                    if (oldNetwork != null)
-                    {
-                        int count3 = 0;
-                        cable2.FillConnected<Device>(buf2, ref count3);
-                        span = buf2[..count3];
-                        for (var index = 0; index < span.Length; ++index)
-                        {
-                            SmallCellRef smallCellRef = span[index];
-                            oldNetwork.RemoveDevice(cable2, smallCellRef.Get<Device>());
-                        }
-                    }
-
-                    newNetwork.Add(cable2);
-                    
-                    int count = 0;
-                    cable2.FillConnected<CableTray>(buf2, ref count);
-                    span = buf2[..count];
-                    for (var index = 0; index < span.Length; ++index)
-                    {
-                        var conn = span[index].Get<CableTray>().MatchCables(cable2);
-                        foreach (var c in conn)
-                            cableQueue.Enqueue(c);
-                    }
+                if (instruction.opcode == OpCodes.Stloc_2)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldloc_2);
+                    yield return new CodeInstruction(OpCodes.Call, InjectTrayConnections);
                 }
-            }
 
-            return false;
+                if (inject2PatternStep != 3) continue;
+                yield return new CodeInstruction(OpCodes.Ldloc, 10);
+                yield return new CodeInstruction(OpCodes.Ldloc_2);
+                yield return new CodeInstruction(OpCodes.Call, InjectTrayConnections);
+            }
         }
 
+        [HarmonyTranspiler, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks))]
+        public static IEnumerable<CodeInstruction> ConnectedNetworksInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
+        {
+            var InjectTrayConnections = SymbolExtensions.GetMethodInfo(() => ConnectedNetworksExtra(null, null));
+            
+            foreach (var instruction in instructions)
+            {
+                if (instruction.opcode == OpCodes.Ret)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldloc_2);
+                    yield return new CodeInstruction(OpCodes.Call, InjectTrayConnections);
+                }
+                
+                yield return instruction;
+            }
+        }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks))]
-        public static unsafe bool ConnectedNetworks(ref List<CableNetwork> __result, Cable cable)
+        public static void ConnectedNetworksExtra(Cable cable, List<CableNetwork> networks)
         {
             Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
             var count = 0;
-            cable.FillConnected<Cable>(buf, ref count);
-            __result = new List<CableNetwork>(count);
-            var span = buf[..count];
-            for (var index = 0; index < span.Length; ++index)
-            {
-                var cable1 = span[index].Get<Cable>();
-                if (!__result.Contains(cable1.CableNetwork))
-                    __result.Add(cable1.CableNetwork);
-            }
-
-            count = 0;
             cable.FillConnected<CableTray>(buf, ref count);
 
             if (CablePatches.GateTriggerRepeatRegistration && count > 0)
             {
                 CablePatches.RetriggerRegistration = true;
-                return false;
+                return;
             }
 
-            span = buf[..count];
+            var span = buf[..count];
             for (var index = 0; index < span.Length; ++index)
             {
                 var tray = span[index].Get<CableTray>();
-                tray.MatchCableNetworks(__result, cable);
+                tray.MatchCableNetworks(networks, cable);
             }
-
-            return false;
         }
 
         /// <summary>
