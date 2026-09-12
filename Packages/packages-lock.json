@@ -136,14 +136,14 @@
       "dependencies": {
         "com.unity.modules.assetbundle": "1.0.0"
       },
-      "hash": "645efedf4618db6125ddd90f91706770777529bc"
+      "hash": "fb2fb22fd2331494a4ecb25ea8efc80b7fd9cdab"
     },
     "stationeers.modding.tools": {
       "version": "https://github.com/StationeersModding/StationeersModdingTools.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "52a80c051aced31c9ad15203b3908a5dbdc7e11e"
+      "hash": "d5a7ee07a96b9ce250945be1a32ff579f7634fd4"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
