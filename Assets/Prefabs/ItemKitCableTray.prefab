@@ -120,7 +120,43 @@ MonoBehaviour:
     Cutable: {fileID: 0}
     Light: {r: 1, g: 1, b: 1, a: 1}
     Color: {r: 1, g: 1, b: 1, a: 1}
-  Interactables: []
+  Interactables:
+  - StringKey: SplitOne
+    StringHash: -523628622
+    Parent: {fileID: 6917369816277724075}
+    Collider: {fileID: 0}
+    ParentInteractableIndex: 0
+    FakeCollider: {fileID: 0}
+    Bounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+    Action: 31
+    Animator: {fileID: 0}
+    JoinInProgressSync: 0
+    Layer: 0
+    CanKeyInteract: 1
+    KeyMap: 
+    AssociatedAudioEvents: []
+    ActionName: 
+    _state: 0
+  - StringKey: SplitHalf
+    StringHash: 336983938
+    Parent: {fileID: 6917369816277724075}
+    Collider: {fileID: 0}
+    ParentInteractableIndex: 0
+    FakeCollider: {fileID: 0}
+    Bounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+    Action: 32
+    Animator: {fileID: 0}
+    JoinInProgressSync: 0
+    Layer: 0
+    CanKeyInteract: 1
+    KeyMap: 
+    AssociatedAudioEvents: []
+    ActionName: 
+    _state: 0
   AudioEvents: []
   AudioSources: []
   BaseAnimator: {fileID: 0}
@@ -186,15 +222,13 @@ MonoBehaviour:
   EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   DiffuseIndex: 0
   SmoothnessIndex: 0
-  SortingClass: 0
+  SortingClass: 3
   RecipeTier: 1
-  CollisionSound: 0
+  CollisionSound: 6
   SlotWearAction: 0
-  SlotType: 0
-  SlotType1: 0
-  SlotType2: 0
+  SlotType: 17
   DeleteOnDestroyed: 1
-  UsingSound: 
+  UsingSound: CableConstructing
   UseCompleteSound: 
   deleteSlotItemsOnDeconstruct: 0
   HasLight: 0
@@ -233,6 +267,7 @@ MonoBehaviour:
   _isBuoyant: 1
   ChildSlotOffset: {x: 0, y: 0, z: 0}
   ChildSlotOffsetPosition: {x: 0, y: 0, z: 0}
+  LastPhysicsTick: 0
   IsUnderLava: 0
   IsInLavaObject: 0
   ReplacementTool: {fileID: 0}
