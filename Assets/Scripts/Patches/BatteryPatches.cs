@@ -46,9 +46,6 @@ namespace ReVolt.Patches
         [HarmonyPrefix, HarmonyPatch(nameof(Battery.CanLogicRead)), OptionPatch("enableBatteryLogicAddition")]
         public static bool CanLogicReadPatch(LogicType logicType, Battery __instance, ref bool __result)
         {
-            if (!ReVolt.enableBatteryLogicAddition.Value)
-                return true;
-
             if (logicType is not (LogicType.ExportQuantity or LogicType.ImportQuantity))
                 return true;
 
