@@ -22,7 +22,8 @@ namespace ReVolt
         [UsedImplicitly] // Used by Re-Volt: Amped!
         public static Type PowerTickType = typeof(RevoltTick);
 
-        internal static ReVolt Instance;
+        // Used by [OptionPatch] to bind patches to ConfigEntry<bool> values
+         internal static ReVolt Instance;
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
@@ -37,10 +38,11 @@ namespace ReVolt
 
         internal static ConfigEntry<bool> enablePrefabContent;
 
-        internal static ConfigEntry<bool> enableTransformerExploitMitigation;
-        internal static ConfigEntry<bool> enableTransformerLogicAddition;
-        internal static ConfigEntry<bool> enableBatteryLogicAddition;
-        internal static ConfigEntry<bool> enableAreaPowerControlFix;
+        [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerExploitMitigation;
+        [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerLogicAddition;
+        [UsedImplicitly] internal static ConfigEntry<bool> enableBatteryLogicAddition;
+        
+        [UsedImplicitly] internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
         public static readonly Mod MOD = new("Re-Volt", "1.8.0");
@@ -51,6 +53,42 @@ namespace ReVolt
             Instance = this;
             
             Debug.Log("Re-Volt is loading");
+
+            LoadConfiguration(config);
+            
+            // Now set up the patches and content loader (via patch)
+            Debug.Log("Re-Volt config loaded; patching...");
+            
+            Harmony harmony = new("ReVolt");
+            harmony.ConditionalPatchAll();
+            Debug.Log("Re-Volt patches implemented, loading prefabs...");
+            
+            if (enablePrefabContent.Value)
+            {
+                MOD.AddPrefabs(prefabs);
+
+                for (var index = prefabs.Count - 1; index >= 0; index--)
+                {
+                    var prefab = prefabs[index];
+                    var prefabThing = prefab.GetComponent<Thing>();
+                    if (prefabThing == null)
+                        continue;
+
+                    if (prefabThing is IPatchable y)
+                        y.PatchPrefab();
+                    else
+                        MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(prefabThing is IDefaultColour IDC ? IDC.DefaultColor : ColorType.White);
+                }
+            }
+            
+            Debug.Log("Re-Volt loaded prefabs");
+
+            MOD.AddSaveDataType<CircuitBreakerSaveData>();
+            MOD.Networking.Required = true;
+        }
+
+        private void LoadConfiguration(ConfigFile config)
+        {
 
             // Battery Balancing config
             configMaxBatteryChargeRate = config.Bind(
@@ -115,38 +153,6 @@ namespace ReVolt
             enablePrefabContent = config.Bind(
                 new ConfigDefinition("Content", "Enable Custom Objects"), true,
                 new ConfigDescription("Enable Re-Volt Circuit Breakers, Heavy Breakers, Load Center, and Cable Tray"));
-
-            // Now set up the patches and content loader (via patch)
-            Debug.Log("Re-Volt config loaded; patching...");
-            
-            Harmony harmony = new("ReVolt");
-            harmony.ConditionalPatchAll();
-            Debug.Log("Re-Volt patches implemented, loading prefabs...");
-            
-            if (enablePrefabContent.Value)
-            {
-                MOD.AddPrefabs(prefabs);
-
-                for (var index = prefabs.Count - 1; index >= 0; index--)
-                {
-                    var prefab = prefabs[index];
-                    var prefabThing = prefab.GetComponent<Thing>();
-                    if (prefabThing == null)
-                        continue;
-
-                    if (prefabThing is IPatchable y)
-                        y.PatchPrefab();
-                    else
-                        MOD.SetupPrefabs(prefabThing.PrefabName).SetBlueprintMaterials().SetPaintableColor(prefabThing is IDefaultColour IDC ? IDC.DefaultColor : ColorType.White);
-                }
-                
-                
-            }
-            
-            Debug.Log("Re-Volt loaded prefabs");
-
-            MOD.AddSaveDataType<CircuitBreakerSaveData>();
-            MOD.Networking.Required = true;
         }
     }
 }
