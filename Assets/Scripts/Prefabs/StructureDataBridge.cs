@@ -103,6 +103,9 @@ namespace ReVolt.Prefabs
                             case DeviceInputOutputImportCircuit device4:
                                 device4.OnNetworkedRefresh(null);
                                 break;
+                            case Computer device5:
+                                device5.OnNetworkedRefresh(null);
+                                break;
                             // TODO identify (mostly via testing) if there are other device types that need to be refreshed
                         }
                     }
