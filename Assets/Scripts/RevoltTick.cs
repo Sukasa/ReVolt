@@ -23,7 +23,7 @@ namespace ReVolt
         {
             public float PowerUsed;
             public float PowerProvided;
-            internal PowerClass Category;
+            public PowerClass Category;
         }
 
         public bool IsDirty = true;
