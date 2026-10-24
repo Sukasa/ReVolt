@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using Assets.Scripts;
 using Assets.Scripts.GridSystem;
 
 namespace ReVolt.Patches
