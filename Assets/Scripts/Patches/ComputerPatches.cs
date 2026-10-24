@@ -13,7 +13,7 @@ namespace ReVolt.Patches
         {
             if (__instance.DataCable == null)
                 __instance.FindDataCable();
-            __result = Logicable.RecalculateSortedDevicesList(__instance.DataCableNetwork);
+            __result = Logicable.RecalculateSortedDevicesList(__instance.DataCableNetwork) ?? new List<ILogicable>();
             return false;
         }
     }
