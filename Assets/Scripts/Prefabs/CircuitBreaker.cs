@@ -649,7 +649,7 @@ namespace ReVolt
                 LogicType.Setting => Setting,
                 LogicType.Maximum => MaxTripCurrent,
                 LogicType.Ratio when MaxTripCurrent > 0 => Setting / MaxTripCurrent,
-                LogicType.Ratio when MaxTripCurrent == 0 => 0.0,
+                LogicType.Ratio when MaxTripCurrent <= 0 => 0.0,
                 LogicType.PowerGeneration => _transferredLast,
                 LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
                 LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,

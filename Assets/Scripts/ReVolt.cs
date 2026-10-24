@@ -25,7 +25,7 @@ namespace ReVolt
         public static Type PowerTickType = typeof(RevoltTick);
 
         // Used by [OptionPatch] to bind patches to ConfigEntry<bool> values
-         internal static ReVolt Instance;
+        internal static ReVolt Instance;
         
         // Configuration vars
         internal static ConfigEntry<float> configMaxBatteryChargeRate;
@@ -95,7 +95,7 @@ namespace ReVolt
             MOD.Networking.Required = true;
         }
 
-        private void LoadConfiguration(ConfigFile config)
+        private static void LoadConfiguration(ConfigFile config)
         {
 
             // Battery Balancing config
