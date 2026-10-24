@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
+using Assets.Scripts.Objects.Motherboards;
 using HarmonyLib;
 using UnityEngine;
 
@@ -9,6 +11,12 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(AreaPowerControl))]
     internal class AreaPowerControllerPatches
     {
+        private class APCPower
+        {
+            internal float Usage;
+        }
+        private static readonly ConditionalWeakTable<AreaPowerControl, APCPower> PowerUsages = new();
+        
         [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.ReceivePower)), OptionPatch("enableAreaPowerControlFix")]
         public static bool ReceivePowerPatch(CableNetwork cableNetwork, float powerAdded, AreaPowerControl __instance, ref float ____powerProvided)
         {
@@ -69,10 +77,18 @@ namespace ReVolt.Patches
             }
             
             ____powerProvided += powerUsed;
+            PowerUsages.AddOrUpdate(__instance, new APCPower {  Usage = powerUsed });
 
             return false;
         }
 
+        [HarmonyPostfix, HarmonyPatch(nameof(AreaPowerControl.GetLogicValue)), OptionPatch("enableAreaPowerControlFix")]
+        public static void AfterGetLogicValue(LogicType logicType, AreaPowerControl __instance, ref double __result)
+        {
+            if (logicType == LogicType.RequiredPower)
+                __result = PowerUsages.GetOrCreateValue(__instance).Usage + __instance.UsedPower;
+        }
+        
         [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.AvailablePower), MethodType.Getter), OptionPatch("enableAreaPowerControlFix")]
         public static bool AvailablePowerGetterPatch(AreaPowerControl __instance, ref float __result, float ____powerProvided)
         {
@@ -93,7 +109,7 @@ namespace ReVolt.Patches
             if (__instance.InputNetwork == null || cableNetwork != __instance.InputNetwork)
                 return false;
 
-            float usedPower = 0.0f;
+            var usedPower = 0.0f;
             if (__instance.OnOff)
             {
                 usedPower += __instance.UsedPower;
