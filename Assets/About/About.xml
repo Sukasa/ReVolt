@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.8.1</Version>
+  <Version>1.8.2</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -66,9 +66,9 @@
 ]]></InGameDescription>
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.8.1[/h3]
+    [h3]Version 1.8.2[/h3]
     [list]
-    [*] Accidental debug output was left in...
+    [*] Slight refactor of the circuit breaker trip logic to support a different mod
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>

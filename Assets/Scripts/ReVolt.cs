@@ -47,7 +47,7 @@ namespace ReVolt
         [UsedImplicitly] internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.8.1");
+        public static readonly Mod MOD = new("Re-Volt", "1.8.2");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
