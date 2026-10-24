@@ -13,6 +13,7 @@ using ReVolt.Assets.Scripts;
 using ReVolt.Components;
 using ReVolt.Interfaces;
 using System.Text;
+using JetBrains.Annotations;
 using LaunchPadBooster.Utils;
 using UnityEngine;
 
@@ -130,19 +131,30 @@ namespace ReVolt
 
         protected override bool IsOperable => (Mode == MODE_ON) && base.IsOperable;
 
+        [UsedImplicitly]
+        public virtual float getTripChance()
+        {
+            if (!(_transferred > Setting) || Mode != MODE_ON)
+                return -1.0f;
+            
+            // Do a cheap calculation to get the % chance to trip the breaker
+            var tripChance = Mathf.Pow(_transferred / (float)Setting, 1.25f) - 1.0f;
+
+            // If we're a smart breaker, trip instantly if tripChance is nonzero
+            if (isSmartBreaker && tripChance > 0.0)
+                return 1.0f;
+
+            return tripChance * ReVolt.configCableBurnFactor.Value;
+
+        }
+
         public override void OnPowerTick()
         {
             base.OnPowerTick();
 
-            if (_transferred > Setting && Mode == MODE_ON)
-            {
-                // Do a cheap calculation to get the % chance to trip the breaker
-                var tripChance = Mathf.Pow(_transferred / (float)Setting, 1.25f) - 1.0f;
-
-                // If we fail the chance then trip, *or* if we're a smart breaker then trip instantly.
-                if (isSmartBreaker || (float)RNG.NextDouble() <= tripChance * ReVolt.configCableBurnFactor.Value)
-                    Trip();
-            }
+            // If we fail the chance then trip, *or* if we're a smart breaker then trip instantly.
+            if ((float)RNG.NextDouble() <= getTripChance())
+                Trip();
 
             _transferredLast = _transferred;
             _transferred = 0f;
@@ -487,7 +499,7 @@ namespace ReVolt
                 writer.WriteInt64(ConnectionRefIds[1]);
                 writer.WriteInt64(ConnectionRefIds[2]);
             }
-            
+
             writer.WriteSingle(_deficit);
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
@@ -513,7 +525,7 @@ namespace ReVolt
                 ConnectionRefIds[1] = reader.ReadInt64();
                 ConnectionRefIds[2] = reader.ReadInt64();
             }
-            
+
             _deficit = reader.ReadSingle();
 
             if (!IsNetworkUpdateRequired(FLAG_LOCKINGBOLTS, networkUpdateType))
@@ -556,7 +568,7 @@ namespace ReVolt
             ConnectionRefIds[2] = reader.ReadInt64();
 
             _deficit = reader.ReadSingle();
-            
+
             UpdateModeNextFrame(NewMode).Forget();
         }
 
