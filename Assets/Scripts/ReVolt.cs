@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Objects;
 using Assets.Scripts.Objects.Motherboards;
 using BepInEx.Configuration;
@@ -10,6 +11,7 @@ using LaunchPadBooster.Patching;
 using LibConstruct;
 using ReVolt.Assets.Scripts;
 using ReVolt.Interfaces;
+using ReVolt.Prefabs;
 using UnityEngine;
 
 namespace ReVolt
@@ -45,19 +47,25 @@ namespace ReVolt
         [UsedImplicitly] internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.8.0");
+        public static readonly Mod MOD = new("Re-Volt", "1.8.1");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
         {
             Instance = this;
-            
+
             Debug.Log("Re-Volt is loading");
 
             LoadConfiguration(config);
-            
-            // Now set up the patches and content loader (via patch)
             Debug.Log("Re-Volt config loaded; patching...");
+
+            if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.Contains("CrossCables"))?.GetType("ExtraNetworkCallsPatch").GetMethod("AddTarget") is { } AddTargetInfo)
+            {
+                Debug.Log("Re-Volt enabling CrossCables compatibility");
+                AddTargetInfo.Invoke(null, new object[] { typeof(CableTray) });
+                AddTargetInfo.Invoke(null, new object[] { typeof(StructureDataBridge) });
+            }
+            
             
             Harmony harmony = new("ReVolt");
             harmony.ConditionalPatchAll();
