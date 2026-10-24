@@ -134,7 +134,7 @@ namespace ReVolt
         [UsedImplicitly]
         public virtual float getTripChance()
         {
-            if (!(_transferred > Setting) || Mode != MODE_ON)
+            if (_transferred <= Setting || Mode != MODE_ON)
                 return -1.0f;
             
             // Do a cheap calculation to get the % chance to trip the breaker
@@ -643,40 +643,20 @@ namespace ReVolt
             return logicType is LogicType.Setting or LogicType.Activate or LogicType.On && canRemoteControl;
         }
 
-        public override double GetLogicValue(LogicType logicType)
-        {
-            switch (logicType)
+        public override double GetLogicValue(LogicType logicType) =>
+            logicType switch
             {
-                case LogicType.Setting:
-                    return Setting;
-
-                case LogicType.Maximum:
-                    return MaxTripCurrent;
-
-                case LogicType.Ratio:
-                    if (MaxTripCurrent == 0.0)
-                        return 0.0;
-                    return Setting / MaxTripCurrent;
-
-                case LogicType.PowerGeneration:
-                    return _transferredLast;
-
-                case LogicType.PowerActual:
-                    return OutputNetwork?.CurrentLoad ?? 0.0;
-
-                case LogicType.PowerRequired:
-                    return OutputNetwork?.RequiredLoad ?? 0.0;
-
-                case LogicType.PowerPotential:
-                    return OutputNetwork?.PotentialLoad ?? 0.0;
-
-                case LogicType.RequiredPower:
-                    return UsedPower;
-
-                default:
-                    return base.GetLogicValue(logicType);
-            }
-        }
+                LogicType.Setting => Setting,
+                LogicType.Maximum => MaxTripCurrent,
+                LogicType.Ratio when MaxTripCurrent > 0 => Setting / MaxTripCurrent,
+                LogicType.Ratio when MaxTripCurrent == 0 => 0.0,
+                LogicType.PowerGeneration => _transferredLast,
+                LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
+                LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,
+                LogicType.PowerPotential => OutputNetwork?.PotentialLoad ?? 0.0,
+                LogicType.RequiredPower => UsedPower,
+                _ => base.GetLogicValue(logicType)
+            };
 
         public override void SetLogicValue(LogicType logicType, double value)
         {
