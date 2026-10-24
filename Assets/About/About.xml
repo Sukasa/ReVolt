@@ -64,6 +64,7 @@
     <b>Breakers & Cable Tray:</b> Circuit Breakers, Switchgear, and Cable Tray!  Oh my!
     <b>Data Networking:</b> Optoisolators and Data Diodes to connect data networks!
 ]]></InGameDescription>
+  
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
     [h3]Version 1.8.2[/h3]
@@ -72,17 +73,16 @@
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
+  
   <!-- StationeersLaunchPad and BepInEx tags for Steam workshop page will be automatically added by the framework when publishing -->
   <Tags>
     <Tag>StationeersLaunchPad</Tag>
   </Tags>
+  
   <!-- Automatic downloads of dependencies -->
-  <Dependencies>
-    <Mod>
-      <Id>3751750326</Id>
-    </Mod>
-  </Dependencies>
+  <DependsOn WorkshopHandle="3751750326" />
+  
   <!-- Automatic reordering of the mods list -->
-  <LoadBefore />
-  <LoadAfter />
+  <OrderBefore />
+  <OrderAfter />
 </ModMetadata>
