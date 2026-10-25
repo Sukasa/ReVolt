@@ -2,35 +2,35 @@
 
 using Assets.Scripts.Objects.Pipes;
 
-namespace ReVolt
+using UnityEngine;
+
+namespace ReVolt.ModCompatibility
 {
     /// <summary>
-    /// Represents an abstract set point with a bounded range.
+    /// Represents a set point with a bounded range.
     /// </summary>
-    public abstract class SetPoint
+    public class SetPoint
     {
-        /// <param name="parent">The parent device associated with the set point.</param>
         /// <param name="unitString">The unit of measurement for the set point.</param>
         /// <param name="lowerBound">The minimum allowable value.</param>
         /// <param name="upperBound">The maximum allowable value.</param>
+        /// <param name="minorStep">The small step size.</param>
+        /// <param name="majorStep">The large step size.</param>
         /// <exception cref="ArgumentException">Lower bound cannot be greater than upper bound.</exception>
-        public SetPoint(Device parent, string unitString, float lowerBound, float upperBound)
+        public SetPoint(string unitString, float lowerBound, float upperBound, float minorStep, float? majorStep = null)
         {
             if (lowerBound > upperBound)
                 throw new ArgumentException(
                     "Lower bound cannot be greater than upper bound.",
                     paramName: nameof(lowerBound) + "," + nameof(upperBound));
 
-            Parent = parent;
-
             UnitString = unitString;
 
             LowerBound = lowerBound;
             UpperBound = upperBound;
+            MinorStepDelta = minorStep;
+            MajorStepDelta = majorStep ?? minorStep;
         }
-
-        /// <summary>Device this set point belongs to.</summary>
-        public Device Parent { get; }
 
         /// <summary>Unit of measurement.</summary>
         /// <remarks>Prefix values are generated, so the string should accept any SI prefix.</remarks>
@@ -42,16 +42,36 @@ namespace ReVolt
         /// <summary>Upper bound (inclusive) of the range.</summary>
         public float UpperBound { get; }
 
-        /// <summary><c>true</c> if the range of valid values is continuous; <c>false</c> if discrete.</summary>
-        public abstract bool IsContinuous { get; }
+        /// <summary>Large, incremental step size.</summary>
+        public float MajorStepDelta { get; }
+        /// <summary>Small, incremental step size.</summary>
+        public float MinorStepDelta { get; }
 
+        private float _currentValue;
         /// <summary>Current value of the set point, clamped to the nearest valid value.</summary>
-        public virtual float CurrentValue { get; set; }
+        public virtual float CurrentValue
+        {
+            get => _currentValue;
+            set
+            {
+                if (float.IsNaN(value)) return;
+                _currentValue = Mathf.Clamp(value, LowerBound, UpperBound);
+            }
+        }
 
-        /// <summary>Next higher step value, or <c>null</c> if already at the upper bound.</summary>
-        public abstract float? NextStepUp { get; }
-        /// <summary>Next lower step value, or <c>null</c> if already at the lower bound.</summary>
-        public abstract float? NextStepDown { get; }
+        /// <summary>Next step up, or <c>null</c> if already at the upper bound.</summary>
+        public virtual float? NextStepUp
+            => CurrentValue < UpperBound ? Math.Min(CurrentValue + MinorStepDelta, UpperBound) : null;
+        /// <summary>Next step down, or <c>null</c> if already at the lower bound.</summary>
+        public virtual float? NextStepDown
+            => CurrentValue > LowerBound ? Math.Max(CurrentValue - MinorStepDelta, LowerBound) : null;
+
+        /// <summary>Next major step up, or <c>null</c> if already at the upper bound.</summary>
+        public virtual float? NextMajorStepUp
+            => CurrentValue < UpperBound ? Math.Min(CurrentValue + MajorStepDelta, UpperBound) : null;
+        /// <summary>Next major step down, or <c>null</c> if already at the lower bound.</summary>
+        public virtual float? NextMajorStepDown
+            => CurrentValue > LowerBound ? Math.Max(CurrentValue - MajorStepDelta, LowerBound) : null;
 
         /// <summary>
         /// Attempts to convert the current value to the specified target unit.

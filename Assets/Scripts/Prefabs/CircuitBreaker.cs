@@ -1,3 +1,4 @@
+using System;
 using Assets.Scripts;
 using Assets.Scripts.Localization2;
 using Assets.Scripts.Networking;
@@ -12,6 +13,7 @@ using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
 using ReVolt.Components;
 using ReVolt.Interfaces;
+using ReVolt.ModCompatibility;
 using System.Text;
 using JetBrains.Annotations;
 using LaunchPadBooster.Utils;
@@ -21,13 +23,14 @@ namespace ReVolt
 {
     public class CircuitBreaker : ElectricalInputOutput, IPatchable, ISetable, IBreaker
     {
-        /// <summary>Provider used to assign trip points. Trip points must be expressible in Watts if a conversion exists.</summary>
+        /// <summary>Provider used to assign trip points.</summary>
         /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
-        public static ISetPointProvider<CircuitBreaker, SetPoint> CircuitBreakerTripPointProvider = new DefaultSetPointProvider();
+        public static Func<CircuitBreaker, SetPoint> CircuitBreakerTripPointProvider =
+            parent => new SetPoint("W", parent.MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value, parent.DeltaTripCurrent);
         /// <summary>Provider used to assign trip behaviors.</summary>
-        public static ITripBehaviorProvider<CircuitBreaker, TripBehavior> CircuitBreakerTripBehaviorProvider = new DefaultTripBehaviorProvider();
+        public static Func<CircuitBreaker, ThermalTripBehavior> CircuitBreakerTripBehaviorProvider =
+            parent => parent.isSmartBreaker ? new InstantTripBehavior(parent) : new ThermalTripBehavior(parent);
 
-        public float MaxTripCurrent;
         public float MinTripCurrent;
         public float DeltaTripCurrent;
         public float MaxInterruptCurrent; // For future use
@@ -56,17 +59,13 @@ namespace ReVolt
         // Moved here from Heavy Breaker.  This way I'm not having to have overrides on overrides in the serialization code (just keeps things cleaner)
         protected readonly long[] ConnectionRefIds = new long[3];
 
-        private SetPoint _tripPoint;
-        public SetPoint TripPoint => _tripPoint ??= CreateTripPoint();
-        private TripBehavior _tripBehavior;
-        public TripBehavior TripBehavior => _tripBehavior ??= CreateTripBehavior();
+        public SetPoint TripPoint { get; private set; }
+        public ThermalTripBehavior TripBehavior { get; private set; }
 
-        public float? LimitPower =>
+        public float? LimitCurrent =>
             Mode != MODE_ON ? 0.0f :
             TripPoint.TryConvertValue("W", out var tripWattage) ? tripWattage :
             null;
-        public float LimitCurrent => Mode == MODE_ON ? TripPoint.CurrentValue : 0.0f;
-        public string LimitUnits => TripPoint.UnitString;
 
         [ByteArraySync]
         public double Setting
@@ -75,7 +74,6 @@ namespace ReVolt
             set
             {
                 TripPoint.CurrentValue = (float)value;
-                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
                 if (NetworkManager.IsServer)
                     NetworkUpdateFlags |= FLAG_TRIPSP;
             }
@@ -88,6 +86,9 @@ namespace ReVolt
 
         public override void Awake()
         {
+            TripPoint ??= CreateTripPoint();
+            TripBehavior ??= CreateTripBehavior();
+
             base.Awake();
             RNG = new System.Random((int)ReferenceId);
 
@@ -124,9 +125,9 @@ namespace ReVolt
         }
 
         protected virtual SetPoint CreateTripPoint()
-            => CircuitBreakerTripPointProvider.CreateSetPoint(this);
-        protected virtual TripBehavior CreateTripBehavior()
-            => CircuitBreakerTripBehaviorProvider.CreateTripBehavior(this);
+            => CircuitBreakerTripPointProvider(this);
+        protected virtual ThermalTripBehavior CreateTripBehavior()
+            => CircuitBreakerTripBehaviorProvider(this);
 
         #region Power Simulation
 
@@ -263,12 +264,6 @@ namespace ReVolt
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
                         newSetting = TripPoint.NextStepUp ?? TripPoint.LowerBound;
                     }
-
-                    var newSetting = Setting + dir;
-                    if (newSetting > ReVolt.smallBreakerMaxTripSetting.Value)
-                        newSetting = MinTripCurrent;
-                    if (newSetting < MinTripCurrent)
-                        newSetting = ReVolt.smallBreakerMaxTripSetting.Value;
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -617,12 +612,6 @@ namespace ReVolt
         public override void OnFinishedLoad()
         {
             base.OnFinishedLoad();
-
-            if (Setting > ReVolt.smallBreakerMaxTripSetting.Value)
-                Setting = ReVolt.smallBreakerMaxTripSetting.Value;
-            if (Setting < MinTripCurrent)
-                Setting = MinTripCurrent;
-
             UpdateMode();
         }
 
@@ -650,10 +639,7 @@ namespace ReVolt
             {
                 LogicType.Setting => Setting,
                 LogicType.Maximum => TripPoint.UpperBound,
-                LogicType.Ratio when TripPoint.UpperBound > 0 => Setting / TripPoint.UpperBound,
-                LogicType.Ratio when TripPoint.UpperBound <= 0 => 0.0,
-                LogicType.Maximum => ReVolt.smallBreakerMaxTripSetting.Value,
-                LogicType.Ratio => Setting / ReVolt.smallBreakerMaxTripSetting.Value,
+                LogicType.Ratio => Setting / TripPoint.UpperBound,
                 LogicType.PowerGeneration => _transferredLast,
                 LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
                 LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,
@@ -681,22 +667,8 @@ namespace ReVolt
                 return;
 
             Setting = value;
-            Setting = value.Clamp(MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
         }
 
-        #endregion
-
-        #region Nested Types
-        private class DefaultSetPointProvider : ISetPointProvider<CircuitBreaker, SetPoint>
-        {
-            public SetPoint CreateSetPoint(CircuitBreaker parent)
-                => new ContinuousFixedStepSetPoint(parent, "W", parent.MinTripCurrent, parent.MaxTripCurrent, parent.DeltaTripCurrent);
-        }
-        private class DefaultTripBehaviorProvider : ITripBehaviorProvider<CircuitBreaker, TripBehavior>
-        {
-            public TripBehavior CreateTripBehavior(CircuitBreaker parent)
-                => parent.isSmartBreaker ? new InstantTripBehavior(parent) : new ThermalTripBehavior(parent);
-        }
         #endregion
     }
 }

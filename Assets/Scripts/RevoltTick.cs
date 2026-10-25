@@ -251,7 +251,7 @@ namespace ReVolt
                 {
                     _breakers[_breakerIndex++] = asBreaker;
                     // If not expressible in Watts, count optimistically as 0.
-                    _breakerLimit += asBreaker.LimitPower ?? 0f;
+                    _breakerLimit += asBreaker.LimitCurrent ?? 0f;
                 }
 
                 Potential += PowerData[idx].PowerProvided;

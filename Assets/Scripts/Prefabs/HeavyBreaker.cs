@@ -7,6 +7,7 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
+using ReVolt.ModCompatibility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,12 @@ namespace ReVolt.Prefabs
 {
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
-        /// <summary>Provider used to assign trip points. Trip points must be expressible in Watts if a conversion exists.</summary>
+        /// <summary>Provider used to assign trip points.</summary>
         /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
-        public static ISetPointProvider<HeavyBreaker, TieredSetPoint> HeavyBreakerTripPointProvider = new DefaultSetPointProvider();
+        public static Func<HeavyBreaker, SetPoint> HeavyBreakerTripPointProvider =
+            parent => new SetPoint("W", 1_000f, ReVolt.heavyBreakerMaxTripSetting.Value, minorStep: 1_000f, majorStep: 10_000f);
         /// <summary>Provider used to assign trip behaviors.</summary>
-        public static ITripBehaviorProvider<HeavyBreaker, TripBehavior> HeavyBreakerTripBehaviorProvider = new DefaultTripBehaviorProvider();
+        public static Func<HeavyBreaker, ThermalTripBehavior> HeavyBreakerTripBehaviorProvider = parent => CircuitBreakerTripBehaviorProvider(parent);
 
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
@@ -37,8 +39,6 @@ namespace ReVolt.Prefabs
         public GameObject InteractablesContainer;
 
         [ReadOnly] public CableNetwork DataNetwork;
-
-        new public TieredSetPoint TripPoint => (TieredSetPoint)base.TripPoint;
 
         public void OnBusConnectionChanged(Device BusTie)
         {
@@ -60,7 +60,6 @@ namespace ReVolt.Prefabs
 
         private readonly int[] ConnectionIndices = { 0, 0, 0 };
 
-        private static readonly float[] SettingOffsets = { -10000.0f, -1000.0f, 1000.0f, 10000.0f };
         private static readonly string[] ConnectionNames = { "Input", "Output", "Data" };
 
         public InteractableAnimComponent[] AnimationComponents;
@@ -116,9 +115,9 @@ namespace ReVolt.Prefabs
         }
 
         protected override SetPoint CreateTripPoint()
-            => HeavyBreakerTripPointProvider.CreateSetPoint(this);
-        protected override TripBehavior CreateTripBehavior()
-            => HeavyBreakerTripBehaviorProvider.CreateTripBehavior(this);
+            => HeavyBreakerTripPointProvider(this);
+        protected override ThermalTripBehavior CreateTripBehavior()
+            => HeavyBreakerTripBehaviorProvider(this);
 
         public override string GetContextualName(Interactable interactable)
         {
@@ -421,18 +420,5 @@ namespace ReVolt.Prefabs
             base.OnDeregistered();
             ReVolt.SwitchgearNetwork.RebuildNetworkDestroy(this);
         }
-
-        #region Nested Types
-        private class DefaultSetPointProvider : ISetPointProvider<HeavyBreaker, TieredSetPoint>
-        {
-            public TieredSetPoint CreateSetPoint(HeavyBreaker parent)
-                => new ContinuousTieredStepSetPoint(parent, "W", 1000f, ReVolt.heavyBreakerMaxTripSetting.Value, SettingOffsets[2], SettingOffsets[3]);
-        }
-        private class DefaultTripBehaviorProvider : ITripBehaviorProvider<HeavyBreaker, TripBehavior>
-        {
-            public TripBehavior CreateTripBehavior(HeavyBreaker parent)
-                => CircuitBreakerTripBehaviorProvider.CreateTripBehavior(parent);
-        }
-        #endregion
     }
 }
