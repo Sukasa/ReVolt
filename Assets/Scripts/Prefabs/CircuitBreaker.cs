@@ -75,6 +75,7 @@ namespace ReVolt
             set
             {
                 TripPoint.CurrentValue = (float)value;
+                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
                 if (NetworkManager.IsServer)
                     NetworkUpdateFlags |= FLAG_TRIPSP;
             }
@@ -262,6 +263,12 @@ namespace ReVolt
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
                         newSetting = TripPoint.NextStepUp ?? TripPoint.LowerBound;
                     }
+
+                    var newSetting = Setting + dir;
+                    if (newSetting > ReVolt.smallBreakerMaxTripSetting.Value)
+                        newSetting = MinTripCurrent;
+                    if (newSetting < MinTripCurrent)
+                        newSetting = ReVolt.smallBreakerMaxTripSetting.Value;
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -611,6 +618,11 @@ namespace ReVolt
         {
             base.OnFinishedLoad();
 
+            if (Setting > ReVolt.smallBreakerMaxTripSetting.Value)
+                Setting = ReVolt.smallBreakerMaxTripSetting.Value;
+            if (Setting < MinTripCurrent)
+                Setting = MinTripCurrent;
+
             UpdateMode();
         }
 
@@ -640,6 +652,8 @@ namespace ReVolt
                 LogicType.Maximum => TripPoint.UpperBound,
                 LogicType.Ratio when TripPoint.UpperBound > 0 => Setting / TripPoint.UpperBound,
                 LogicType.Ratio when TripPoint.UpperBound <= 0 => 0.0,
+                LogicType.Maximum => ReVolt.smallBreakerMaxTripSetting.Value,
+                LogicType.Ratio => Setting / ReVolt.smallBreakerMaxTripSetting.Value,
                 LogicType.PowerGeneration => _transferredLast,
                 LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
                 LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,
@@ -667,6 +681,7 @@ namespace ReVolt
                 return;
 
             Setting = value;
+            Setting = value.Clamp(MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
         }
 
         #endregion
