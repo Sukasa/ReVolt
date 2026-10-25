@@ -23,6 +23,12 @@ namespace ReVolt.Prefabs
 {
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
+        /// <summary>Provider used to assign trip points. Trip points must be expressible in Watts if a conversion exists.</summary>
+        /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
+        public static ISetPointProvider<HeavyBreaker, TieredSetPoint> HeavyBreakerTripPointProvider = new DefaultSetPointProvider();
+        /// <summary>Provider used to assign trip behaviors.</summary>
+        public static ITripBehaviorProvider<HeavyBreaker, TripBehavior> HeavyBreakerTripBehaviorProvider = new DefaultTripBehaviorProvider();
+
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
         private static readonly MethodInfo DataSetter = AccessTools.Property(typeof(Device), nameof(DataCables))?.GetSetMethod(nonPublic: true);
@@ -31,6 +37,8 @@ namespace ReVolt.Prefabs
         public GameObject InteractablesContainer;
 
         [ReadOnly] public CableNetwork DataNetwork;
+
+        new public TieredSetPoint TripPoint => (TieredSetPoint)base.TripPoint;
 
         public void OnBusConnectionChanged(Device BusTie)
         {
@@ -106,6 +114,11 @@ namespace ReVolt.Prefabs
                 }
             }
         }
+
+        protected override SetPoint CreateTripPoint()
+            => HeavyBreakerTripPointProvider.CreateSetPoint(this);
+        protected override TripBehavior CreateTripBehavior()
+            => HeavyBreakerTripBehaviorProvider.CreateTripBehavior(this);
 
         public override string GetContextualName(Interactable interactable)
         {
@@ -218,9 +231,14 @@ namespace ReVolt.Prefabs
                 case InteractableType.Button10:
                 case InteractableType.Button11:
                 case InteractableType.Button12:
-                    var adjIdx = interactable.Action - InteractableType.Button9;
-                    var by = SettingOffsets[adjIdx];
-                    var newSetting = Mathf.Clamp((float)Setting + by, 1000.0f, ReVolt.heavyBreakerMaxTripSetting.Value);
+                    var newSetting = interactable.Action switch
+                    {
+                        InteractableType.Button9  => TripPoint.NextMajorStepDown,
+                        InteractableType.Button10 => TripPoint.NextStepDown,
+                        InteractableType.Button11 => TripPoint.NextStepUp,
+                        InteractableType.Button12 => TripPoint.NextMajorStepUp,
+                        _ => null // Not reachable
+                    } ?? TripPoint.CurrentValue;
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -403,5 +421,18 @@ namespace ReVolt.Prefabs
             base.OnDeregistered();
             ReVolt.SwitchgearNetwork.RebuildNetworkDestroy(this);
         }
+
+        #region Nested Types
+        private class DefaultSetPointProvider : ISetPointProvider<HeavyBreaker, TieredSetPoint>
+        {
+            public TieredSetPoint CreateSetPoint(HeavyBreaker parent)
+                => new ContinuousTieredStepSetPoint(parent, "W", 1000f, ReVolt.heavyBreakerMaxTripSetting.Value, SettingOffsets[2], SettingOffsets[3]);
+        }
+        private class DefaultTripBehaviorProvider : ITripBehaviorProvider<HeavyBreaker, TripBehavior>
+        {
+            public TripBehavior CreateTripBehavior(HeavyBreaker parent)
+                => CircuitBreakerTripBehaviorProvider.CreateTripBehavior(parent);
+        }
+        #endregion
     }
 }
