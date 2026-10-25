@@ -21,7 +21,6 @@ namespace ReVolt
 {
     public class CircuitBreaker : ElectricalInputOutput, IPatchable, ISetable, IBreaker
     {
-        public float MaxTripCurrent;
         public float MinTripCurrent;
         public float DeltaTripCurrent;
         public float MaxInterruptCurrent; // For future use
@@ -61,7 +60,7 @@ namespace ReVolt
             get => _tripPoint;
             set
             {
-                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, MaxTripCurrent);
+                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
                 if (NetworkManager.IsServer)
                     NetworkUpdateFlags |= FLAG_TRIPSP;
             }
@@ -263,10 +262,10 @@ namespace ReVolt
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
 
                     var newSetting = Setting + dir;
-                    if (newSetting > MaxTripCurrent)
+                    if (newSetting > ReVolt.smallBreakerMaxTripSetting.Value)
                         newSetting = MinTripCurrent;
                     if (newSetting < MinTripCurrent)
-                        newSetting = MaxTripCurrent;
+                        newSetting = ReVolt.smallBreakerMaxTripSetting.Value;
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -616,8 +615,8 @@ namespace ReVolt
         {
             base.OnFinishedLoad();
 
-            if (Setting > MaxTripCurrent)
-                Setting = MaxTripCurrent;
+            if (Setting > ReVolt.smallBreakerMaxTripSetting.Value)
+                Setting = ReVolt.smallBreakerMaxTripSetting.Value;
             if (Setting < MinTripCurrent)
                 Setting = MinTripCurrent;
 
@@ -647,9 +646,8 @@ namespace ReVolt
             logicType switch
             {
                 LogicType.Setting => Setting,
-                LogicType.Maximum => MaxTripCurrent,
-                LogicType.Ratio when MaxTripCurrent > 0 => Setting / MaxTripCurrent,
-                LogicType.Ratio when MaxTripCurrent <= 0 => 0.0,
+                LogicType.Maximum => ReVolt.smallBreakerMaxTripSetting.Value,
+                LogicType.Ratio => Setting / ReVolt.smallBreakerMaxTripSetting.Value,
                 LogicType.PowerGeneration => _transferredLast,
                 LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
                 LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,
@@ -676,7 +674,7 @@ namespace ReVolt
             if (logicType != LogicType.Setting)
                 return;
 
-            Setting = value.Clamp(MinTripCurrent, MaxTripCurrent);
+            Setting = value.Clamp(MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
         }
 
         #endregion

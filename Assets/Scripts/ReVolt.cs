@@ -35,6 +35,7 @@ namespace ReVolt
         internal static ConfigEntry<float> configCableBurnFactor;
         internal static ConfigEntry<bool> enableRecursiveNetworkLimits;
         internal static ConfigEntry<float> heavyBreakerMaxTripSetting;
+        internal static ConfigEntry<float> smallBreakerMaxTripSetting;
         internal static ConfigEntry<float> mediumTransformerMaxSetting;
         internal static ConfigEntry<float> largeTransformerMaxSetting;
 
@@ -119,6 +120,10 @@ namespace ReVolt
             configCableBurnFactor = config.Bind(
                 new ConfigDefinition("Power Balancing", "Cable burn Chance"), 1.0f,
                 new ConfigDescription("Increase or decrease this to affect how likely a cable is to burn out each tick.  Set to 0.0 to disable cable burn entirely.", new AcceptableValueRange<float>(0.000f, 2.0f)));
+            
+            smallBreakerMaxTripSetting = config.Bind(
+                new ConfigDefinition("Power Balancing", "Small Breaker Maximum Trip Setting"), 500000.0f,
+                new ConfigDescription("Maximum configurable trip current for a Small Breaker.", new AcceptableValueRange<float>(500, 5000)));
             
             heavyBreakerMaxTripSetting = config.Bind(
                 new ConfigDefinition("Power Balancing", "Heavy Breaker Maximum Trip Setting"), 500000.0f,
