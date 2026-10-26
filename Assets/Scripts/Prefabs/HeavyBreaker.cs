@@ -7,6 +7,7 @@ using Assets.Scripts.Objects.Items;
 using Assets.Scripts.Objects.Pipes;
 using LibConstruct;
 using ReVolt.Interfaces;
+using ReVolt.ModCompatibility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,13 @@ namespace ReVolt.Prefabs
 {
     public class HeavyBreaker : CircuitBreaker, ISwitchgearComponent
     {
+        /// <summary>Provider used to assign trip points.</summary>
+        /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
+        public static Func<HeavyBreaker, SetPoint> HeavyBreakerTripPointProvider =
+            parent => new SetPoint("W", 1_000f, ReVolt.heavyBreakerMaxTripSetting.Value, minorStep: 1_000f, majorStep: 10_000f);
+        /// <summary>Provider used to assign trip behaviors.</summary>
+        public static Func<HeavyBreaker, ThermalTripBehavior> HeavyBreakerTripBehaviorProvider = parent => CircuitBreakerTripBehaviorProvider(parent);
+
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
 
         private static readonly MethodInfo DataSetter = AccessTools.Property(typeof(Device), nameof(DataCables))?.GetSetMethod(nonPublic: true);
@@ -52,7 +60,6 @@ namespace ReVolt.Prefabs
 
         private readonly int[] ConnectionIndices = { 0, 0, 0 };
 
-        private static readonly float[] SettingOffsets = { -10000.0f, -1000.0f, 1000.0f, 10000.0f };
         private static readonly string[] ConnectionNames = { "Input", "Output", "Data" };
 
         public InteractableAnimComponent[] AnimationComponents;
@@ -106,6 +113,11 @@ namespace ReVolt.Prefabs
                 }
             }
         }
+
+        protected override SetPoint CreateTripPoint()
+            => HeavyBreakerTripPointProvider(this);
+        protected override ThermalTripBehavior CreateTripBehavior()
+            => HeavyBreakerTripBehaviorProvider(this);
 
         public override string GetContextualName(Interactable interactable)
         {
@@ -218,9 +230,14 @@ namespace ReVolt.Prefabs
                 case InteractableType.Button10:
                 case InteractableType.Button11:
                 case InteractableType.Button12:
-                    var adjIdx = interactable.Action - InteractableType.Button9;
-                    var by = SettingOffsets[adjIdx];
-                    var newSetting = Mathf.Clamp((float)Setting + by, 1000.0f, ReVolt.heavyBreakerMaxTripSetting.Value);
+                    var newSetting = interactable.Action switch
+                    {
+                        InteractableType.Button9  => TripPoint.NextMajorStepDown,
+                        InteractableType.Button10 => TripPoint.NextStepDown,
+                        InteractableType.Button11 => TripPoint.NextStepUp,
+                        InteractableType.Button12 => TripPoint.NextMajorStepUp,
+                        _ => null // Not reachable
+                    } ?? TripPoint.CurrentValue;
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 

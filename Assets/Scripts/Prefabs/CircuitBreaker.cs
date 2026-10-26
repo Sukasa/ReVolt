@@ -1,3 +1,4 @@
+using System;
 using Assets.Scripts;
 using Assets.Scripts.Localization2;
 using Assets.Scripts.Networking;
@@ -12,6 +13,7 @@ using Cysharp.Threading.Tasks;
 using ReVolt.Assets.Scripts;
 using ReVolt.Components;
 using ReVolt.Interfaces;
+using ReVolt.ModCompatibility;
 using System.Text;
 using JetBrains.Annotations;
 using LaunchPadBooster.Utils;
@@ -21,6 +23,14 @@ namespace ReVolt
 {
     public class CircuitBreaker : ElectricalInputOutput, IPatchable, ISetable, IBreaker
     {
+        /// <summary>Provider used to assign trip points.</summary>
+        /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
+        public static Func<CircuitBreaker, SetPoint> CircuitBreakerTripPointProvider =
+            parent => new SetPoint("W", parent.MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value, parent.DeltaTripCurrent);
+        /// <summary>Provider used to assign trip behaviors.</summary>
+        public static Func<CircuitBreaker, ThermalTripBehavior> CircuitBreakerTripBehaviorProvider =
+            parent => parent.isSmartBreaker ? new InstantTripBehavior(parent) : new ThermalTripBehavior(parent);
+
         public float MinTripCurrent;
         public float DeltaTripCurrent;
         public float MaxInterruptCurrent; // For future use
@@ -32,8 +42,6 @@ namespace ReVolt
 
         [SerializeField] protected ReVoltMultiStateAnimator _breakerStateAnimator;
         [SerializeField] private ReVoltMultiStateAnimator _breakerHandleAnimator;
-
-        private float _tripPoint;
 
         protected const int FLAG_TRIPSP = 1024;
         protected const int FLAG_MODE = 2048;
@@ -51,16 +59,21 @@ namespace ReVolt
         // Moved here from Heavy Breaker.  This way I'm not having to have overrides on overrides in the serialization code (just keeps things cleaner)
         protected readonly long[] ConnectionRefIds = new long[3];
 
+        public SetPoint TripPoint { get; private set; }
+        public ThermalTripBehavior TripBehavior { get; private set; }
 
-        public float LimitCurrent => Mode == MODE_ON ? (float)Setting : 0.0f;
+        public float? LimitCurrent =>
+            Mode != MODE_ON ? 0.0f :
+            TripPoint.TryConvertValue("W", out var tripWattage) ? tripWattage :
+            null;
 
         [ByteArraySync]
         public double Setting
         {
-            get => _tripPoint;
+            get => TripPoint.CurrentValue;
             set
             {
-                _tripPoint = Mathf.Clamp((float)value, MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
+                TripPoint.CurrentValue = (float)value;
                 if (NetworkManager.IsServer)
                     NetworkUpdateFlags |= FLAG_TRIPSP;
             }
@@ -73,10 +86,11 @@ namespace ReVolt
 
         public override void Awake()
         {
+            TripPoint ??= CreateTripPoint();
+            TripBehavior ??= CreateTripBehavior();
+
             base.Awake();
             RNG = new System.Random((int)ReferenceId);
-            if (Setting == 0.0)
-                Setting = MinTripCurrent;
 
             if (_breakerModeStrings.Length != 0) return;
 
@@ -110,6 +124,11 @@ namespace ReVolt
             return Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
         }
 
+        protected virtual SetPoint CreateTripPoint()
+            => CircuitBreakerTripPointProvider(this);
+        protected virtual ThermalTripBehavior CreateTripBehavior()
+            => CircuitBreakerTripBehaviorProvider(this);
+
         #region Power Simulation
 
         public override bool AllowSetPower(CableNetwork cableNetwork)
@@ -130,29 +149,12 @@ namespace ReVolt
 
         protected override bool IsOperable => (Mode == MODE_ON) && base.IsOperable;
 
-        [UsedImplicitly]
-        public virtual float getTripChance()
-        {
-            if (_transferred <= Setting || Mode != MODE_ON)
-                return -1.0f;
-            
-            // Do a cheap calculation to get the % chance to trip the breaker
-            var tripChance = Mathf.Pow(_transferred / (float)Setting, 1.25f) - 1.0f;
-
-            // If we're a smart breaker, trip instantly if tripChance is nonzero
-            if (isSmartBreaker && tripChance > 0.0)
-                return 1.0f;
-
-            return tripChance * ReVolt.configCableBurnFactor.Value;
-
-        }
-
         public override void OnPowerTick()
         {
             base.OnPowerTick();
 
             // If we fail the chance then trip, *or* if we're a smart breaker then trip instantly.
-            if ((float)RNG.NextDouble() <= getTripChance())
+            if (TripBehavior.ShouldTrip(RNG, _transferred))
                 Trip();
 
             _transferredLast = _transferred;
@@ -224,7 +226,7 @@ namespace ReVolt
         {
             return interactable.Action switch
             {
-                InteractableType.Button1 => $"Trip Point: {Setting}",
+                InteractableType.Button1 => $"Trip Point: {TripPoint.CurrentValue} {TripPoint.UnitString}",
                 InteractableType.Mode => ModeStrings[InteractMode.State],
                 _ => base.GetContextualName(interactable),
             };
@@ -254,18 +256,14 @@ namespace ReVolt
                     if (!interaction.SourceSlot.Contains<Screwdriver>())
                         return action.Fail(GameStrings.RequiresScrewdriver);
 
-                    var dir = DeltaTripCurrent;
-
+                    float newSetting;
                     if (KeyManager.GetButton(KeyMap.QuantityModifier))
-                        dir = -DeltaTripCurrent;
+                        newSetting = TripPoint.NextStepDown ?? TripPoint.UpperBound;
                     else
+                    {
                         action.ExtendedMessage = ReVoltStrings.HoldForPreviousTrip;
-
-                    var newSetting = Setting + dir;
-                    if (newSetting > ReVolt.smallBreakerMaxTripSetting.Value)
-                        newSetting = MinTripCurrent;
-                    if (newSetting < MinTripCurrent)
-                        newSetting = ReVolt.smallBreakerMaxTripSetting.Value;
+                        newSetting = TripPoint.NextStepUp ?? TripPoint.LowerBound;
+                    }
 
                     action.AppendStateMessage(GameStrings.GlobalChangeSettingTo, newSetting.ToString());
 
@@ -431,7 +429,7 @@ namespace ReVolt
                 sb.AppendLine(ReVoltStrings.ResetBreakerToClear);
 
             sb.Append("Current Trip Point is <color=yellow>");
-            sb.Append(Setting.ToStringPrefix("W", "yellow"));
+            sb.Append(Setting.ToStringPrefix(TripPoint.UnitString, "yellow"));
             sb.AppendLine("</color>");
 
             if (OutputNetwork != null)
@@ -614,12 +612,6 @@ namespace ReVolt
         public override void OnFinishedLoad()
         {
             base.OnFinishedLoad();
-
-            if (Setting > ReVolt.smallBreakerMaxTripSetting.Value)
-                Setting = ReVolt.smallBreakerMaxTripSetting.Value;
-            if (Setting < MinTripCurrent)
-                Setting = MinTripCurrent;
-
             UpdateMode();
         }
 
@@ -646,8 +638,8 @@ namespace ReVolt
             logicType switch
             {
                 LogicType.Setting => Setting,
-                LogicType.Maximum => ReVolt.smallBreakerMaxTripSetting.Value,
-                LogicType.Ratio => Setting / ReVolt.smallBreakerMaxTripSetting.Value,
+                LogicType.Maximum => TripPoint.UpperBound,
+                LogicType.Ratio => Setting / TripPoint.UpperBound,
                 LogicType.PowerGeneration => _transferredLast,
                 LogicType.PowerActual => OutputNetwork?.CurrentLoad ?? 0.0,
                 LogicType.PowerRequired => OutputNetwork?.RequiredLoad ?? 0.0,
@@ -674,7 +666,7 @@ namespace ReVolt
             if (logicType != LogicType.Setting)
                 return;
 
-            Setting = value.Clamp(MinTripCurrent, ReVolt.smallBreakerMaxTripSetting.Value);
+            Setting = value;
         }
 
         #endregion

@@ -250,7 +250,8 @@ namespace ReVolt
                 if (currentDevice is IBreaker asBreaker && asBreaker.CanSupplyPower(CableNetwork))
                 {
                     _breakers[_breakerIndex++] = asBreaker;
-                    _breakerLimit += asBreaker.LimitCurrent;
+                    // If not expressible in Watts, count optimistically as 0.
+                    _breakerLimit += asBreaker.LimitCurrent ?? 0f;
                 }
 
                 Potential += PowerData[idx].PowerProvided;

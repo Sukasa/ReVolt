@@ -4,7 +4,8 @@ namespace ReVolt.Interfaces
 {
     public interface IBreaker
     {
-        float LimitCurrent { get; }
+        /// <summary>Limit power (in Watts), or <c>null</c> if not expressible in Watts.</summary>
+        float? LimitCurrent { get; }
 
         void Trip();
 
