@@ -16,6 +16,7 @@ using Assets.Scripts.Networks;
 using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Objects.Motherboards;
 using HarmonyLib;
+using JetBrains.Annotations;
 using LaunchPadBooster.Utils;
 using UnityEngine;
 using static ReVolt.Interfaces.ISwitchgearComponent;
@@ -26,9 +27,11 @@ namespace ReVolt.Prefabs
     {
         /// <summary>Provider used to assign trip points.</summary>
         /// <remarks>If trip point cannot be expressed in Watts, the breaker will not trip under default trip behaviors.</remarks>
+        [UsedImplicitly]
         public static Func<HeavyBreaker, SetPoint> HeavyBreakerTripPointProvider =
             parent => new SetPoint("W", 1_000f, ReVolt.heavyBreakerMaxTripSetting.Value, minorStep: 1_000f, majorStep: 10_000f);
         /// <summary>Provider used to assign trip behaviors.</summary>
+        [UsedImplicitly]
         public static Func<HeavyBreaker, ThermalTripBehavior> HeavyBreakerTripBehaviorProvider = parent => CircuitBreakerTripBehaviorProvider(parent);
 
         public SwitchgearComponentType ComponentType => SwitchgearComponentType.Breaker;
