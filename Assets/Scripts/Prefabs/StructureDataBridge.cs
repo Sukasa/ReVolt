@@ -8,6 +8,7 @@ using Assets.Scripts.Objects.Pipes;
 using LaunchPadBooster.Utils;
 using Objects.Pipes;
 using ReVolt.Interfaces;
+using ReVolt.Patches;
 
 namespace ReVolt.Prefabs
 {
@@ -34,8 +35,6 @@ namespace ReVolt.Prefabs
             var span = cables[..count];
             var cacheIndex = -1;
             var seenIdx = 0;
-            
-            
             
             for (var index = 0; index < span.Length; ++index)
                 if (cables[index].Get<Cable>().CableNetwork == excludeNetwork)
@@ -86,7 +85,9 @@ namespace ReVolt.Prefabs
                 var span = cables[..count];
                 for (var index = 0; index < span.Length; ++index)
                 {
-                    var _list = span[index].Get<Cable>().CableNetwork.DataDeviceList;
+                    var network = span[index].Get<Cable>().CableNetwork;
+                    var _list = network.DataDeviceList;
+                    CableNetworkPatches.CableNetworkExtendedDeviceLists.Remove(network);
                     for (var i = _list.Count - 1; i >= 0; --i)
                     {
                         switch (_list[i])

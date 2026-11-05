@@ -3,10 +3,12 @@ using Assets.Scripts.Objects.Electrical;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Objects.Pipes;
 using System.Reflection;
 using System.Reflection.Emit;
-using Assets.Scripts;
+using System.Runtime.CompilerServices;
 using Assets.Scripts.GridSystem;
+using ReVolt.Prefabs;
 
 namespace ReVolt.Patches
 {
@@ -14,6 +16,8 @@ namespace ReVolt.Patches
     public class CableNetworkPatches
     {
         private static readonly FieldInfo TickSetter = typeof(CableNetwork).GetField(nameof(CableNetwork.PowerTick));
+
+        internal static readonly ConditionalWeakTable<CableNetwork, List<Device>> CableNetworkExtendedDeviceLists = new();
 
         [HarmonyPostfix, HarmonyPatch(nameof(CableNetwork.DirtyPowerAndDataDeviceLists))]
         public static void DirtyPowerAndDataDeviceListsPatch(CableNetwork __instance)
@@ -49,6 +53,52 @@ namespace ReVolt.Patches
             };
         }
 
+        private static List<Device> GetExtendedDeviceList(CableNetwork Network)
+        {
+            if (CableNetworkExtendedDeviceLists.TryGetValue(Network, out var deviceList))
+                return deviceList;
+
+            deviceList = new(Network.DataDeviceList); // Create list copy
+            HashSet<Device> seen = new(deviceList);
+
+            for (var i = deviceList.Count - 1; i >= 0; i--)
+            {
+                if (deviceList[i] is not StructureDataBridge Bridge)
+                    continue;
+
+                var additional = Bridge.GetBridgedDevices(Network);
+                var c = deviceList.Count;
+                for (var j = additional.Count - 1; j >= 0; j--)
+                {
+                    if (seen.Contains(additional[j]))
+                        continue;
+                    deviceList.Add(additional[j]);
+                    seen.Add(additional[j]);
+                }
+
+                c = deviceList.Count - c;
+            }
+
+            CableNetworkExtendedDeviceLists.AddOrUpdate(Network, deviceList);
+
+            return deviceList;
+        }
+
+        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.GetStackSize)), OptionPatch("enablePrefabContent")]
+        public static bool GetStackSizePatch(CableNetwork __instance, ref int __result)
+        {
+            __result = GetExtendedDeviceList(__instance).Count;
+            return false;
+        }
+
+        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.ReadMemory)), OptionPatch("enablePrefabContent")]
+        public static bool ReadMemoryOverride(CableNetwork __instance, int address, ref double __result)
+        {
+            __result = GetExtendedDeviceList(__instance)[address].ReferenceId;
+
+            return false;
+        }
+
 
         public static void RebuildNetwork_CableTray(Cable cable, Queue<Cable> cableQueue)
         {
@@ -63,7 +113,7 @@ namespace ReVolt.Patches
                     cableQueue.Enqueue(c);
             }
         }
-        
+
         [HarmonyTranspiler, HarmonyPatch("RebuildNetwork"), OptionPatch("enablePrefabContent")]
         public static IEnumerable<CodeInstruction> RebuildNetworkInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
@@ -81,7 +131,7 @@ namespace ReVolt.Patches
                     4 => 4,
                     _ => 0
                 };
-                
+
                 yield return instruction;
 
                 if (instruction.opcode == OpCodes.Stloc_2)
@@ -102,7 +152,7 @@ namespace ReVolt.Patches
         public static IEnumerable<CodeInstruction> ConnectedNetworksInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var InjectTrayConnections = SymbolExtensions.GetMethodInfo(() => ConnectedNetworksExtra(null, null));
-            
+
             foreach (var instruction in instructions)
             {
                 if (instruction.opcode == OpCodes.Ret)
@@ -111,7 +161,7 @@ namespace ReVolt.Patches
                     yield return new CodeInstruction(OpCodes.Ldloc_2);
                     yield return new CodeInstruction(OpCodes.Call, InjectTrayConnections);
                 }
-                
+
                 yield return instruction;
             }
         }

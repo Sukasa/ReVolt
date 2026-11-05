@@ -25,7 +25,8 @@ namespace ReVolt.ModCompatibility
                     paramName: nameof(lowerBound) + "," + nameof(upperBound));
 
             UnitString = unitString;
-
+            _currentValue = lowerBound;
+            
             LowerBound = lowerBound;
             UpperBound = upperBound;
             MinorStepDelta = minorStep;
