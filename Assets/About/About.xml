@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.9.0</Version>
+  <Version>1.9.1</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -67,6 +67,10 @@
   
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
+    [h3]Version 1.9.1[/h3]
+    [list]
+    [*] Fixed CrossCables compatibility: Cable Tray and data bridges are now registered with CrossCables, so they work with cable crossings
+    [/list]
     [h3]Version 1.9.0[/h3]
     [list]
     [*] Moderate refactor of the circuit breaker trip logic to support a different mod
