@@ -48,7 +48,7 @@ namespace ReVolt
         [UsedImplicitly] internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.9.0");
+        public static readonly Mod MOD = new("Re-Volt", "1.9.1");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
@@ -60,7 +60,9 @@ namespace ReVolt
             LoadConfiguration(config);
             Debug.Log("Re-Volt config loaded; patching...");
 
-            if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.Contains("CrossCables"))?.GetType("ExtraNetworkCallsPatch").GetMethod("AddTarget") is { } AddTargetInfo)
+            // CrossCables: assembly "Crosscables", type "CrossCables.ExtraNetworkCallsPatch".
+            if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "Crosscables")
+                    ?.GetType("CrossCables.ExtraNetworkCallsPatch")?.GetMethod("AddTarget") is { } AddTargetInfo)
             {
                 Debug.Log("Re-Volt enabling CrossCables compatibility");
                 AddTargetInfo.Invoke(null, new object[] { typeof(CableTray) });
