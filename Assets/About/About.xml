@@ -12,7 +12,9 @@
     
     [h2]🔌 Features[/h2]
 
-    [b]NEW! Optoisolator and Data Diode:[/b] Connect data networks together while keeping power separate.  The Optoisolator is a 4-network bidirectional link, and the Data Diode is a two network one-way link
+    [b]NEW! Network Analyzer:[/b] The Network Analyzer cartridge now displays data-only devices, as well as data devices connected via the Optoisolator or Data Diode
+
+    [b]Optoisolator and Data Diode:[/b] Connect data networks together while keeping power separate.  The Optoisolator is a 4-network bidirectional link, and the Data Diode is a two network one-way link
     
     [b]Cable Tray:[/b] Why spend a ton of space keeping all those cables separate?  With a Cable Tray, you can run many different cables together through a tray, taking up less space and fewer objects.  Trays connect cables with matching colour and watt limits.
     
@@ -73,8 +75,7 @@
     [/list]
     [h3]Version 1.9.0[/h3]
     [list]
-    [*] Moderate refactor of the circuit breaker trip logic to support a different mod
-    [*] IC10 indexing cable network devices now works with data bridges (optoisolator, data diode)
+    [*] Network Analyzer cartridge now shows bridged devices
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
