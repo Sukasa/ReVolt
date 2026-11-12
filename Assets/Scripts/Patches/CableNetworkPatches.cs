@@ -53,7 +53,7 @@ namespace ReVolt.Patches
             };
         }
 
-        private static List<Device> GetExtendedDeviceList(CableNetwork Network)
+        internal static List<Device> GetExtendedDeviceList(CableNetwork Network)
         {
             if (CableNetworkExtendedDeviceLists.TryGetValue(Network, out var deviceList))
                 return deviceList;

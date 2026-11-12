@@ -16,9 +16,9 @@ namespace ReVolt.Prefabs
     {
         private bool _updateFlag;
         public bool IsOneWay;
-        
+
         private readonly List<Device>[] _cachedLists = new List<Device>[4];
-        
+
         public override void OnNetworkChange()
         {
             _updateFlag = true;
@@ -35,64 +35,72 @@ namespace ReVolt.Prefabs
             var span = cables[..count];
             var cacheIndex = -1;
             var seenIdx = 0;
-            
+
             for (var index = 0; index < span.Length; ++index)
                 if (cables[index].Get<Cable>().CableNetwork == excludeNetwork)
                     cacheIndex = index;
 
             List<Device> Devices = new();
-            
+
             if (IsOneWay && cacheIndex == 0) // For the data diode, input 0 cannot see any other networks
                 return Devices;
-            
+
             if (cacheIndex >= 0 && _cachedLists[cacheIndex] != null)
                 return _cachedLists[cacheIndex];
-            
+
             for (var index = 0; index < span.Length; ++index)
             {
                 var cable = span[index].Get<Cable>();
                 if (cable.CableNetwork is not { } cableNetwork || cableNetwork == excludeNetwork)
                     continue;
-                
-                for(var sidx = 0; sidx < seenIdx; sidx++)
+
+                for (var sidx = 0; sidx < seenIdx; sidx++)
                     if (seenNetworks[sidx] == cableNetwork.ReferenceId)
                         goto already_added; // continue outer for if we've seen the same CableNetwork twice
-                
+
                 seenNetworks[seenIdx++] = cableNetwork.ReferenceId;
                 Devices.AddRange(cableNetwork.DataDeviceList);
                 Devices.Remove(this);
-                    
+
                 already_added: ;
             }
-            
+
             if (cacheIndex >= 0)
                 _cachedLists[cacheIndex] = Devices;
-            
+
             return Devices;
         }
-        
+
         public override unsafe void OnPowerTick()
         {
             if (_updateFlag)
             {
                 for (var i = 0; i < 4; i++)
                     _cachedLists[i] = null;
-                
-                // Trigger all connected LogicUnitBase devices on all networks to refresh their device lists
+
+                // Trigger all connected LogicUnitBase devices on all networks to refresh their device lists (except other data bridges)
                 Span<SmallCellRef> cables = stackalloc SmallCellRef[4];
                 var count = 0;
                 FillConnected<Cable>(cables, ref count);
+                
+                if (count < 2)
+                    return;
+                
                 var span = cables[..count];
                 for (var index = 0; index < span.Length; ++index)
                 {
                     var network = span[index].Get<Cable>().CableNetwork;
                     var _list = network.DataDeviceList;
                     CableNetworkPatches.CableNetworkExtendedDeviceLists.Remove(network);
+                    
+                    if (IsOneWay && index == 0) // Do not do this for the data diode, on the input network
+                        continue;
+                    
                     for (var i = _list.Count - 1; i >= 0; --i)
                     {
                         switch (_list[i])
                         {
-                            case LogicUnitBase device:
+                            case LogicUnitBase device and not StructureDataBridge:
                                 device.OnNetworkChange();
                                 break;
                             case DeviceInputOutputCircuit device2:
@@ -112,11 +120,12 @@ namespace ReVolt.Prefabs
                     }
                 }
 
-                _updateFlag = false;   
+                _updateFlag = false;
             }
+
             base.OnPowerTick();
         }
-        
+
         public void PatchPrefab()
         {
             ReVolt.MOD.SetupPrefabs(PrefabName)
