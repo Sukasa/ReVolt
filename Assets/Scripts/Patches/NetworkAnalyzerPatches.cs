@@ -9,7 +9,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(NetworkAnalyser))]
     public static class NetworkAnalyzerPatches
     {
-        [HarmonyPostfix, HarmonyPatch(nameof(NetworkAnalyser.OnPreScreenUpdate))]
+        [HarmonyPostfix, HarmonyPatch(nameof(NetworkAnalyser.OnPreScreenUpdate)), OptionPatch("enableExpandedNetworkAnalyzer")]
         public static void AfterPreScreenUpdate(NetworkAnalyser __instance, ref CableNetwork ____scannedNetwork, ref string ____outputText)
         {
             if (____scannedNetwork == null)

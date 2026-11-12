@@ -40,6 +40,7 @@ namespace ReVolt
         internal static ConfigEntry<float> largeTransformerMaxSetting;
 
         internal static ConfigEntry<bool> enablePrefabContent;
+        [UsedImplicitly] internal static ConfigEntry<bool> enableExpandedNetworkAnalyzer;
 
         [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerExploitMitigation;
         [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerLogicAddition;
@@ -168,6 +169,10 @@ namespace ReVolt
             enablePrefabContent = config.Bind(
                 new ConfigDefinition("Content", "Enable Custom Objects"), true,
                 new ConfigDescription("Enable Re-Volt Circuit Breakers, Heavy Breakers, Load Center, and Cable Tray"));
+            
+            enableExpandedNetworkAnalyzer = config.Bind(
+                new ConfigDefinition("Content", "Enable Expanded Network Analyzer"), true,
+                new ConfigDescription("Enable the expanded network analyzer view of data-only and bridged connections"));
         }
     }
 }
