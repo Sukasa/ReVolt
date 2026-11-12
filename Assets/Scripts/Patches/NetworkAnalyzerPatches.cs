@@ -16,10 +16,11 @@ namespace ReVolt.Patches
                 return;
             
             StringBuilder Output = new(____outputText);
+            Output.AppendLine();
             var num = ____scannedNetwork.DeviceList.Count;
             foreach (var device in CableNetworkPatches.GetExtendedDeviceList(____scannedNetwork))
             {
-                if (device.PowerCableNetwork == ____scannedNetwork)
+                if (____scannedNetwork.DeviceList.Contains(device))
                     continue;
                 
                 ++num;
