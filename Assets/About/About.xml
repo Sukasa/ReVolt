@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.9.1</Version>
+  <Version>1.9.2</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -69,13 +69,15 @@
   
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.9.1[/h3]
+    [h3]Version 1.9.2[/h3]
     [list]
     [*] Fixed CrossCables compatibility: Cable Tray and data bridges are now registered with CrossCables, so they work with cable crossings
     [/list]
     [h3]Version 1.9.0[/h3]
     [list]
     [*] Network Analyzer cartridge now shows bridged devices
+    [*] Minor bugfixes to network analyzer display
+    [*] Performance bugfix to data bridges that should also fix a rocket computer bug
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>
