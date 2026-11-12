@@ -60,7 +60,9 @@ namespace ReVolt
             LoadConfiguration(config);
             Debug.Log("Re-Volt config loaded; patching...");
 
-            if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.FullName.Contains("CrossCables"))?.GetType("ExtraNetworkCallsPatch").GetMethod("AddTarget") is { } AddTargetInfo)
+            // CrossCables: assembly "Crosscables", type "CrossCables.ExtraNetworkCallsPatch".
+            if (AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "Crosscables")
+                    ?.GetType("CrossCables.ExtraNetworkCallsPatch")?.GetMethod("AddTarget") is { } AddTargetInfo)
             {
                 Debug.Log("Re-Volt enabling CrossCables compatibility");
                 AddTargetInfo.Invoke(null, new object[] { typeof(CableTray) });
