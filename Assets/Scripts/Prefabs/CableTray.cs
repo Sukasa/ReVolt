@@ -11,7 +11,7 @@ using Assets.Scripts.Util;
 using LaunchPadBooster.Utils;
 using LibConstruct;
 using ReVolt.Interfaces;
-using UnityEngine;
+using ReVolt.ModCompatibility;
 
 namespace ReVolt
 {
@@ -19,7 +19,22 @@ namespace ReVolt
     {
         public static readonly List<CableTray> AllTrays = new(); // Master list used for the meson scanners as PseudoNetworks are not tracked globally
 
-        private static readonly HashSet<int> RebuildExclusions = new();
+        private static IEqualityComparer<Cable> _cableComparer = new ColorVoltageCableComparer();
+        /// <summary>
+        /// Comparer used to determine if two cables can be joined through trays.
+        /// </summary>
+        /// <remarks>Defaults to <see cref="ColorVoltageCableComparer"/>.</remarks>
+        public static IEqualityComparer<Cable> CableComparer
+        {
+            get => _cableComparer;
+            set
+            {
+                _cableComparer = value ?? throw new ArgumentNullException(nameof(value));
+                RebuildExclusions = new(_cableComparer);
+            }
+        }
+
+        private static HashSet<Cable> RebuildExclusions = new(_cableComparer);
         private static readonly HashSet<long> SeenTrays = new();
 
         public override void OnRegistered(Cell cell)
@@ -74,10 +89,7 @@ namespace ReVolt
                     if (cable.CableNetwork == null)
                         continue;
 
-                    var col = GameManager.GetColorIndex(cable.CustomColor);
-                    var volt = (int)cable.MaxVoltage;
-
-                    if (!RebuildExclusions.Add(col + volt * 64))
+                    if (!RebuildExclusions.Add(cable))
                         continue;
 
                     cable.CableNetwork ??= new CableNetwork(cable);
@@ -118,10 +130,7 @@ namespace ReVolt
                 if (cable.CableNetwork == null)
                     continue;
 
-                var col = GameManager.GetColorIndex(cable.CustomColor);
-                var volt = (int)cable.MaxVoltage;
-
-                if (!RebuildExclusions.Add(col + volt * 64))
+                if (!RebuildExclusions.Add(cable))
                     continue;
 
                 cable.CableNetwork ??= new CableNetwork(cable);
@@ -134,7 +143,6 @@ namespace ReVolt
         {
             var Result = new List<Cable>();
 
-            var wantColour = GameManager.GetColorIndex(Metric.CustomColor);
             Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
 
             foreach (var Component in Network.Members)
@@ -154,11 +162,8 @@ namespace ReVolt
                 for (var cableIndex = 0; cableIndex < span.Length; ++cableIndex)
                 {
                     var Cable = span[cableIndex].Get<Cable>();
-                    var cableCol = GameManager.GetColorIndex(Cable.CustomColor);
-
                     if (Cable != Metric &&
-                        Mathf.Approximately(Cable.MaxVoltage, Metric.MaxVoltage) &&
-                        cableCol == wantColour &&
+                        CableComparer.Equals(Metric, Cable) &&
                         !Result.Contains(Cable))
                     {
                         Result.Add(Cable);
