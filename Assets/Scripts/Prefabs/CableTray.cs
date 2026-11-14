@@ -63,6 +63,12 @@ namespace ReVolt
                 PropagateNetworkUpdate(span[index].Get<CableTray>().Network.Members);
         }
 
+        public void TriggerPropagation()
+        {
+            SeenTrays.Clear();
+            PropagateNetworkUpdate(Network.Members);
+        }
+        
         private static void PropagateNetworkUpdate(IEnumerable<ICableTrayComponent> TraySet)
         {
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)

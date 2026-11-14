@@ -99,13 +99,8 @@ namespace ReVolt.Patches
                 cable.FillConnected<CableTray>(cells, ref count);
 
                 for (var idx = count - 1; idx >= 0; idx--)
-                {
-                    var tray = cells[idx].Get<CableTray>();
-                    if (tray is null) continue;
-
-                    tray.OnMemberRemoved(null);
-                    tray.OnMembersChanged();
-                }
+                    cells[idx].Get<CableTray>()?.TriggerPropagation();
+                
             }
         }
     }
