@@ -8,6 +8,7 @@ using Assets.Scripts.Objects.Electrical;
 using Assets.Scripts.Objects.Motherboards;
 using Assets.Scripts.UI;
 using Assets.Scripts.Util;
+using JetBrains.Annotations;
 using LaunchPadBooster.Utils;
 using LibConstruct;
 using ReVolt.Interfaces;
@@ -21,9 +22,12 @@ namespace ReVolt
 
         private static IEqualityComparer<Cable> _cableComparer = new ColorVoltageCableComparer();
         /// <summary>
-        /// Comparer used to determine if two cables can be joined through trays.
+        ///     Comparer used to determine if two cables can be joined through trays.
         /// </summary>
-        /// <remarks>Defaults to <see cref="ColorVoltageCableComparer"/>.</remarks>
+        /// <remarks>
+        ///     Defaults to <see cref="ColorVoltageCableComparer"/>
+        /// </remarks>
+        [UsedImplicitly]
         public static IEqualityComparer<Cable> CableComparer
         {
             get => _cableComparer;
@@ -127,14 +131,9 @@ namespace ReVolt
 
             foreach (var Component in Network.Members)
             {
-                var Tray = Component as CableTray;
-
-                if (Tray == null)
-                {
-                    ConsoleWindow.PrintError("Null tray member!");
+                if (Component is not CableTray Tray)
                     continue;
-                }
-
+                
                 var count = 0;
                 Tray.FillConnected<Cable>(buf, ref count);
 
