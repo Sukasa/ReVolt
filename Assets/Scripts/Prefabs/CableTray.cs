@@ -119,32 +119,6 @@ namespace ReVolt
         {
         }
 
-        private unsafe void OnMembersChangedDeferred()
-        {
-            Span<SmallCellRef> buf = stackalloc SmallCellRef[32];
-            var count = 0;
-            FillConnected<Cable>(buf, ref count);
-            var span = buf[..count];
-
-            for (var index = 0; index < span.Length; ++index)
-            {
-                var cable = span[index].Get<Cable>();
-
-                if (cable == null)
-                    continue;
-
-                if (cable.CableNetwork == null)
-                    continue;
-
-                if (!RebuildExclusions.Add(cable))
-                    continue;
-
-                cable.CableNetwork ??= new CableNetwork(cable);
-
-                CableNetwork.RebuildCableNetworkServer(cable);
-            }
-        }
-
         public List<Cable> MatchCables(Cable Metric)
         {
             var Result = new List<Cable>();
@@ -193,12 +167,6 @@ namespace ReVolt
 
         public override string GetStationpediaCategoryKey() => StationpediaCategoryStrings.CableCategory;
         public override string GetStationpediaCategory() => Localization.GetInterface(StationpediaCategoryStrings.CableCategory);
-
-        private bool IsConnectedToTray(Connection OpenEnd)
-        {
-            var smallCell = GridController.GetSmallCell(GridController.WorldToLocalGrid(OpenEnd.Transform.position, SmallGridSize, SmallGridOffset));
-            return smallCell is { Other: CableTray } && smallCell.Other.IsConnected(OpenEnd);
-        }
 
         public IEnumerable<Connection> Connections
         {
