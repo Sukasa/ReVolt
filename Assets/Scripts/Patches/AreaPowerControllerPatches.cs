@@ -17,7 +17,7 @@ namespace ReVolt.Patches
         }
         private static readonly ConditionalWeakTable<AreaPowerControl, APCPower> PowerUsages = new();
         
-        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.ReceivePower)), OptionPatch("enableAreaPowerControlFix")]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.ReceivePower)), OptionPatch(nameof(ReVolt.enableAreaPowerControlFix))]
         public static bool ReceivePowerPatch(CableNetwork cableNetwork, float powerAdded, AreaPowerControl __instance, ref float ____powerProvided)
         {
             // Check that the network we're receiving power from is also the network we SHOULD be receiving power from
@@ -54,7 +54,7 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.UsePower)), OptionPatch("enableAreaPowerControlFix")]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.UsePower)), OptionPatch(nameof(ReVolt.enableAreaPowerControlFix))]
         public static bool UsePowerPatch(CableNetwork cableNetwork, float powerUsed, AreaPowerControl __instance, ref float ____powerProvided)
         {
             if (cableNetwork != __instance.OutputNetwork)
@@ -82,14 +82,14 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPostfix, HarmonyPatch(nameof(AreaPowerControl.GetLogicValue)), OptionPatch("enableAreaPowerControlFix")]
+        [HarmonyPostfix, HarmonyPatch(nameof(AreaPowerControl.GetLogicValue)), OptionPatch(nameof(ReVolt.enableAreaPowerControlFix))]
         public static void AfterGetLogicValue(LogicType logicType, AreaPowerControl __instance, ref double __result)
         {
             if (logicType == LogicType.RequiredPower)
                 __result = PowerUsages.GetOrCreateValue(__instance).Usage + __instance.UsedPower;
         }
         
-        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.AvailablePower), MethodType.Getter), OptionPatch("enableAreaPowerControlFix")]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.AvailablePower), MethodType.Getter), OptionPatch(nameof(ReVolt.enableAreaPowerControlFix))]
         public static bool AvailablePowerGetterPatch(AreaPowerControl __instance, ref float __result, float ____powerProvided)
         {
             var availablePower = __instance.InputNetwork?.PotentialLoad ?? 0.0f;
@@ -101,7 +101,7 @@ namespace ReVolt.Patches
             return false;
         }
         
-        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.GetUsedPower)), OptionPatch("enableAreaPowerControlFix")]
+        [HarmonyPrefix, HarmonyPatch(nameof(AreaPowerControl.GetUsedPower)), OptionPatch(nameof(ReVolt.enableAreaPowerControlFix))]
         public static bool GetUsedPowerPatch(CableNetwork cableNetwork, AreaPowerControl __instance, ref float __result, float ____powerProvided, CableNetwork ___InputNetwork)
         {
             __result = 0.0f;

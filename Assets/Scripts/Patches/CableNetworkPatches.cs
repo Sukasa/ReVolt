@@ -84,14 +84,14 @@ namespace ReVolt.Patches
             return deviceList;
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.GetStackSize)), OptionPatch("enablePrefabContent")]
+        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.GetStackSize)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static bool GetStackSizePatch(CableNetwork __instance, ref int __result)
         {
             __result = GetExtendedDeviceList(__instance).Count;
             return false;
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.ReadMemory)), OptionPatch("enablePrefabContent")]
+        [HarmonyPrefix, HarmonyPatch(nameof(CableNetwork.ReadMemory)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static bool ReadMemoryOverride(CableNetwork __instance, int address, ref double __result)
         {
             __result = GetExtendedDeviceList(__instance)[address].ReferenceId;
@@ -114,7 +114,7 @@ namespace ReVolt.Patches
             }
         }
 
-        [HarmonyTranspiler, HarmonyPatch("RebuildNetwork"), OptionPatch("enablePrefabContent")]
+        [HarmonyTranspiler, HarmonyPatch("RebuildNetwork"), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static IEnumerable<CodeInstruction> RebuildNetworkInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var inject2PatternStep = 0;
@@ -148,7 +148,7 @@ namespace ReVolt.Patches
             }
         }
 
-        [HarmonyTranspiler, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks)), OptionPatch("enablePrefabContent")]
+        [HarmonyTranspiler, HarmonyPatch(nameof(CableNetwork.ConnectedNetworks)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static IEnumerable<CodeInstruction> ConnectedNetworksInjector(IEnumerable<CodeInstruction> instructions, ILGenerator ilGenerator)
         {
             var InjectTrayConnections = SymbolExtensions.GetMethodInfo(() => ConnectedNetworksExtra(null, null));

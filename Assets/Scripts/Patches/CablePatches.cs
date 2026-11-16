@@ -15,7 +15,7 @@ namespace ReVolt.Patches
         public static bool GateTriggerRepeatRegistration;
         public static bool RetriggerRegistration;
 
-        [HarmonyPrefix, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch("enablePrefabContent")]
+        [HarmonyPrefix, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static bool BeforeOnRegistered(Cell cell, Cable __instance)
         {
             if (GameManager.GameState == GameState.Loading || !GameManager.RunSimulation)
@@ -26,7 +26,7 @@ namespace ReVolt.Patches
             return true;
         }
          
-        [HarmonyPostfix, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch("enablePrefabContent")]
+        [HarmonyPostfix, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static void AfterOnRegistered(Cell cell, Cable __instance)
         {
             if (RetriggerRegistration)
@@ -39,7 +39,7 @@ namespace ReVolt.Patches
                 GateTriggerRepeatRegistration = false;
         }
 
-        [HarmonyFinalizer, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch("enablePrefabContent")]
+        [HarmonyFinalizer, HarmonyPatch(nameof(Cable.OnRegistered)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static void ForceRegisterCleanup()
         {
             RetriggerRegistration = false;

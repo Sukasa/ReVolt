@@ -10,7 +10,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(Battery))]
     internal class BatteryPatches
     {
-        [HarmonyPostfix, HarmonyPatch(nameof(Battery.GetUsedPower)), OptionPatch("enableBatteryLimitsPatch")]
+        [HarmonyPostfix, HarmonyPatch(nameof(Battery.GetUsedPower)), OptionPatch(nameof(ReVolt.enableBatteryLimitsPatch))]
         public static void LimitMaxChargeRate(Battery __instance, ref float __result)
         {
             __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryChargeRate.Value);
@@ -18,7 +18,7 @@ namespace ReVolt.Patches
 
         private const float MaxBatterySelfDischargeRate = 40f;
 
-        [HarmonyPrefix, HarmonyPatch(nameof(Battery.ReceivePower)), OptionPatch("enableBatteryLimitsPatch")]
+        [HarmonyPrefix, HarmonyPatch(nameof(Battery.ReceivePower)), OptionPatch(nameof(ReVolt.enableBatteryLimitsPatch))]
         public static bool ChargeEfficiencyControl(Battery __instance, CableNetwork cableNetwork, float powerAdded)
         {
             if (__instance.Error == 1 || !__instance.OnOff || cableNetwork != __instance.InputNetwork || !GetIsOperable(__instance)) return false;
@@ -37,13 +37,13 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPostfix, HarmonyPatch(nameof(Battery.GetGeneratedPower)), OptionPatch("enableBatteryLimitsPatch")]
+        [HarmonyPostfix, HarmonyPatch(nameof(Battery.GetGeneratedPower)), OptionPatch(nameof(ReVolt.enableBatteryLimitsPatch))]
         public static void LimitMaxDischargeRate(Battery __instance, ref float __result)
         {
             __result = MathF.Min(__result, __instance.PowerMaximum * ReVolt.configMaxBatteryDischargeRate.Value);
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(Battery.CanLogicRead)), OptionPatch("enableBatteryLogicAddition")]
+        [HarmonyPrefix, HarmonyPatch(nameof(Battery.CanLogicRead)), OptionPatch(nameof(ReVolt.enableBatteryLogicAddition))]
         public static bool CanLogicReadPatch(LogicType logicType, Battery __instance, ref bool __result)
         {
             if (logicType is not (LogicType.ExportQuantity or LogicType.ImportQuantity))
@@ -53,7 +53,7 @@ namespace ReVolt.Patches
             return false;
         }
 
-        [HarmonyPrefix, HarmonyPatch(nameof(Battery.GetLogicValue)), OptionPatch("enableBatteryLogicAddition")]
+        [HarmonyPrefix, HarmonyPatch(nameof(Battery.GetLogicValue)), OptionPatch(nameof(ReVolt.enableBatteryLogicAddition))]
         public static bool GetLogicValuePatch(LogicType logicType, Battery __instance, ref double __result)
         {
             switch (logicType)

@@ -12,7 +12,7 @@ namespace ReVolt.Patches
     {
         private static readonly HashSet<ILogicable> Deduplicator = new(128);
         
-        [HarmonyPostfix, HarmonyPatch(nameof(Logicable.RecalculateSortedDevicesList)), OptionPatch("enablePrefabContent")]
+        [HarmonyPostfix, HarmonyPatch(nameof(Logicable.RecalculateSortedDevicesList)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static void RecalculateSortedDevicesListPatch(CableNetwork cableNetwork, ref List<ILogicable> __result)
         {
             if (cableNetwork == null)

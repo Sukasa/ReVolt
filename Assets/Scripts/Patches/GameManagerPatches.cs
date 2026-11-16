@@ -7,7 +7,7 @@ namespace ReVolt.Patches
     [HarmonyPatch(typeof(GameManager))]
     public class GameManagerPatches
     {
-        [HarmonyPostfix, HarmonyPatch("OnGameStateChanged"), OptionPatch("enablePrefabContent")]
+        [HarmonyPostfix, HarmonyPatch("OnGameStateChanged"), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static void OnGameStateChangedPatch(GameState oldState, GameState newState)
         {
             if (newState is GameState.Loading or GameState.None)

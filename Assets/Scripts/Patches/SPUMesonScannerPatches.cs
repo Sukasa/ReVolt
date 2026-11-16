@@ -40,7 +40,7 @@ namespace ReVolt.Patches
             }
         }
         
-        [HarmonyTranspiler, HarmonyPatch(nameof(SPUMesonScanner.Render))]
+        [HarmonyTranspiler, HarmonyPatch(nameof(SPUMesonScanner.Render)), OptionPatch(nameof(ReVolt.enablePrefabContent))]
         public static IEnumerable<CodeInstruction> RenderPatch(IEnumerable<CodeInstruction> instructions)
         {
             var RenderFunc = AccessTools.Method(typeof(SPUMesonScanner), "RenderMeshes");

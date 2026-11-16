@@ -40,13 +40,13 @@ namespace ReVolt
         internal static ConfigEntry<float> largeTransformerMaxSetting;
 
         internal static ConfigEntry<bool> enablePrefabContent;
-        [UsedImplicitly] internal static ConfigEntry<bool> enableExpandedNetworkAnalyzer;
+        internal static ConfigEntry<bool> enableExpandedNetworkAnalyzer;
 
-        [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerExploitMitigation;
-        [UsedImplicitly] internal static ConfigEntry<bool> enableTransformerLogicAddition;
-        [UsedImplicitly] internal static ConfigEntry<bool> enableBatteryLogicAddition;
+        internal static ConfigEntry<bool> enableTransformerExploitMitigation;
+        internal static ConfigEntry<bool> enableTransformerLogicAddition;
+        internal static ConfigEntry<bool> enableBatteryLogicAddition;
         
-        [UsedImplicitly] internal static ConfigEntry<bool> enableAreaPowerControlFix;
+        internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
         public static readonly Mod MOD = new("Re-Volt", "1.9.3");
