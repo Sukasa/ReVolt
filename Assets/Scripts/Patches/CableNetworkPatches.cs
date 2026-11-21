@@ -23,14 +23,14 @@ namespace ReVolt.Patches
         public static void DirtyPowerAndDataDeviceListsPatch(CableNetwork __instance)
         {
             if (__instance.PowerTick is RevoltTick revoltTick)
-                revoltTick.IsDirty = true;
+                revoltTick.MarkDirty();
         }
 
         [HarmonyPostfix, HarmonyPatch(nameof(CableNetwork.DirtyDataDeviceList))]
         public static void DirtyDataDeviceListPatch(CableNetwork __instance)
         {
             if (__instance.PowerTick is RevoltTick revoltTick)
-                revoltTick.IsDirty = true;
+                revoltTick.MarkDirty();
         }
 
         [HarmonyPostfix, HarmonyPatch(MethodType.Constructor, new Type[0])]

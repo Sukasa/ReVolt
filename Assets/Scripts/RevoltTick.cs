@@ -27,6 +27,30 @@ namespace ReVolt
         }
 
         public bool IsDirty = true;
+        private readonly RevisionClock _topology = new();
+        private const int AuditInterval = 10;
+        private int _ticksUntilAudit;
+
+        internal void MarkDirty()
+        {
+            _topology.Changed();
+            IsDirty = true;
+        }
+
+        private bool CacheMatches(CableNetwork network)
+        {
+            lock (network.DeviceList)
+            {
+                var powered = network.DeviceList.Where(device => device != null &&
+                    device.PowerCables != null && device.PowerCables.Any(c => c != null && c.CableNetwork == network));
+                if (!CacheAudit.Matches(powered, Devices)) return false;
+            }
+            lock (network.CableList)
+                if (!CacheAudit.MatchesRated(network.CableList.Where(c => c != null), _allCables, c => c.MaxVoltage))
+                    return false;
+            lock (network.FuseList)
+                return CacheAudit.MatchesRated(network.FuseList.Where(f => f != null), _allFuses, f => f.PowerBreak);
+        }
 
         private readonly SortedList<float, List<Cable>> _allCables = new();
         private readonly SortedList<float, List<CableFuse>> _allFuses = new();
@@ -73,7 +97,10 @@ namespace ReVolt
         public virtual void Initialize_New(CableNetwork from)
         {
             if (CableNetwork != from) // If our cable network changes somehow, mark dirty 
+            {
                 IsDirty = true;
+                _ticksUntilAudit = (int)System.Math.Abs(from.ReferenceId % AuditInterval) + 1;
+            }
 
             // Basic housekeeping
             CableNetwork = from;
@@ -81,8 +108,14 @@ namespace ReVolt
             Required = 0.0f;
             Consumed = 0.0f;
 
-            if (!IsDirty) // Only rebuild if dirty
-                return;
+            bool auditDue = --_ticksUntilAudit <= 0;
+            if (auditDue) _ticksUntilAudit = AuditInterval;
+            bool topologyChanged = _topology.Pending || (auditDue && !CacheMatches(from));
+            if (!IsDirty && !topologyChanged) return;
+
+            // A cable may have changed while vanilla was rebuilding its own power list.
+            if (topologyChanged) from.DirtyPowerAndDataDeviceLists();
+            long revision = _topology.Revision;
 
             PowerProviders = new();
 
@@ -122,8 +155,7 @@ namespace ReVolt
                         allCable.Add(cable);
 
             // Allocate our memoization arrays, if they've changed, including power classifications
-            if (PowerData is null || PowerData.Length != Devices.Count || IsDirty)
-                PowerData = Devices.Select(x => new PowerUsage { Category = ClassifyDevice(x) }).ToArray();
+            PowerData = Devices.Select(x => new PowerUsage { Category = ClassifyDevice(x) }).ToArray();
 
 
             // Now look for a load centre and initialize it (and us)
@@ -140,6 +172,7 @@ namespace ReVolt
                 foreach (var item in Devs)
                     item.HasConflict = true;
 
+            _topology.TryCommit(revision);
             if (_loadCenter != null) return;
 
             PowerStates[(int)PowerClass.Lights] = true;
