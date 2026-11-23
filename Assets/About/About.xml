@@ -1,7 +1,7 @@
 ﻿<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>Re-Volt</Name>
   <Author>Sukasa</Author>
-  <Version>1.9.3</Version>
+  <Version>1.9.4</Version>
   <!-- Steam description using steam styling tags for Steam workshop page -->
   <Description>
     [h1]⚡ Re-Volt ⚡[/h1]
@@ -69,9 +69,9 @@
   
   <!-- All contents of ChangeLog should be changed for each publication for Steam workshop page -->
   <ChangeLog>
-    [h3]Version 1.9.3[/h3]
+    [h3]Version 1.9.4[/h3]
     [list]
-    [*] Additional cross-mod compatibility work for the cable trays, some spray paint fixes, and slight code cleanup in spots
+    [*] Minor code cleanup and added a debug command to help diagnose a cross-mod data corruption issue
     [/list]
   </ChangeLog>
   <WorkshopHandle>3587239682</WorkshopHandle>

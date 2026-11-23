@@ -40,6 +40,8 @@ namespace ReVolt
 
         private System.Random RNG = new(); // Cannot use the Unity RNG because it throws an error if used in a thread
 
+        internal int DeviceCountAtLastRebuild = -1;
+        
         private float _powerRatio;
         private bool _isPowerMet;
         private float _breakerLimit;
@@ -72,7 +74,7 @@ namespace ReVolt
 
         public virtual void Initialize_New(CableNetwork from)
         {
-            if (CableNetwork != from) // If our cable network changes somehow, mark dirty 
+            if (CableNetwork != from || CableNetwork.DeviceList.Count != DeviceCountAtLastRebuild) // If our cable network changes somehow, mark dirty 
                 IsDirty = true;
 
             // Basic housekeeping
@@ -83,6 +85,7 @@ namespace ReVolt
 
             if (!IsDirty) // Only rebuild if dirty
                 return;
+            IsDirty = false;
 
             PowerProviders = new();
 
@@ -101,6 +104,7 @@ namespace ReVolt
             lock (CableNetwork.PowerDeviceList)
                 Devices.AddRange(CableNetwork.PowerDeviceList);
 
+            DeviceCountAtLastRebuild = CableNetwork.DeviceList.Count;
 
             // Allocate breaker list
             _breakers = new IBreaker[Devices.Count(x => x is IBreaker)];
@@ -129,7 +133,7 @@ namespace ReVolt
             // Now look for a load centre and initialize it (and us)
             _loadCenter = null;
 
-            var Devs = Devices.Where(x => x is ILoadCenter).Cast<ILoadCenter>().ToList();
+            var Devs = Devices.OfType<ILoadCenter>().ToList();
             if (Devs.Count == 1)
             {
                 _loadCenter = Devs[0];
@@ -149,8 +153,6 @@ namespace ReVolt
             PowerStates[(int)PowerClass.Logic] = true;
             PowerStates[(int)PowerClass.Power] = true;
             PowerStates[(int)PowerClass.Misc] = true;
-
-            IsDirty = false;
         }
 
         public static PowerClass ClassifyDevice(Device DevUnderTest)

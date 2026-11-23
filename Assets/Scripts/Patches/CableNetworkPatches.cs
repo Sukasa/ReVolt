@@ -67,7 +67,6 @@ namespace ReVolt.Patches
                     continue;
 
                 var additional = Bridge.GetBridgedDevices(Network);
-                var c = deviceList.Count;
                 for (var j = additional.Count - 1; j >= 0; j--)
                 {
                     if (seen.Contains(additional[j]))
@@ -75,8 +74,6 @@ namespace ReVolt.Patches
                     deviceList.Add(additional[j]);
                     seen.Add(additional[j]);
                 }
-
-                c = deviceList.Count - c;
             }
 
             CableNetworkExtendedDeviceLists.AddOrUpdate(Network, deviceList);

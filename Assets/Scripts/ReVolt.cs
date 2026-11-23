@@ -10,9 +10,11 @@ using LaunchPadBooster;
 using LaunchPadBooster.Patching;
 using LibConstruct;
 using ReVolt.Assets.Scripts;
+using ReVolt.Commands;
 using ReVolt.Interfaces;
 using ReVolt.Prefabs;
 using UnityEngine;
+using Util.Commands;
 
 namespace ReVolt
 {
@@ -49,7 +51,7 @@ namespace ReVolt
         internal static ConfigEntry<bool> enableAreaPowerControlFix;
         internal static ConfigEntry<bool> enableBatteryLimitsPatch;
 
-        public static readonly Mod MOD = new("Re-Volt", "1.9.3");
+        public static readonly Mod MOD = new("Re-Volt", "1.9.4");
 
         [UsedImplicitly]
         public void OnLoaded(ConfigFile config, List<GameObject> prefabs)
@@ -97,6 +99,8 @@ namespace ReVolt
 
             MOD.AddSaveDataType<CircuitBreakerSaveData>();
             MOD.Networking.Required = true;
+            
+            CommandLine.AddCommand("rvdebug", new RVDebugCommand());
         }
 
         private static void LoadConfiguration(ConfigFile config)

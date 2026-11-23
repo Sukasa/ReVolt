@@ -20,7 +20,8 @@
                                   "BepInEx.dll",
                                   "UniTask.dll",
                                   "LaunchPadBooster.dll",
-                                  "LibConstruct.dll"
+                                  "LibConstruct.dll",
+                                  "Newtonsoft.Json.dll"
                               ],
     "name":  "ReVolt",
     "rootNamespace":  "ReVolt",
