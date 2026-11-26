@@ -367,7 +367,8 @@ namespace ReVolt
                 {
                     var powerAvailable = PowerStates[(int)PowerData[idx].Category] ? PowerData[idx].PowerUsed * _powerRatio : 0.0f;
 
-                    currentDevice.ReceivePower(CableNetwork, powerAvailable);
+                    if (powerAvailable > 0.0f)
+                        currentDevice.ReceivePower(CableNetwork, powerAvailable);
 
                     if (PowerStates[(int)PowerData[idx].Category] && powerAvailable > 0.0f &&
                         (_isPowerMet || (currentDevice.IsPowerProvider && PowerData[idx].PowerProvided > 0.0f)))
